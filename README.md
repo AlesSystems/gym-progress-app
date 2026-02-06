@@ -2,8 +2,6 @@
 
 A **personal iOS gym progress app** built with React Native. Offline-first, fast to use during workouts, with long-term progress visualization. Planning and architecture are maintained in AlesDocs.
 
-**Full planning & architecture:** [AlesSystems/AlesDocs – projects-created/workout-planner](https://github.com/AlesSystems/AlesDocs/tree/main/projects-created/workout-planner)
-
 ---
 
 ## Vision & Purpose
@@ -88,22 +86,6 @@ Fast path: Start → Add exercise → Log sets → Finish (minimal taps, no dead
 - **Reliability:** No data loss; auto-save; crash recovery (resume or discard incomplete workout).
 - **Usability:** One-handed use, minimal taps, smart defaults (e.g. last weight/reps), dark mode for gym.
 - **Privacy:** Local-only storage, no tracking, user-owned data.
-
----
-
-## Documentation in AlesDocs
-
-| Doc | Description |
-|-----|-------------|
-| [vision.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/vision.md) | Vision, scope, personas, success metrics, design philosophy |
-| [information.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/information.md) | High-level planning summary |
-| [folder-structure.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/folder-structure.md) | Docs folder layout |
-| [architecture/app-architecture.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/architecture/app-architecture.md) | Layers, data flow, state, testing, tech stack |
-| [architecture/data-model.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/architecture/data-model.md) | Entities, validation, storage, migrations |
-| [architecture/navigation.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/architecture/navigation.md) | Tabs, screens, flows, gestures |
-| [non-functional.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/non-functional.md) | Performance, reliability, accessibility, privacy |
-| [docs/features/](https://github.com/AlesSystems/AlesDocs/tree/main/projects-created/workout-planner/docs/features) | Workout logging, progress tracking, history |
-| [docs/future.md](https://github.com/AlesSystems/AlesDocs/blob/main/projects-created/workout-planner/docs/future.md) | Post-MVP ideas |
 
 ---
 
