@@ -1,12 +1,14 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useActiveWorkout } from '../hooks/useActiveWorkout';
 import { Workout, PersonalRecord } from '../../data/models/Workout';
+import { WorkoutTemplate } from '../../data/models/WorkoutTemplate';
 
 interface WorkoutContextValue {
   activeWorkout: Workout | null;
   workoutHistory: Workout[];
+  templates: WorkoutTemplate[];
   isLoading: boolean;
-  startWorkout: () => Promise<void>;
+  startWorkout: (templateId?: string) => Promise<void>;
   addExercise: (name: string) => Promise<void>;
   addSet: (
     exerciseId: string,
@@ -22,6 +24,8 @@ interface WorkoutContextValue {
   discardWorkout: () => Promise<void>;
   updateWorkoutNotes: (notes: string) => Promise<void>;
   updateWorkoutBodyweight: (bodyweight: number) => Promise<void>;
+  saveAsTemplate: (name: string) => Promise<void>;
+  deleteTemplate: (id: string) => Promise<void>;
 }
 
 const WorkoutContext = createContext<WorkoutContextValue | null>(null);

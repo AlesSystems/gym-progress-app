@@ -21,6 +21,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     deleteSet,
     deleteExercise,
     finishWorkout,
+    saveAsTemplate,
   } = useWorkoutContext();
 
   const [showExercisePicker, setShowExercisePicker] = useState(false);
@@ -90,6 +91,10 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     Alert.alert('Finish Workout', 'Are you ready to finish this workout?', [
       { text: 'Cancel', style: 'cancel' },
       {
+        text: 'Save as Template',
+        onPress: handleSaveAsTemplate,
+      },
+      {
         text: 'Finish',
         onPress: async () => {
           await finishWorkout();
@@ -97,6 +102,38 @@ export function ActiveWorkoutScreen({ navigation }: any) {
         },
       },
     ]);
+  };
+
+  const handleSaveAsTemplate = () => {
+    Alert.prompt(
+      'Save as Template',
+      'Enter a name for this workout template:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Save',
+          onPress: async (templateName?: string) => {
+            if (templateName && templateName.trim()) {
+              await saveAsTemplate(templateName.trim());
+              Alert.alert(
+                'Template Saved',
+                'Workout saved as template successfully!',
+                [
+                  {
+                    text: 'Finish Workout',
+                    onPress: async () => {
+                      await finishWorkout();
+                      navigation.navigate('Dashboard');
+                    },
+                  },
+                ]
+              );
+            }
+          },
+        },
+      ],
+      'plain-text'
+    );
   };
 
   const getLastSetValues = (exerciseId: string) => {

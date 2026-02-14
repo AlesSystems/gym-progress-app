@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
+import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -9,32 +9,45 @@ import { HistoryScreen } from './src/ui/screens/HistoryScreen';
 import { WorkoutDetailScreen } from './src/ui/screens/WorkoutDetailScreen';
 import { StatsScreen } from './src/ui/screens/StatsScreen';
 import { ExerciseDetailScreen } from './src/ui/screens/ExerciseDetailScreen';
+import { SettingsScreen } from './src/ui/screens/SettingsScreen';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
+import { ThemeProvider, useTheme } from './src/ui/context/ThemeContext';
 
 const Stack = createNativeStackNavigator();
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+function AppNavigator() {
+  const { isDarkMode } = useTheme();
 
   return (
+    <>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="WorkoutDetail" component={WorkoutDetailScreen} />
+        <Stack.Screen name="Stats" component={StatsScreen} />
+        <Stack.Screen name="ExerciseDetail" component={ExerciseDetailScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator>
+    </>
+  );
+}
+
+function App() {
+  return (
     <SafeAreaProvider>
-      <WorkoutProvider>
-        <NavigationContainer>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="Dashboard" component={DashboardScreen} />
-            <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
-            <Stack.Screen name="History" component={HistoryScreen} />
-            <Stack.Screen name="WorkoutDetail" component={WorkoutDetailScreen} />
-            <Stack.Screen name="Stats" component={StatsScreen} />
-            <Stack.Screen name="ExerciseDetail" component={ExerciseDetailScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </WorkoutProvider>
+      <ThemeProvider>
+        <WorkoutProvider>
+          <NavigationContainer>
+            <AppNavigator />
+          </NavigationContainer>
+        </WorkoutProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }

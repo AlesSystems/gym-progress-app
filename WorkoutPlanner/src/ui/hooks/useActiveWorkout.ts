@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { Workout, Exercise, Set } from '../../data/models/Workout';
+import { WorkoutTemplate, TemplateExercise } from '../../data/models/WorkoutTemplate';
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
+import { TemplateStorage } from '../../data/storage/TemplateStorage';
 import { PRDetector } from '../../domain/workout/PRDetector';
 
 export function useActiveWorkout() {
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
   const [workoutHistory, setWorkoutHistory] = useState<Workout[]>([]);
+  const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,12 +38,14 @@ export function useActiveWorkout() {
 
   const loadInitialData = async () => {
     try {
-      const [active, history] = await Promise.all([
+      const [active, history, templateList] = await Promise.all([
         WorkoutStorage.getActiveWorkout(),
         WorkoutStorage.getAllWorkouts(),
+        TemplateStorage.getAllTemplates(),
       ]);
       setActiveWorkout(active);
       setWorkoutHistory(history);
+      setTemplates(templateList);
     } catch (error) {
       console.error('Error loading initial data:', error);
     } finally {
@@ -48,13 +53,43 @@ export function useActiveWorkout() {
     }
   };
 
-  const startWorkout = useCallback(async () => {
+  const startWorkout = useCallback(async (templateId?: string) => {
     const now = new Date().toISOString();
+    let exercises: Exercise[] = [];
+
+    if (templateId) {
+      const template = await TemplateStorage.getTemplateById(templateId);
+      if (template) {
+        exercises = template.exercises.map((templateEx: TemplateExercise, index: number) => ({
+          id: generateId(),
+          workoutId: '', // Will be set below
+          name: templateEx.name,
+          sets: templateEx.sets.map((templateSet, setIndex) => ({
+            id: generateId(),
+            exerciseId: '', // Will be set in the map
+            reps: templateSet.reps,
+            weight: templateSet.weight,
+            isWarmup: templateSet.isWarmup,
+            order: setIndex,
+            createdAt: now,
+          })),
+          notes: templateEx.notes,
+          order: index,
+          createdAt: now,
+          updatedAt: now,
+        }));
+      }
+    }
+
     const newWorkout: Workout = {
       id: generateId(),
       date: now,
       startTime: now,
-      exercises: [],
+      exercises: exercises.map(ex => ({
+        ...ex,
+        workoutId: generateId(),
+        sets: ex.sets.map(s => ({ ...s, exerciseId: ex.id })),
+      })),
       isCompleted: false,
       createdAt: now,
       updatedAt: now,
@@ -225,9 +260,47 @@ export function useActiveWorkout() {
     await WorkoutStorage.saveActiveWorkout(updated);
   }, [activeWorkout]);
 
+  const saveAsTemplate = useCallback(async (name: string) => {
+    if (!activeWorkout) return;
+
+    const now = new Date().toISOString();
+    const template: WorkoutTemplate = {
+      id: generateId(),
+      name,
+      exercises: activeWorkout.exercises.map((ex, index) => ({
+        id: generateId(),
+        name: ex.name,
+        sets: ex.sets
+          .filter(s => !s.isWarmup)
+          .map((s, setIndex) => ({
+            id: generateId(),
+            reps: s.reps,
+            weight: s.weight,
+            isWarmup: false,
+            order: setIndex,
+          })),
+        notes: ex.notes,
+        order: index,
+      })),
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    await TemplateStorage.saveTemplate(template);
+    const updatedTemplates = await TemplateStorage.getAllTemplates();
+    setTemplates(updatedTemplates);
+  }, [activeWorkout]);
+
+  const deleteTemplate = useCallback(async (id: string) => {
+    await TemplateStorage.deleteTemplate(id);
+    const updatedTemplates = await TemplateStorage.getAllTemplates();
+    setTemplates(updatedTemplates);
+  }, []);
+
   return {
     activeWorkout,
     workoutHistory,
+    templates,
     isLoading,
     startWorkout,
     addExercise,
@@ -238,6 +311,8 @@ export function useActiveWorkout() {
     discardWorkout,
     updateWorkoutNotes,
     updateWorkoutBodyweight,
+    saveAsTemplate,
+    deleteTemplate,
   };
 }
 
