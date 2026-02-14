@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   Vibration,
+  SafeAreaView,
 } from 'react-native';
 import { useWorkoutContext } from '../context/WorkoutContext';
 import { ExercisePicker } from '../components/ExercisePicker';
@@ -26,8 +27,13 @@ export function ActiveWorkoutScreen({ navigation }: any) {
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
   const [showSetInput, setShowSetInput] = useState(false);
 
+  useEffect(() => {
+    if (!activeWorkout) {
+      navigation.navigate('Dashboard');
+    }
+  }, [activeWorkout, navigation]);
+
   if (!activeWorkout) {
-    navigation.navigate('Dashboard');
     return null;
   }
 
@@ -100,13 +106,24 @@ export function ActiveWorkoutScreen({ navigation }: any) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Active Workout</Text>
-        <Text style={styles.headerTime}>
-          {activeWorkout.startTime && formatElapsedTime(activeWorkout.startTime)}
-        </Text>
-      </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.navigate('Dashboard')}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.backButtonText}>✕</Text>
+          </TouchableOpacity>
+          <View style={styles.headerCenter}>
+            <Text style={styles.headerTitle}>Active Workout</Text>
+            <Text style={styles.headerTime}>
+              {activeWorkout.startTime && formatElapsedTime(activeWorkout.startTime)}
+            </Text>
+          </View>
+          <View style={styles.headerSpacer} />
+        </View>
 
       <ScrollView style={styles.content}>
         {activeWorkout.exercises.length === 0 && (
@@ -186,6 +203,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
         defaultValues={selectedExerciseId ? getLastSetValues(selectedExerciseId) : null}
       />
     </View>
+    </SafeAreaView>
   );
 }
 
@@ -202,6 +220,10 @@ function formatElapsedTime(startTime: string): string {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#007AFF',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -209,7 +231,24 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#007AFF',
     padding: 20,
-    paddingTop: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backButtonText: {
+    fontSize: 28,
+    color: '#FFFFFF',
+    fontWeight: '300',
+  },
+  headerCenter: {
+    flex: 1,
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
@@ -221,6 +260,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     opacity: 0.9,
     marginTop: 5,
+  },
+  headerSpacer: {
+    width: 40,
   },
   content: {
     flex: 1,

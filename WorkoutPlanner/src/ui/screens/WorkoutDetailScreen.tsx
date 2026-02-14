@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import { useWorkoutDetail } from '../hooks/useWorkoutDetail';
 import { ExerciseDetailCard } from '../components/ExerciseDetailCard';
@@ -91,33 +92,36 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
 
   if (isLoading || !workout) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007AFF" />
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>← History</Text>
-        </TouchableOpacity>
-        <View style={styles.headerActions}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
           <TouchableOpacity
-            style={styles.iconButton}
-            onPress={handleUseAsTemplate}
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            <Text style={styles.iconButtonText}>📋</Text>
+            <Text style={styles.backButtonText}>← History</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton} onPress={handleDelete}>
-            <Text style={styles.iconButtonText}>🗑️</Text>
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={handleUseAsTemplate}
+            >
+              <Text style={styles.iconButtonText}>📋</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton} onPress={handleDelete}>
+              <Text style={styles.iconButtonText}>🗑️</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         <View style={styles.metaSection}>
@@ -166,11 +170,16 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
             ))}
         </View>
       </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#000',
@@ -179,7 +188,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 60,
     paddingHorizontal: 20,
     paddingBottom: 16,
     backgroundColor: '#000',

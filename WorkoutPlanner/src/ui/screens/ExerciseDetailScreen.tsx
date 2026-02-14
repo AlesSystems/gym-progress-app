@@ -202,8 +202,8 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backButton}>← Back</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Stats')}>
+            <Text style={styles.backButton}>← Stats</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Exercise Details</Text>
           <View style={styles.headerSpacer} />
@@ -218,8 +218,8 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backButton}>← Back</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Stats')}>
+          <Text style={styles.backButton}>← Stats</Text>
         </TouchableOpacity>
         <Text style={styles.title} numberOfLines={1}>{exerciseName}</Text>
         <View style={styles.headerSpacer} />

@@ -48,8 +48,8 @@ export function StatsScreen({ navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backButton}>← Back</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+          <Text style={styles.backButton}>← Dashboard</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Progress & Stats</Text>
         <View style={styles.headerSpacer} />

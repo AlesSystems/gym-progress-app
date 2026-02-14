@@ -8,6 +8,7 @@ import {
   RefreshControl,
   Alert,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
 import { WorkoutCard } from '../components/WorkoutCard';
@@ -96,16 +97,27 @@ export function HistoryScreen({ navigation }: any) {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007AFF" />
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>History</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.navigate('Dashboard')}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.backButtonText}>← Dashboard</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>History</Text>
+          <View style={styles.headerSpacer} />
         <View style={styles.viewToggle}>
           <TouchableOpacity
             style={[
@@ -166,27 +178,42 @@ export function HistoryScreen({ navigation }: any) {
         />
       )}
     </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#000',
   },
   header: {
-    paddingTop: 60,
     paddingHorizontal: 20,
     paddingBottom: 16,
     backgroundColor: '#000',
     borderBottomWidth: 1,
     borderBottomColor: '#333',
   },
+  backButton: {
+    marginBottom: 8,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
   title: {
     fontSize: 34,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 16,
+  },
+  headerSpacer: {
+    height: 0,
   },
   viewToggle: {
     flexDirection: 'row',

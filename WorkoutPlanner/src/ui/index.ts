@@ -18,3 +18,6 @@ export { useWorkoutDetail } from './hooks/useWorkoutDetail';
 
 // Context
 export { WorkoutProvider, useWorkoutContext } from './context/WorkoutContext';
+
+// Theme
+export { colors, spacing, borderRadius, shadows, typography } from './theme';

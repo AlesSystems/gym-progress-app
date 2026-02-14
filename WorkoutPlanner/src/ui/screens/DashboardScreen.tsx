@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import { useWorkoutContext } from '../context/WorkoutContext';
 
@@ -41,9 +42,12 @@ export function DashboardScreen({ navigation }: any) {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.content}>
-        <Text style={styles.title}>Workout Planner</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Workout Planner</Text>
+        </View>
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
 
         <TouchableOpacity
           style={styles.startButton}
@@ -88,7 +92,8 @@ export function DashboardScreen({ navigation }: any) {
           </Text>
         </View>
       </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -113,19 +118,31 @@ function getTotalSets(workout: any): number {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
   },
+  header: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
   content: {
     flex: 1,
+  },
+  scrollContent: {
     padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 30,
   },
   startButton: {
     backgroundColor: '#007AFF',
