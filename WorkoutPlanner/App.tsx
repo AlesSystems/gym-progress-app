@@ -7,6 +7,8 @@ import { DashboardScreen } from './src/ui/screens/DashboardScreen';
 import { ActiveWorkoutScreen } from './src/ui/screens/ActiveWorkoutScreen';
 import { HistoryScreen } from './src/ui/screens/HistoryScreen';
 import { WorkoutDetailScreen } from './src/ui/screens/WorkoutDetailScreen';
+import { StatsScreen } from './src/ui/screens/StatsScreen';
+import { ExerciseDetailScreen } from './src/ui/screens/ExerciseDetailScreen';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +30,8 @@ function App() {
             <Stack.Screen name="ActiveWorkout" component={ActiveWorkoutScreen} />
             <Stack.Screen name="History" component={HistoryScreen} />
             <Stack.Screen name="WorkoutDetail" component={WorkoutDetailScreen} />
+            <Stack.Screen name="Stats" component={StatsScreen} />
+            <Stack.Screen name="ExerciseDetail" component={ExerciseDetailScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </WorkoutProvider>

@@ -61,6 +61,14 @@ export function DashboardScreen({ navigation }: any) {
           <Text style={styles.historyButtonText}>View History</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.statsButton}
+          onPress={() => navigation.navigate('Stats')}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.statsButtonText}>Progress & Stats</Text>
+        </TouchableOpacity>
+
         {lastWorkout && (
           <View style={styles.lastWorkoutCard}>
             <Text style={styles.cardTitle}>Last Workout</Text>
@@ -142,6 +150,20 @@ const styles = StyleSheet.create({
   },
   historyButtonText: {
     color: '#007AFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  statsButton: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#4CAF50',
+  },
+  statsButtonText: {
+    color: '#4CAF50',
     fontSize: 18,
     fontWeight: '600',
   },
