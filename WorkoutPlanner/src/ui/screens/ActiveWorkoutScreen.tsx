@@ -8,10 +8,16 @@ import {
   Alert,
   Vibration,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import { useWorkoutContext } from '../context/WorkoutContext';
 import { ExercisePicker } from '../components/ExercisePicker';
 import { SetInputSheet } from '../components/SetInputSheet';
+import { RestTimer } from '../components/RestTimer';
+import { TemplateNameModal } from '../components/TemplateNameModal';
+import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 export function ActiveWorkoutScreen({ navigation }: any) {
   const {
@@ -23,10 +29,23 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     finishWorkout,
     saveAsTemplate,
   } = useWorkoutContext();
+  const { colors, isDarkMode } = useTheme();
 
   const [showExercisePicker, setShowExercisePicker] = useState(false);
   const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
   const [showSetInput, setShowSetInput] = useState(false);
+  const [showRestTimer, setShowRestTimer] = useState(false);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [settings, setSettings] = useState<AppSettings | null>(null);
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    const loaded = await SettingsStorage.getSettings();
+    setSettings(loaded);
+  };
 
   useEffect(() => {
     if (!activeWorkout) {
@@ -63,8 +82,12 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     if (result?.prs && result.prs.length > 0) {
       Vibration.vibrate([0, 100, 50, 100]);
       Alert.alert('🎉 Personal Record!', `You set ${result.prs.length} PR(s)!`);
-    } else {
+    } else if (settings?.vibrationEnabled) {
       Vibration.vibrate(50);
+    }
+
+    if (!isWarmup && settings?.restTimerEnabled) {
+      setShowRestTimer(true);
     }
   };
 
@@ -92,7 +115,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Save as Template',
-        onPress: handleSaveAsTemplate,
+        onPress: () => setShowTemplateModal(true),
       },
       {
         text: 'Finish',
@@ -104,35 +127,25 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     ]);
   };
 
-  const handleSaveAsTemplate = () => {
-    Alert.prompt(
-      'Save as Template',
-      'Enter a name for this workout template:',
+  const handleSaveTemplate = async (templateName: string) => {
+    await saveAsTemplate(templateName);
+    setShowTemplateModal(false);
+    Alert.alert(
+      'Template Saved',
+      'Workout saved as template successfully!',
       [
-        { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Save',
-          onPress: async (templateName?: string) => {
-            if (templateName && templateName.trim()) {
-              await saveAsTemplate(templateName.trim());
-              Alert.alert(
-                'Template Saved',
-                'Workout saved as template successfully!',
-                [
-                  {
-                    text: 'Finish Workout',
-                    onPress: async () => {
-                      await finishWorkout();
-                      navigation.navigate('Dashboard');
-                    },
-                  },
-                ]
-              );
-            }
+          text: 'Finish Workout',
+          onPress: async () => {
+            await finishWorkout();
+            navigation.navigate('Dashboard');
           },
         },
-      ],
-      'plain-text'
+        {
+          text: 'Continue Workout',
+          style: 'cancel',
+        },
+      ]
     );
   };
 
@@ -142,8 +155,11 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     return exercise.sets[exercise.sets.length - 1];
   };
 
+  const styles = createStyles(colors, isDarkMode);
+
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity 
@@ -162,7 +178,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
           <View style={styles.headerSpacer} />
         </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
         {activeWorkout.exercises.length === 0 && (
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>No exercises yet</Text>
@@ -184,11 +200,13 @@ export function ActiveWorkoutScreen({ navigation }: any) {
 
             {exercise.sets.map((set, index) => (
               <View key={set.id} style={styles.setRow}>
-                <Text style={styles.setNumber}>{index + 1}</Text>
+                <View style={styles.setNumberContainer}>
+                  <Text style={styles.setNumber}>{index + 1}</Text>
+                </View>
                 <Text style={styles.setText}>
                   {set.weight} kg × {set.reps} reps
                 </Text>
-                {set.isWarmup && <Text style={styles.warmupBadge}>W</Text>}
+                {set.isWarmup && <Text style={styles.warmupBadge}>WARMUP</Text>}
                 <TouchableOpacity
                   onPress={() => handleDeleteSet(exercise.id, set.id)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -239,6 +257,21 @@ export function ActiveWorkoutScreen({ navigation }: any) {
         }}
         defaultValues={selectedExerciseId ? getLastSetValues(selectedExerciseId) : null}
       />
+
+      {settings && (
+        <RestTimer
+          visible={showRestTimer}
+          duration={settings.defaultRestTime}
+          onClose={() => setShowRestTimer(false)}
+          onSkip={() => setShowRestTimer(false)}
+        />
+      )}
+
+      <TemplateNameModal
+        visible={showTemplateModal}
+        onSave={handleSaveTemplate}
+        onCancel={() => setShowTemplateModal(false)}
+      />
     </View>
     </SafeAreaView>
   );
@@ -256,21 +289,23 @@ function formatElapsedTime(startTime: string): string {
   return `${mins} min`;
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.primary, // Match header color for status bar area
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: '#007AFF',
-    padding: 20,
+    backgroundColor: colors.primary,
+    padding: spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: spacing.xl, // Add some top padding if safe area doesn't cover it fully
   },
   backButton: {
     width: 40,
@@ -279,8 +314,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backButtonText: {
-    fontSize: 28,
-    color: '#FFFFFF',
+    fontSize: 24,
+    color: colors.textOnPrimary,
     fontWeight: '300',
   },
   headerCenter: {
@@ -288,22 +323,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.textOnPrimary,
   },
   headerTime: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.textOnPrimary,
     opacity: 0.9,
-    marginTop: 5,
+    marginTop: 2,
+    fontWeight: '600',
   },
   headerSpacer: {
     width: 40,
   },
   content: {
     flex: 1,
-    padding: 15,
+  },
+  scrollContent: {
+    padding: spacing.lg,
+    paddingBottom: 100, // Space for footer
   },
   emptyState: {
     alignItems: 'center',
@@ -312,116 +351,135 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#999',
+    color: colors.textMuted,
     marginTop: 8,
   },
   exerciseCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   exerciseHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: spacing.md,
   },
   exerciseName: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: '700',
+    color: colors.text,
   },
   deleteButton: {
-    fontSize: 24,
-    color: '#FF3B30',
+    fontSize: 20,
+    color: colors.textMuted,
     fontWeight: '300',
   },
   setRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: colors.border,
+  },
+  setNumberContainer: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   setNumber: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#666',
-    width: 30,
+    color: colors.textSecondary,
   },
   setText: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: colors.text,
+    fontWeight: '500',
   },
   warmupBadge: {
-    backgroundColor: '#FFE5B4',
+    backgroundColor: 'rgba(255, 152, 0, 0.15)',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#FF8C00',
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#FF9800',
     marginRight: 10,
+    overflow: 'hidden',
   },
   deleteSetButton: {
     fontSize: 18,
-    color: '#FF3B30',
+    color: colors.danger,
     fontWeight: '300',
     paddingHorizontal: 10,
   },
   addSetButton: {
-    marginTop: 10,
-    padding: 12,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 8,
+    marginTop: spacing.md,
+    padding: spacing.md,
+    backgroundColor: isDarkMode ? colors.background : '#F0F0F0',
+    borderRadius: borderRadius.md,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   addSetButtonText: {
     fontSize: 16,
-    color: '#007AFF',
+    color: colors.primary,
     fontWeight: '600',
   },
   footer: {
     flexDirection: 'row',
-    padding: 15,
-    backgroundColor: '#FFFFFF',
+    padding: spacing.lg,
+    backgroundColor: colors.surface,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    gap: 10,
+    borderTopColor: colors.border,
+    gap: spacing.md,
   },
   addExerciseButton: {
     flex: 1,
-    backgroundColor: '#007AFF',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: colors.surface,
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.primary,
   },
   addExerciseButtonText: {
-    color: '#FFFFFF',
+    color: colors.primary,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   finishButton: {
     flex: 1,
-    backgroundColor: '#34C759',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: colors.success,
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
   },
   finishButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });
+}

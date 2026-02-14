@@ -8,9 +8,12 @@ import {
   Alert,
   ActivityIndicator,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import { useWorkoutDetail } from '../hooks/useWorkoutDetail';
 import { ExerciseDetailCard } from '../components/ExerciseDetailCard';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 export function WorkoutDetailScreen({ route, navigation }: any) {
   const { workoutId } = route.params;
@@ -21,6 +24,7 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
     updateWorkout,
     duplicateAsTemplate,
   } = useWorkoutDetail(workoutId);
+  const { colors, isDarkMode } = useTheme();
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -90,11 +94,13 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
     }, 0);
   };
 
+  const styles = createStyles(colors, isDarkMode);
+
   if (isLoading || !workout) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       </SafeAreaView>
     );
@@ -102,6 +108,7 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -123,157 +130,162 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
           </View>
         </View>
 
-      <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.metaSection}>
-          <Text style={styles.dateText}>{formatDate(workout.date)}</Text>
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Duration</Text>
-              <Text style={styles.metaValue}>
-                {formatDuration(workout.startTime, workout.endTime)}
-              </Text>
-            </View>
-            {workout.bodyweight && (
+        <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
+          <View style={styles.metaSection}>
+            <Text style={styles.dateText}>{formatDate(workout.date)}</Text>
+            <View style={styles.metaRow}>
               <View style={styles.metaItem}>
-                <Text style={styles.metaLabel}>Bodyweight</Text>
-                <Text style={styles.metaValue}>{workout.bodyweight} kg</Text>
+                <Text style={styles.metaLabel}>Duration</Text>
+                <Text style={styles.metaValue}>
+                  {formatDuration(workout.startTime, workout.endTime)}
+                </Text>
               </View>
-            )}
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Total Volume</Text>
-              <Text style={styles.metaValue}>
-                {calculateTotalVolume().toFixed(0)} kg
-              </Text>
+              {workout.bodyweight && (
+                <View style={styles.metaItem}>
+                  <Text style={styles.metaLabel}>Bodyweight</Text>
+                  <Text style={styles.metaValue}>{workout.bodyweight} kg</Text>
+                </View>
+              )}
+              <View style={styles.metaItem}>
+                <Text style={styles.metaLabel}>Total Volume</Text>
+                <Text style={styles.metaValue}>
+                  {calculateTotalVolume().toFixed(0)} kg
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {workout.notes && (
-          <View style={styles.notesSection}>
-            <Text style={styles.sectionTitle}>Notes</Text>
-            <Text style={styles.notesText}>{workout.notes}</Text>
+          {workout.notes && (
+            <View style={styles.notesSection}>
+              <Text style={styles.sectionTitle}>Notes</Text>
+              <Text style={styles.notesText}>{workout.notes}</Text>
+            </View>
+          )}
+
+          <View style={styles.exercisesSection}>
+            <Text style={styles.sectionTitle}>
+              Exercises ({workout.exercises.length})
+            </Text>
+            {workout.exercises
+              .sort((a, b) => a.order - b.order)
+              .map(exercise => (
+                <ExerciseDetailCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  isEditing={isEditing}
+                />
+              ))}
           </View>
-        )}
-
-        <View style={styles.exercisesSection}>
-          <Text style={styles.sectionTitle}>
-            Exercises ({workout.exercises.length})
-          </Text>
-          {workout.exercises
-            .sort((a, b) => a.order - b.order)
-            .map(exercise => (
-              <ExerciseDetailCard
-                key={exercise.id}
-                exercise={exercise}
-                isEditing={isEditing}
-              />
-            ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: '#000',
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  backButton: {
-    paddingVertical: 8,
-  },
-  backButtonText: {
-    fontSize: 17,
-    color: '#007AFF',
-  },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  iconButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconButtonText: {
-    fontSize: 20,
-  },
-  content: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
-  metaSection: {
-    marginTop: 20,
-  },
-  dateText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 16,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  metaItem: {
-    flex: 1,
-    backgroundColor: '#1c1c1e',
-    padding: 16,
-    borderRadius: 12,
-  },
-  metaLabel: {
-    fontSize: 13,
-    color: '#8e8e93',
-    marginBottom: 4,
-  },
-  metaValue: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  notesSection: {
-    marginTop: 24,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 12,
-  },
-  notesText: {
-    fontSize: 15,
-    color: '#8e8e93',
-    lineHeight: 22,
-    backgroundColor: '#1c1c1e',
-    padding: 16,
-    borderRadius: 12,
-  },
-  exercisesSection: {
-    marginTop: 24,
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.background,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    backButton: {
+      paddingVertical: 8,
+    },
+    backButtonText: {
+      fontSize: 17,
+      color: colors.primary,
+    },
+    headerActions: {
+      flexDirection: 'row',
+      gap: 16,
+    },
+    iconButton: {
+      width: 44,
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    iconButtonText: {
+      fontSize: 20,
+      color: colors.text,
+    },
+    content: {
+      flex: 1,
+    },
+    scrollContent: {
+      paddingHorizontal: spacing.lg,
+      paddingBottom: 40,
+    },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+    },
+    metaSection: {
+      marginTop: spacing.xl,
+    },
+    dateText: {
+      ...typography.title1,
+      color: colors.text,
+      marginBottom: spacing.lg,
+    },
+    metaRow: {
+      flexDirection: 'row',
+      gap: 16,
+    },
+    metaItem: {
+      flex: 1,
+      backgroundColor: colors.surface,
+      padding: spacing.lg,
+      borderRadius: borderRadius.lg,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    metaLabel: {
+      fontSize: 13,
+      color: colors.textSecondary,
+      marginBottom: 4,
+    },
+    metaValue: {
+      fontSize: 17,
+      fontWeight: '600',
+      color: colors.text,
+    },
+    notesSection: {
+      marginTop: spacing.xl,
+    },
+    sectionTitle: {
+      ...typography.title3,
+      color: colors.text,
+      marginBottom: spacing.md,
+    },
+    notesText: {
+      fontSize: 15,
+      color: colors.textSecondary,
+      lineHeight: 22,
+      backgroundColor: colors.surface,
+      padding: spacing.lg,
+      borderRadius: borderRadius.lg,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    exercisesSection: {
+      marginTop: spacing.xl,
+    },
+  });
+}

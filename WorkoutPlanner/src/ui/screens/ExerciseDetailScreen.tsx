@@ -7,11 +7,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import { useWorkoutContext } from '../context/WorkoutContext';
 import { useExerciseStats } from '../hooks/useExerciseStats';
 import { useWeightChart, useVolumeChart } from '../hooks/useChartData';
 import { TimeRange } from '../../domain/progress/types';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -20,6 +23,7 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
   const { workoutHistory } = useWorkoutContext();
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>('all');
   const [chartType, setChartType] = useState<'weight' | 'volume'>('weight');
+  const { colors, isDarkMode } = useTheme();
 
   const stats = useExerciseStats(exerciseName, workoutHistory);
   const weightChart = useWeightChart(exerciseName, workoutHistory, selectedTimeRange, []);
@@ -30,15 +34,17 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
   const getTrendColor = (trend: string) => {
     switch (trend) {
       case 'improving':
-        return '#4CAF50';
+        return colors.success;
       case 'declining':
-        return '#F44336';
+        return colors.danger;
       case 'plateauing':
-        return '#FF9800';
+        return colors.warning;
       default:
-        return '#999';
+        return colors.textMuted;
     }
   };
+
+  const styles = createStyles(colors, isDarkMode);
 
   const renderSimpleChart = () => {
     if (!currentChart || currentChart.dataPoints.length === 0) {
@@ -217,6 +223,7 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Stats')}>
           <Text style={styles.backButton}>← Stats</Text>
@@ -364,263 +371,275 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    fontSize: 16,
-    color: '#2196F3',
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    flex: 1,
-    textAlign: 'center',
-    marginHorizontal: 10,
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  summaryCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  statRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  statBox: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2196F3',
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  statDate: {
-    fontSize: 10,
-    color: '#999',
-    marginTop: 2,
-  },
-  timeRangeContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 8,
-    marginBottom: 16,
-    gap: 8,
-  },
-  timeRangeButton: {
-    flex: 1,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
-  },
-  timeRangeButtonActive: {
-    backgroundColor: '#2196F3',
-  },
-  timeRangeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#666',
-  },
-  timeRangeTextActive: {
-    color: '#fff',
-  },
-  chartTypeContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 8,
-    marginBottom: 16,
-    gap: 8,
-  },
-  chartTypeButton: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
-  },
-  chartTypeButtonActive: {
-    backgroundColor: '#2196F3',
-  },
-  chartTypeText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#666',
-  },
-  chartTypeTextActive: {
-    color: '#fff',
-  },
-  chartCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  chartTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 16,
-  },
-  chartContainer: {
-    marginTop: 10,
-  },
-  chart: {
-    flexDirection: 'row',
-    position: 'relative',
-  },
-  yAxis: {
-    width: 40,
-    justifyContent: 'space-between',
-    paddingRight: 8,
-  },
-  axisLabel: {
-    fontSize: 10,
-    color: '#999',
-  },
-  chartArea: {
-    flex: 1,
-    position: 'relative',
-  },
-  gridLine: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 1,
-    backgroundColor: '#e0e0e0',
-  },
-  dataPoint: {
-    position: 'absolute',
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  prMarker: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  chartLine: {
-    position: 'absolute',
-    height: 2,
-    backgroundColor: '#2196F3',
-    transformOrigin: 'left center',
-  },
-  trendLineContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  trendLine: {
-    position: 'absolute',
-    height: 1,
-    backgroundColor: '#FF9800',
-    opacity: 0.6,
-    borderStyle: 'dashed',
-    transformOrigin: 'left center',
-  },
-  xAxis: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-    paddingLeft: 40,
-  },
-  chartPlaceholder: {
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-  },
-  placeholderText: {
-    color: '#999',
-    fontSize: 14,
-  },
-  infoCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 12,
-  },
-  infoText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#999',
-  },
-  headerSpacer: {
-    width: 60,
-  },
-  footerSpacer: {
-    height: 40,
-  },
-  statRowMargin: {
-    marginTop: 16,
-  },
-  prPoint: {
-    backgroundColor: '#FFD700',
-  },
-  normalPoint: {
-    backgroundColor: '#2196F3',
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.background,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    backButton: {
+      fontSize: 16,
+      color: colors.primary,
+      fontWeight: '600',
+    },
+    title: {
+      ...typography.headline,
+      fontWeight: 'bold',
+      color: colors.text,
+      flex: 1,
+      textAlign: 'center',
+      marginHorizontal: 10,
+    },
+    content: {
+      flex: 1,
+      padding: spacing.lg,
+    },
+    summaryCard: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    statRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    statBox: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    statValue: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: colors.primary,
+    },
+    statLabel: {
+      fontSize: 12,
+      color: colors.textSecondary,
+      marginTop: 4,
+    },
+    statDate: {
+      fontSize: 10,
+      color: colors.textMuted,
+      marginTop: 2,
+    },
+    timeRangeContainer: {
+      flexDirection: 'row',
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: 8,
+      marginBottom: spacing.lg,
+      gap: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    timeRangeButton: {
+      flex: 1,
+      paddingVertical: 8,
+      borderRadius: borderRadius.md,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+    },
+    timeRangeButtonActive: {
+      backgroundColor: colors.primary,
+    },
+    timeRangeText: {
+      fontSize: 12,
+      fontWeight: '600',
+      color: colors.textSecondary,
+    },
+    timeRangeTextActive: {
+      color: colors.textOnPrimary,
+    },
+    chartTypeContainer: {
+      flexDirection: 'row',
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: 8,
+      marginBottom: spacing.lg,
+      gap: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    chartTypeButton: {
+      flex: 1,
+      paddingVertical: 10,
+      borderRadius: borderRadius.md,
+      backgroundColor: colors.background,
+      alignItems: 'center',
+    },
+    chartTypeButtonActive: {
+      backgroundColor: colors.primary,
+    },
+    chartTypeText: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.textSecondary,
+    },
+    chartTypeTextActive: {
+      color: colors.textOnPrimary,
+    },
+    chartCard: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    chartTitle: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: spacing.lg,
+    },
+    chartContainer: {
+      marginTop: 10,
+    },
+    chart: {
+      flexDirection: 'row',
+      position: 'relative',
+    },
+    yAxis: {
+      width: 40,
+      justifyContent: 'space-between',
+      paddingRight: 8,
+    },
+    axisLabel: {
+      fontSize: 10,
+      color: colors.textMuted,
+    },
+    chartArea: {
+      flex: 1,
+      position: 'relative',
+    },
+    gridLine: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      height: 1,
+      backgroundColor: colors.border,
+    },
+    dataPoint: {
+      position: 'absolute',
+      width: 16,
+      height: 16,
+      borderRadius: 8,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    prMarker: {
+      color: '#fff',
+      fontSize: 10,
+      fontWeight: 'bold',
+    },
+    chartLine: {
+      position: 'absolute',
+      height: 2,
+      backgroundColor: colors.primary,
+      transformOrigin: 'left center',
+    },
+    trendLineContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+    trendLine: {
+      position: 'absolute',
+      height: 1,
+      backgroundColor: colors.warning,
+      opacity: 0.6,
+      borderStyle: 'dashed',
+      transformOrigin: 'left center',
+    },
+    xAxis: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 8,
+      paddingLeft: 40,
+    },
+    chartPlaceholder: {
+      height: 200,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+      borderRadius: borderRadius.md,
+    },
+    placeholderText: {
+      color: colors.textMuted,
+      fontSize: 14,
+    },
+    infoCard: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    infoTitle: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: spacing.md,
+    },
+    infoText: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginBottom: 8,
+    },
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    emptyText: {
+      fontSize: 16,
+      color: colors.textMuted,
+    },
+    headerSpacer: {
+      width: 60,
+    },
+    footerSpacer: {
+      height: 40,
+    },
+    statRowMargin: {
+      marginTop: spacing.lg,
+    },
+    prPoint: {
+      backgroundColor: colors.warning, // Gold/Yellow for PRs
+    },
+    normalPoint: {
+      backgroundColor: colors.primary,
+    },
+  });
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Exercise } from '../../data/models/Workout';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 interface ExerciseDetailCardProps {
   exercise: Exercise;
@@ -11,6 +13,9 @@ export function ExerciseDetailCard({
   exercise,
   isEditing = false,
 }: ExerciseDetailCardProps) {
+  const { colors, isDarkMode } = useTheme();
+  const styles = createStyles(colors, isDarkMode);
+
   const calculateVolume = () => {
     return exercise.sets
       .filter(set => !set.isWarmup)
@@ -57,89 +62,98 @@ export function ExerciseDetailCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#1c1c1e',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#2c2c2e',
-  },
-  exerciseName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  setRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-    gap: 12,
-  },
-  setNumber: {
-    fontSize: 15,
-    color: '#8e8e93',
-    width: 50,
-  },
-  setText: {
-    fontSize: 15,
-    color: '#fff',
-    flex: 1,
-  },
-  warmupBadge: {
-    backgroundColor: '#007AFF',
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  warmupText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  rpeText: {
-    fontSize: 13,
-    color: '#8e8e93',
-  },
-  volumeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#2c2c2e',
-  },
-  volumeLabel: {
-    fontSize: 15,
-    color: '#8e8e93',
-  },
-  volumeValue: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  notesContainer: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#2c2c2e',
-  },
-  notesLabel: {
-    fontSize: 13,
-    color: '#8e8e93',
-    marginBottom: 4,
-  },
-  notesText: {
-    fontSize: 14,
-    color: '#fff',
-    lineHeight: 20,
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.lg,
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: spacing.md,
+      paddingBottom: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    exerciseName: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: colors.text,
+    },
+    setRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: spacing.sm,
+      gap: 12,
+    },
+    setNumber: {
+      fontSize: 15,
+      color: colors.textSecondary,
+      width: 50,
+    },
+    setText: {
+      fontSize: 15,
+      color: colors.text,
+      flex: 1,
+    },
+    warmupBadge: {
+      backgroundColor: colors.primary,
+      borderRadius: 4,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+    },
+    warmupText: {
+      fontSize: 12,
+      fontWeight: '600',
+      color: colors.textOnPrimary,
+    },
+    rpeText: {
+      fontSize: 13,
+      color: colors.textSecondary,
+    },
+    volumeRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: spacing.md,
+      paddingTop: spacing.md,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    volumeLabel: {
+      fontSize: 15,
+      color: colors.textSecondary,
+    },
+    volumeValue: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.text,
+    },
+    notesContainer: {
+      marginTop: spacing.md,
+      paddingTop: spacing.md,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    notesLabel: {
+      fontSize: 13,
+      color: colors.textSecondary,
+      marginBottom: 4,
+    },
+    notesText: {
+      fontSize: 14,
+      color: colors.text,
+      lineHeight: 20,
+    },
+  });
+}

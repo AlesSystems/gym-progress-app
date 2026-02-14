@@ -8,6 +8,8 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Workout } from '../../data/models/Workout';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 interface CalendarViewProps {
   workouts: Workout[];
@@ -30,6 +32,8 @@ export function CalendarView({
   refreshing,
 }: CalendarViewProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const { colors, isDarkMode } = useTheme();
+  const styles = createStyles(colors, isDarkMode);
 
   const goToPreviousMonth = useCallback(() => {
     setCurrentMonth(prev => {
@@ -89,7 +93,12 @@ export function CalendarView({
     <ScrollView
       style={styles.container}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl 
+          refreshing={refreshing} 
+          onRefresh={onRefresh}
+          tintColor={colors.primary}
+          colors={[colors.primary]}
+        />
       }
     >
       <View style={styles.header}>
@@ -157,97 +166,101 @@ export function CalendarView({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  navButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 32,
-    color: '#007AFF',
-    fontWeight: '300',
-  },
-  monthText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  weekDays: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingBottom: 8,
-  },
-  weekDayText: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#8e8e93',
-  },
-  calendar: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 20,
-  },
-  dayCell: {
-    width: `${100 / 7}%`,
-    aspectRatio: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  todayCell: {
-    backgroundColor: '#1c1c1e',
-    borderRadius: 8,
-  },
-  otherMonthCell: {
-    opacity: 0.3,
-  },
-  dayNumber: {
-    fontSize: 16,
-    color: '#fff',
-  },
-  todayText: {
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-  otherMonthText: {
-    color: '#636366',
-  },
-  workoutIndicator: {
-    position: 'absolute',
-    bottom: 4,
-  },
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#007AFF',
-  },
-  badge: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-    minWidth: 16,
-    alignItems: 'center',
-  },
-  badgeText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#fff',
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    navButton: {
+      width: 44,
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    navText: {
+      fontSize: 32,
+      color: colors.primary,
+      fontWeight: '300',
+    },
+    monthText: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: colors.text,
+    },
+    weekDays: {
+      flexDirection: 'row',
+      paddingHorizontal: spacing.lg,
+      paddingBottom: spacing.sm,
+    },
+    weekDayText: {
+      flex: 1,
+      textAlign: 'center',
+      fontSize: 12,
+      fontWeight: '600',
+      color: colors.textSecondary,
+    },
+    calendar: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      paddingHorizontal: spacing.lg,
+    },
+    dayCell: {
+      width: `${100 / 7}%`,
+      aspectRatio: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    todayCell: {
+      backgroundColor: colors.surface,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    otherMonthCell: {
+      opacity: 0.3,
+    },
+    dayNumber: {
+      fontSize: 16,
+      color: colors.text,
+    },
+    todayText: {
+      color: colors.primary,
+      fontWeight: '600',
+    },
+    otherMonthText: {
+      color: colors.textMuted,
+    },
+    workoutIndicator: {
+      position: 'absolute',
+      bottom: 4,
+    },
+    dot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: colors.primary,
+    },
+    badge: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingHorizontal: 5,
+      paddingVertical: 1,
+      minWidth: 16,
+      alignItems: 'center',
+    },
+    badgeText: {
+      fontSize: 10,
+      fontWeight: '600',
+      color: colors.textOnPrimary,
+    },
+  });
+}

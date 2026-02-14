@@ -8,12 +8,14 @@ import {
   SafeAreaView,
   Switch,
   Alert,
+  StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
+import { spacing, borderRadius, typography } from '../theme';
 
 export function SettingsScreen({ navigation }: any) {
-  const { themeMode, isDarkMode, setThemeMode } = useTheme();
+  const { themeMode, isDarkMode, setThemeMode, colors } = useTheme();
   const [settings, setSettings] = useState<AppSettings | null>(null);
 
   useEffect(() => {
@@ -53,10 +55,11 @@ export function SettingsScreen({ navigation }: any) {
     );
   };
 
-  const styles = createStyles(isDarkMode);
+  const styles = createStyles(colors, isDarkMode);
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity
@@ -132,17 +135,33 @@ export function SettingsScreen({ navigation }: any) {
                   <Switch
                     value={settings.restTimerEnabled}
                     onValueChange={(value) => updateSetting('restTimerEnabled', value)}
-                    trackColor={{ false: '#767577', true: '#007AFF' }}
-                    thumbColor={isDarkMode ? '#f4f3f4' : '#fff'}
+                    trackColor={{ false: colors.textMuted, true: colors.primary }}
+                    thumbColor={colors.surface}
                   />
                 </View>
 
-                <View style={styles.settingRow}>
-                  <View style={styles.settingLabelContainer}>
-                    <Text style={styles.settingLabel}>Default Rest Time</Text>
-                    <Text style={styles.settingDescription}>{settings.defaultRestTime} seconds</Text>
+                {settings.restTimerEnabled && (
+                  <View style={styles.settingRow}>
+                    <View style={styles.settingLabelContainer}>
+                      <Text style={styles.settingLabel}>Default Rest Time</Text>
+                      <Text style={styles.settingDescription}>{settings.defaultRestTime} seconds</Text>
+                    </View>
+                    <View style={styles.restTimeControls}>
+                      <TouchableOpacity
+                        style={styles.restTimeButton}
+                        onPress={() => updateSetting('defaultRestTime', Math.max(30, settings.defaultRestTime - 15))}
+                      >
+                        <Text style={styles.restTimeButtonText}>-15</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.restTimeButton}
+                        onPress={() => updateSetting('defaultRestTime', Math.min(300, settings.defaultRestTime + 15))}
+                      >
+                        <Text style={styles.restTimeButtonText}>+15</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
+                )}
               </View>
 
               {/* Feedback Settings */}
@@ -157,8 +176,8 @@ export function SettingsScreen({ navigation }: any) {
                   <Switch
                     value={settings.vibrationEnabled}
                     onValueChange={(value) => updateSetting('vibrationEnabled', value)}
-                    trackColor={{ false: '#767577', true: '#007AFF' }}
-                    thumbColor={isDarkMode ? '#f4f3f4' : '#fff'}
+                    trackColor={{ false: colors.textMuted, true: colors.primary }}
+                    thumbColor={colors.surface}
                   />
                 </View>
 
@@ -170,8 +189,8 @@ export function SettingsScreen({ navigation }: any) {
                   <Switch
                     value={settings.soundEnabled}
                     onValueChange={(value) => updateSetting('soundEnabled', value)}
-                    trackColor={{ false: '#767577', true: '#007AFF' }}
-                    thumbColor={isDarkMode ? '#f4f3f4' : '#fff'}
+                    trackColor={{ false: colors.textMuted, true: colors.primary }}
+                    thumbColor={colors.surface}
                   />
                 </View>
               </View>
@@ -212,29 +231,22 @@ export function SettingsScreen({ navigation }: any) {
   );
 }
 
-function createStyles(isDarkMode: boolean) {
-  const bg = isDarkMode ? '#000000' : '#FFFFFF';
-  const bgSecondary = isDarkMode ? '#1C1C1E' : '#F5F5F5';
-  const surface = isDarkMode ? '#1C1C1E' : '#FFFFFF';
-  const text = isDarkMode ? '#FFFFFF' : '#333333';
-  const textSecondary = isDarkMode ? '#8E8E93' : '#666666';
-  const border = isDarkMode ? '#333333' : '#E0E0E0';
-
+function createStyles(colors: any, isDarkMode: boolean) {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: bg,
+      backgroundColor: colors.background,
     },
     container: {
       flex: 1,
-      backgroundColor: bgSecondary,
+      backgroundColor: colors.background,
     },
     header: {
-      backgroundColor: bg,
-      paddingHorizontal: 20,
-      paddingVertical: 20,
+      backgroundColor: colors.background,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.lg,
       borderBottomWidth: 1,
-      borderBottomColor: border,
+      borderBottomColor: colors.border,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -247,12 +259,11 @@ function createStyles(isDarkMode: boolean) {
     },
     backButtonText: {
       fontSize: 28,
-      color: '#007AFF',
+      color: colors.primary,
     },
     title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: text,
+      ...typography.title2,
+      color: colors.text,
     },
     headerSpacer: {
       width: 40,
@@ -261,37 +272,38 @@ function createStyles(isDarkMode: boolean) {
       flex: 1,
     },
     section: {
-      marginTop: 20,
-      paddingHorizontal: 20,
+      marginTop: spacing.xl,
+      paddingHorizontal: spacing.lg,
     },
     sectionTitle: {
-      fontSize: 13,
-      fontWeight: '600',
-      color: textSecondary,
+      ...typography.caption1,
+      color: colors.textSecondary,
       textTransform: 'uppercase',
-      marginBottom: 10,
+      marginBottom: spacing.sm,
       letterSpacing: 0.5,
     },
     settingRow: {
-      backgroundColor: surface,
-      padding: 16,
+      backgroundColor: colors.surface,
+      padding: spacing.lg,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
-      borderBottomColor: border,
+      borderBottomColor: colors.border,
+      borderRadius: borderRadius.md,
+      marginBottom: 1,
     },
     settingLabel: {
-      fontSize: 17,
-      color: text,
+      ...typography.body,
+      color: colors.text,
       fontWeight: '500',
     },
     settingLabelContainer: {
       flex: 1,
     },
     settingDescription: {
-      fontSize: 13,
-      color: textSecondary,
+      ...typography.caption1,
+      color: colors.textSecondary,
       marginTop: 2,
     },
     themeButtons: {
@@ -303,63 +315,63 @@ function createStyles(isDarkMode: boolean) {
       paddingVertical: 6,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: border,
-      backgroundColor: bgSecondary,
+      borderColor: colors.border,
+      backgroundColor: colors.background,
     },
     themeButtonActive: {
-      backgroundColor: '#007AFF',
-      borderColor: '#007AFF',
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
     },
     themeButtonText: {
       fontSize: 14,
-      color: text,
+      color: colors.text,
       fontWeight: '500',
     },
     themeButtonTextActive: {
-      color: '#FFFFFF',
+      color: colors.textOnPrimary,
     },
     segmentControl: {
       flexDirection: 'row',
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: border,
+      borderColor: colors.border,
       overflow: 'hidden',
     },
     segmentButton: {
       paddingHorizontal: 20,
       paddingVertical: 8,
-      backgroundColor: bgSecondary,
+      backgroundColor: colors.background,
     },
     segmentButtonActive: {
-      backgroundColor: '#007AFF',
+      backgroundColor: colors.primary,
     },
     segmentButtonText: {
       fontSize: 14,
-      color: text,
+      color: colors.text,
       fontWeight: '600',
     },
     segmentButtonTextActive: {
-      color: '#FFFFFF',
+      color: colors.textOnPrimary,
     },
     developerName: {
-      fontSize: 17,
-      color: '#007AFF',
+      ...typography.body,
+      color: colors.primary,
       fontWeight: '600',
     },
     versionText: {
-      fontSize: 17,
-      color: textSecondary,
+      ...typography.body,
+      color: colors.textSecondary,
     },
     resetButton: {
-      backgroundColor: surface,
-      padding: 16,
-      borderRadius: 12,
+      backgroundColor: colors.surface,
+      padding: spacing.lg,
+      borderRadius: borderRadius.lg,
       alignItems: 'center',
       borderWidth: 1,
-      borderColor: '#FF3B30',
+      borderColor: colors.danger,
     },
     resetButtonText: {
-      color: '#FF3B30',
+      color: colors.danger,
       fontSize: 17,
       fontWeight: '600',
     },
@@ -369,8 +381,23 @@ function createStyles(isDarkMode: boolean) {
     },
     footerText: {
       fontSize: 14,
-      color: textSecondary,
+      color: colors.textSecondary,
       fontWeight: '500',
+    },
+    restTimeControls: {
+      flexDirection: 'row',
+      gap: 10,
+    },
+    restTimeButton: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: 15,
+      paddingVertical: 8,
+      borderRadius: 8,
+    },
+    restTimeButtonText: {
+      color: colors.textOnPrimary,
+      fontSize: 14,
+      fontWeight: '600',
     },
   });
 }

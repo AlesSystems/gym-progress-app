@@ -286,8 +286,10 @@ export function useActiveWorkout() {
       updatedAt: now,
     };
 
+    console.log('Saving template:', template);
     await TemplateStorage.saveTemplate(template);
     const updatedTemplates = await TemplateStorage.getAllTemplates();
+    console.log('Templates after save:', updatedTemplates.length);
     setTemplates(updatedTemplates);
   }, [activeWorkout]);
 

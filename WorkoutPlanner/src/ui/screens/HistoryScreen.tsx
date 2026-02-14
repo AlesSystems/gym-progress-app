@@ -9,10 +9,13 @@ import {
   Alert,
   ActivityIndicator,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
 import { WorkoutCard } from '../components/WorkoutCard';
 import { CalendarView } from '../components/CalendarView';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 type ViewMode = 'list' | 'calendar';
 
@@ -23,9 +26,8 @@ export function HistoryScreen({ navigation }: any) {
     refreshHistory,
     deleteWorkout,
     duplicateWorkout,
-    searchQuery,
-    setSearchQuery,
   } = useWorkoutHistory();
+  const { colors, isDarkMode } = useTheme();
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [refreshing, setRefreshing] = useState(false);
@@ -83,6 +85,8 @@ export function HistoryScreen({ navigation }: any) {
     [handleWorkoutPress, handleDeleteWorkout, handleDuplicateWorkout]
   );
 
+  const styles = createStyles(colors, isDarkMode);
+
   const ListEmptyComponent = useMemo(
     () => (
       <View style={styles.emptyContainer}>
@@ -92,14 +96,14 @@ export function HistoryScreen({ navigation }: any) {
         </Text>
       </View>
     ),
-    []
+    [styles]
   );
 
   if (isLoading) {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       </SafeAreaView>
     );
@@ -107,6 +111,7 @@ export function HistoryScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity 
@@ -118,151 +123,170 @@ export function HistoryScreen({ navigation }: any) {
           </TouchableOpacity>
           <Text style={styles.title}>History</Text>
           <View style={styles.headerSpacer} />
-        <View style={styles.viewToggle}>
-          <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              viewMode === 'list' && styles.toggleButtonActive,
-            ]}
-            onPress={() => setViewMode('list')}
-          >
-            <Text
-              style={[
-                styles.toggleText,
-                viewMode === 'list' && styles.toggleTextActive,
-              ]}
-            >
-              List
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              viewMode === 'calendar' && styles.toggleButtonActive,
-            ]}
-            onPress={() => setViewMode('calendar')}
-          >
-            <Text
-              style={[
-                styles.toggleText,
-                viewMode === 'calendar' && styles.toggleTextActive,
-              ]}
-            >
-              Calendar
-            </Text>
-          </TouchableOpacity>
         </View>
-      </View>
+        
+        <View style={styles.viewToggleContainer}>
+          <View style={styles.viewToggle}>
+            <TouchableOpacity
+              style={[
+                styles.toggleButton,
+                viewMode === 'list' && styles.toggleButtonActive,
+              ]}
+              onPress={() => setViewMode('list')}
+            >
+              <Text
+                style={[
+                  styles.toggleText,
+                  viewMode === 'list' && styles.toggleTextActive,
+                ]}
+              >
+                List
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.toggleButton,
+                viewMode === 'calendar' && styles.toggleButtonActive,
+              ]}
+              onPress={() => setViewMode('calendar')}
+            >
+              <Text
+                style={[
+                  styles.toggleText,
+                  viewMode === 'calendar' && styles.toggleTextActive,
+                ]}
+              >
+                Calendar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {viewMode === 'list' ? (
-        <FlatList
-          data={workouts}
-          renderItem={renderWorkoutCard}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContent}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-          ListEmptyComponent={ListEmptyComponent}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          removeClippedSubviews={true}
-        />
-      ) : (
-        <CalendarView
-          workouts={workouts}
-          onWorkoutPress={handleWorkoutPress}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-        />
-      )}
-    </View>
+        {viewMode === 'list' ? (
+          <FlatList
+            data={workouts}
+            renderItem={renderWorkoutCard}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl 
+                refreshing={refreshing} 
+                onRefresh={handleRefresh}
+                tintColor={colors.primary}
+                colors={[colors.primary]}
+              />
+            }
+            ListEmptyComponent={ListEmptyComponent}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            removeClippedSubviews={true}
+          />
+        ) : (
+          <CalendarView
+            workouts={workouts}
+            onWorkoutPress={handleWorkoutPress}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
+          />
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: '#000',
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  backButton: {
-    marginBottom: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 16,
-  },
-  headerSpacer: {
-    height: 0,
-  },
-  viewToggle: {
-    flexDirection: 'row',
-    backgroundColor: '#1c1c1e',
-    borderRadius: 8,
-    padding: 2,
-  },
-  toggleButton: {
-    flex: 1,
-    paddingVertical: 8,
-    alignItems: 'center',
-    borderRadius: 6,
-  },
-  toggleButtonActive: {
-    backgroundColor: '#007AFF',
-  },
-  toggleText: {
-    color: '#8e8e93',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  toggleTextActive: {
-    color: '#fff',
-  },
-  listContent: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 100,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 100,
-  },
-  emptyText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#8e8e93',
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 16,
-    color: '#636366',
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.background,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    backButton: {
+      paddingVertical: spacing.xs,
+    },
+    backButtonText: {
+      fontSize: 16,
+      color: colors.primary,
+      fontWeight: '600',
+    },
+    title: {
+      ...typography.title3,
+      color: colors.text,
+    },
+    headerSpacer: {
+      width: 80, // Approximate width of back button to center title
+    },
+    viewToggleContainer: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.background,
+    },
+    viewToggle: {
+      flexDirection: 'row',
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.md,
+      padding: 2,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    toggleButton: {
+      flex: 1,
+      paddingVertical: 8,
+      alignItems: 'center',
+      borderRadius: borderRadius.sm - 2,
+    },
+    toggleButtonActive: {
+      backgroundColor: colors.primary,
+    },
+    toggleText: {
+      color: colors.textSecondary,
+      fontSize: 14,
+      fontWeight: '600',
+    },
+    toggleTextActive: {
+      color: colors.textOnPrimary,
+    },
+    listContent: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.md,
+      paddingBottom: 100,
+    },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+    },
+    emptyContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 100,
+    },
+    emptyText: {
+      fontSize: 20,
+      fontWeight: '600',
+      color: colors.textSecondary,
+      marginBottom: spacing.sm,
+    },
+    emptySubtext: {
+      fontSize: 16,
+      color: colors.textMuted,
+      textAlign: 'center',
+    },
+  });
+}

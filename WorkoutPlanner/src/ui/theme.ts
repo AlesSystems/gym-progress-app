@@ -1,40 +1,69 @@
-export const colors = {
-  // Primary colors
-  primary: '#007AFF',
+export const palette = {
+  // Base colors
+  black: '#000000',
+  white: '#FFFFFF',
+  
+  // Reds
+  redPrimary: '#FF3333', // Vibrant Red
+  redDark: '#D32F2F',
+  redLight: '#FF6666',
+  
+  // Grays
+  gray100: '#F5F5F5',
+  gray200: '#E0E0E0',
+  gray300: '#CCCCCC',
+  gray400: '#999999',
+  gray500: '#666666',
+  gray600: '#333333',
+  gray700: '#2C2C2E',
+  gray800: '#1C1C1E',
+  gray900: '#121212',
+};
+
+export const lightColors = {
+  primary: '#007AFF', // Keep Blue for light mode or switch to Red? User said "Dark mode must use red...", implies light mode can be different. But consistency is good. Let's keep Blue for now to minimize disruption, or switch to Red for brand consistency. Let's stick to the request for Dark Mode specifically.
   primaryDark: '#0051D5',
   primaryLight: '#4DA3FF',
   
-  // Success/Action colors
+  background: palette.gray100,
+  surface: palette.white,
+  surfaceHighlight: palette.white,
+  
+  text: palette.gray600,
+  textSecondary: palette.gray500,
+  textMuted: palette.gray400,
+  textOnPrimary: palette.white,
+  
+  border: palette.gray200,
+  
   success: '#34C759',
   warning: '#FF9800',
   danger: '#FF3B30',
   
-  // Background colors
-  background: '#F5F5F5',
-  backgroundDark: '#000000',
-  surface: '#FFFFFF',
-  surfaceDark: '#1C1C1E',
+  cardShadow: '#000000',
+};
+
+export const darkColors = {
+  primary: palette.redPrimary,
+  primaryDark: palette.redDark,
+  primaryLight: palette.redLight,
   
-  // Text colors
-  text: '#333333',
-  textLight: '#666666',
-  textMuted: '#999999',
-  textOnDark: '#FFFFFF',
-  textOnDarkMuted: '#8E8E93',
+  background: palette.black,
+  surface: palette.gray900, // Slightly lighter than black for cards
+  surfaceHighlight: palette.gray800,
   
-  // Border colors
-  border: '#E0E0E0',
-  borderDark: '#333333',
+  text: palette.white,
+  textSecondary: palette.gray300,
+  textMuted: palette.gray500,
+  textOnPrimary: palette.white,
   
-  // Status colors
-  improving: '#4CAF50',
-  declining: '#F44336',
-  plateauing: '#FF9800',
+  border: palette.gray700,
   
-  // Special colors
-  warmup: '#FFE5B4',
-  warmupText: '#FF8C00',
-  pr: '#FFD700',
+  success: '#32D74B',
+  warning: '#FF9F0A',
+  danger: '#FF453A',
+  
+  cardShadow: '#000000',
 };
 
 export const spacing = {
@@ -51,31 +80,8 @@ export const borderRadius = {
   sm: 8,
   md: 12,
   lg: 16,
+  xl: 20,
   round: 999,
-};
-
-export const shadows = {
-  small: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  medium: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  large: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-  },
 };
 
 export const typography = {
@@ -124,3 +130,6 @@ export const typography = {
     fontWeight: '400' as const,
   },
 };
+
+// Legacy export for backward compatibility until refactor is complete
+export const colors = lightColors;

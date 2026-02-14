@@ -7,6 +7,8 @@ import {
   Alert,
 } from 'react-native';
 import { Workout } from '../../data/models/Workout';
+import { useTheme } from '../context/ThemeContext';
+import { spacing, borderRadius, typography } from '../theme';
 
 interface WorkoutCardProps {
   workout: Workout;
@@ -21,6 +23,9 @@ export function WorkoutCard({
   onDelete,
   onDuplicate,
 }: WorkoutCardProps) {
+  const { colors, isDarkMode } = useTheme();
+  const styles = createStyles(colors, isDarkMode);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -122,56 +127,65 @@ export function WorkoutCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#1c1c1e',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  date: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  duration: {
-    fontSize: 14,
-    color: '#8e8e93',
-  },
-  stats: {
-    flexDirection: 'row',
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#2c2c2e',
-    marginBottom: 12,
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#8e8e93',
-  },
-  exerciseList: {
-    gap: 4,
-  },
-  exerciseName: {
-    fontSize: 14,
-    color: '#8e8e93',
-  },
-});
+function createStyles(colors: any, isDarkMode: boolean) {
+  return StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      marginBottom: spacing.md,
+    },
+    date: {
+      fontSize: 17,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: 4,
+    },
+    duration: {
+      fontSize: 14,
+      color: colors.textSecondary,
+    },
+    stats: {
+      flexDirection: 'row',
+      paddingVertical: spacing.md,
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: colors.border,
+      marginBottom: spacing.md,
+    },
+    statItem: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    statValue: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.text,
+      marginBottom: 4,
+    },
+    statLabel: {
+      fontSize: 12,
+      color: colors.textSecondary,
+    },
+    exerciseList: {
+      gap: 4,
+    },
+    exerciseName: {
+      fontSize: 14,
+      color: colors.textSecondary,
+    },
+  });
+}
