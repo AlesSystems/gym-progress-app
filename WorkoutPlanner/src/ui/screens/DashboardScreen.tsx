@@ -53,6 +53,14 @@ export function DashboardScreen({ navigation }: any) {
           <Text style={styles.startButtonText}>Start Workout</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.historyButton}
+          onPress={() => navigation.navigate('History')}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.historyButtonText}>View History</Text>
+        </TouchableOpacity>
+
         {lastWorkout && (
           <View style={styles.lastWorkoutCard}>
             <Text style={styles.cardTitle}>Last Workout</Text>
@@ -116,10 +124,24 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 12,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   startButtonText: {
     color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  historyButton: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#007AFF',
+  },
+  historyButtonText: {
+    color: '#007AFF',
     fontSize: 18,
     fontWeight: '600',
   },
