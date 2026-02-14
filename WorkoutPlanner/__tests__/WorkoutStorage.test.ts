@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WorkoutStorage } from '../../src/data/storage/WorkoutStorage';
-import { Workout } from '../../src/data/models/Workout';
+import { WorkoutStorage } from '../src/data/storage/WorkoutStorage';
+import { Workout } from '../src/data/models/Workout';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),

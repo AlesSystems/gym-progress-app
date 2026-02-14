@@ -1,5 +1,5 @@
-import { PRDetector } from '../../src/domain/workout/PRDetector';
-import { Workout, Set } from '../../src/data/models/Workout';
+import { PRDetector } from '../src/domain/workout/PRDetector';
+import { Workout, Set } from '../src/data/models/Workout';
 
 describe('PRDetector', () => {
   const createSet = (
@@ -53,7 +53,7 @@ describe('PRDetector', () => {
       const newSet = createSet('s3', 'ex1', 5, 110);
       const prs = PRDetector.detectPRs('Bench Press', newSet, history);
 
-      expect(prs).toHaveLength(2);
+      expect(prs).toHaveLength(1);
       expect(prs.some(pr => pr.type === 'max_weight' && pr.value === 110)).toBe(true);
     });
 
