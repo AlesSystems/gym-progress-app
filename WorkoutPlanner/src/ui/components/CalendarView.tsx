@@ -67,8 +67,7 @@ export function CalendarView({
     for (let i = 0; i < 42; i++) {
       const dateStr = currentDate.toISOString().split('T')[0];
       const dayWorkouts = workouts.filter(w => {
-        const workoutDate = new Date(w.date);
-        return workoutDate.toISOString().split('T')[0] === dateStr;
+        return w.date.split('T')[0] === dateStr;
       });
 
       days.push({
