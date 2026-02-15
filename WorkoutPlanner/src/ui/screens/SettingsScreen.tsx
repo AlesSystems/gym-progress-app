@@ -7,12 +7,12 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  Alert,
   StatusBar,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 export function SettingsScreen({ navigation }: any) {
   const { themeMode, isDarkMode, setThemeMode, colors } = useTheme();

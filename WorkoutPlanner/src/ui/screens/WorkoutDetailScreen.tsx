@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
@@ -14,6 +13,7 @@ import { useWorkoutDetail } from '../hooks/useWorkoutDetail';
 import { ExerciseDetailCard } from '../components/ExerciseDetailCard';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 export function WorkoutDetailScreen({ route, navigation }: any) {
   const { workoutId } = route.params;

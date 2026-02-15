@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
-  Alert,
   SafeAreaView,
   StatusBar,
   Modal,
@@ -14,6 +13,7 @@ import {
 import { useNutritionContext } from '../context/NutritionContext';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 export function NutritionScreen({ navigation }: any) {
   const { goals, saveEntry, saveGoals, getEntryByDate } = useNutritionContext();

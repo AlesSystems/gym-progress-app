@@ -80,6 +80,11 @@ export function RestTimer({ visible, duration, onClose, onSkip }: RestTimerProps
             >
               <Text style={styles.adjustButtonText}>-15s</Text>
             </TouchableOpacity>
+            
+            <View style={styles.progressIndicator}>
+              <View style={[styles.progressBar, { width: `${progress * 100}%` }]} />
+            </View>
+            
             <TouchableOpacity
               style={styles.adjustButton}
               onPress={() => addTime(15)}
@@ -110,28 +115,28 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 30,
+    padding: 24,
     alignItems: 'center',
-    width: '80%',
+    width: '85%',
     maxWidth: 350,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 30,
+    marginBottom: 24,
   },
   timerContainer: {
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
+    marginBottom: 24,
   },
   progressRing: {
     position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     backgroundColor: '#F0F0F0',
     overflow: 'hidden',
   },
@@ -144,37 +149,54 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   timeText: {
-    fontSize: 64,
+    fontSize: 56,
     fontWeight: 'bold',
     color: '#007AFF',
+    zIndex: 1,
   },
   controls: {
     flexDirection: 'row',
-    gap: 15,
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 20,
+    width: '100%',
+    gap: 10,
+  },
+  progressIndicator: {
+    flex: 1,
+    height: 4,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#007AFF',
   },
   adjustButton: {
     backgroundColor: '#F0F0F0',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 8,
+    minWidth: 60,
+    alignItems: 'center',
   },
   adjustButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#007AFF',
   },
   skipButton: {
     backgroundColor: '#007AFF',
     paddingHorizontal: 30,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 12,
     width: '100%',
     alignItems: 'center',
   },
   skipButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
   },
 });

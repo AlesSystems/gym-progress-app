@@ -5,13 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   SafeAreaView,
   StatusBar,
 } from 'react-native';
 import { useWorkoutContext } from '../context/WorkoutContext';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 export function DashboardScreen({ navigation }: any) {
   const { activeWorkout, workoutHistory, templates, startWorkout, discardWorkout } = useWorkoutContext();

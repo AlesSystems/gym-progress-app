@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { Workout } from '../../data/models/Workout';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 interface WorkoutCardProps {
   workout: Workout;

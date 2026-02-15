@@ -14,6 +14,7 @@ import { NutritionScreen } from './src/ui/screens/NutritionScreen';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
 import { NutritionProvider } from './src/ui/context/NutritionContext';
 import { ThemeProvider, useTheme } from './src/ui/context/ThemeContext';
+import { AlertProvider } from './src/ui/utils/Alert';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,13 +46,15 @@ function App() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <WorkoutProvider>
-          <NutritionProvider>
-            <NavigationContainer>
-              <AppNavigator />
-            </NavigationContainer>
-          </NutritionProvider>
-        </WorkoutProvider>
+        <AlertProvider>
+          <WorkoutProvider>
+            <NutritionProvider>
+              <NavigationContainer>
+                <AppNavigator />
+              </NavigationContainer>
+            </NutritionProvider>
+          </WorkoutProvider>
+        </AlertProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   );

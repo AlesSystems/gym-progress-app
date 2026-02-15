@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Vibration,
   SafeAreaView,
   StatusBar,
@@ -18,6 +17,7 @@ import { TemplateNameModal } from '../components/TemplateNameModal';
 import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 export function ActiveWorkoutScreen({ navigation }: any) {
   const {

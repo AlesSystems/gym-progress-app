@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   RefreshControl,
-  Alert,
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
@@ -16,6 +15,7 @@ import { WorkoutCard } from '../components/WorkoutCard';
 import { CalendarView } from '../components/CalendarView';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { Alert } from '../utils/Alert';
 
 type ViewMode = 'list' | 'calendar';
 
