@@ -7,7 +7,6 @@ export interface AppSettings {
   restTimerEnabled: boolean;
   defaultRestTime: number;
   vibrationEnabled: boolean;
-  soundEnabled: boolean;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -15,7 +14,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   restTimerEnabled: true,
   defaultRestTime: 90,
   vibrationEnabled: true,
-  soundEnabled: false,
 };
 
 export class SettingsStorage {

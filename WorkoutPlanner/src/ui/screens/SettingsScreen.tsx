@@ -55,7 +55,7 @@ export function SettingsScreen({ navigation }: any) {
     );
   };
 
-  const styles = createStyles(colors, isDarkMode);
+  const styles = createStyles(colors);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -180,19 +180,6 @@ export function SettingsScreen({ navigation }: any) {
                     thumbColor={colors.surface}
                   />
                 </View>
-
-                <View style={styles.settingRow}>
-                  <View style={styles.settingLabelContainer}>
-                    <Text style={styles.settingLabel}>Sound</Text>
-                    <Text style={styles.settingDescription}>Sound effects for PRs</Text>
-                  </View>
-                  <Switch
-                    value={settings.soundEnabled}
-                    onValueChange={(value) => updateSetting('soundEnabled', value)}
-                    trackColor={{ false: colors.textMuted, true: colors.primary }}
-                    thumbColor={colors.surface}
-                  />
-                </View>
               </View>
             </>
           )}
@@ -231,7 +218,7 @@ export function SettingsScreen({ navigation }: any) {
   );
 }
 
-function createStyles(colors: any, isDarkMode: boolean) {
+function createStyles(colors: any) {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
