@@ -10,7 +10,9 @@ import { WorkoutDetailScreen } from './src/ui/screens/WorkoutDetailScreen';
 import { StatsScreen } from './src/ui/screens/StatsScreen';
 import { ExerciseDetailScreen } from './src/ui/screens/ExerciseDetailScreen';
 import { SettingsScreen } from './src/ui/screens/SettingsScreen';
+import { NutritionScreen } from './src/ui/screens/NutritionScreen';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
+import { NutritionProvider } from './src/ui/context/NutritionContext';
 import { ThemeProvider, useTheme } from './src/ui/context/ThemeContext';
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +35,7 @@ function AppNavigator() {
         <Stack.Screen name="Stats" component={StatsScreen} />
         <Stack.Screen name="ExerciseDetail" component={ExerciseDetailScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Nutrition" component={NutritionScreen} />
       </Stack.Navigator>
     </>
   );
@@ -43,9 +46,11 @@ function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <WorkoutProvider>
-          <NavigationContainer>
-            <AppNavigator />
-          </NavigationContainer>
+          <NutritionProvider>
+            <NavigationContainer>
+              <AppNavigator />
+            </NavigationContainer>
+          </NutritionProvider>
         </WorkoutProvider>
       </ThemeProvider>
     </SafeAreaProvider>

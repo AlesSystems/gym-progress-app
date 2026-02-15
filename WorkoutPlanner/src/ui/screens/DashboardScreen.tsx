@@ -116,6 +116,15 @@ export function DashboardScreen({ navigation }: any) {
             <Text style={styles.actionIcon}>📈</Text>
             <Text style={styles.actionButtonText}>Stats</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('Nutrition')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionIcon}>🍎</Text>
+            <Text style={styles.actionButtonText}>Nutrition</Text>
+          </TouchableOpacity>
         </View>
 
         {lastWorkout && (

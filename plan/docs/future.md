@@ -24,7 +24,7 @@ If answer is "no" to any → Don't add it.
 
 ---
 
-## Phase 2: Essential Enhancements (3-6 months post-MVP)
+## Phase 2: Essential Enhancements
 
 ### 2.1 Cloud Sync (iCloud)
 
@@ -239,7 +239,7 @@ interface WorkoutTemplate {
 
 ---
 
-## Phase 3: Advanced Features (6-12 months post-MVP)
+## Phase 3: Advanced Features
 
 ### 3.1 AI Workout Insights
 

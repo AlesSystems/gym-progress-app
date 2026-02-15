@@ -20,4 +20,4 @@ export { useWorkoutDetail } from './hooks/useWorkoutDetail';
 export { WorkoutProvider, useWorkoutContext } from './context/WorkoutContext';
 
 // Theme
-export { colors, spacing, borderRadius, shadows, typography } from './theme';
+export { colors, spacing, borderRadius, typography } from './theme';
