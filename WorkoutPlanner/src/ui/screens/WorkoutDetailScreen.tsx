@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useWorkoutDetail } from '../hooks/useWorkoutDetail';
+import { useWorkoutContext } from '../context/WorkoutContext';
 import { ExerciseDetailCard } from '../components/ExerciseDetailCard';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
@@ -20,10 +21,10 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
   const {
     workout,
     isLoading,
-    deleteWorkout,
     updateWorkout,
     duplicateAsTemplate,
   } = useWorkoutDetail(workoutId);
+  const { deleteWorkout } = useWorkoutContext();
   const { colors, isDarkMode } = useTheme();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -44,13 +45,13 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
           text: 'Delete',
           style: 'destructive',
           onPress: async () => {
-            await deleteWorkout();
+            await deleteWorkout(workoutId);
             navigation.goBack();
           },
         },
       ]
     );
-  }, [deleteWorkout, navigation]);
+  }, [deleteWorkout, workoutId, navigation]);
 
   const handleUseAsTemplate = useCallback(async () => {
     await duplicateAsTemplate();

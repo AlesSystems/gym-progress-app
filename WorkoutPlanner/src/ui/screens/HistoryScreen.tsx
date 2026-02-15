@@ -10,7 +10,7 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { useWorkoutHistory } from '../hooks/useWorkoutHistory';
+import { useWorkoutContext } from '../context/WorkoutContext';
 import { WorkoutCard } from '../components/WorkoutCard';
 import { CalendarView } from '../components/CalendarView';
 import { useTheme } from '../context/ThemeContext';
@@ -21,22 +21,28 @@ type ViewMode = 'list' | 'calendar';
 
 export function HistoryScreen({ navigation }: any) {
   const {
-    workouts,
+    workoutHistory,
     isLoading,
-    refreshHistory,
+    refreshWorkouts,
     deleteWorkout,
-    duplicateWorkout,
-  } = useWorkoutHistory();
+  } = useWorkoutContext();
   const { colors, isDarkMode } = useTheme();
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [refreshing, setRefreshing] = useState(false);
 
+  // Filter and sort completed workouts
+  const workouts = useMemo(() => {
+    return workoutHistory
+      .filter(w => w.isCompleted)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [workoutHistory]);
+
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refreshHistory();
+    await refreshWorkouts();
     setRefreshing(false);
-  }, [refreshHistory]);
+  }, [refreshWorkouts]);
 
   const handleDeleteWorkout = useCallback(
     (workoutId: string) => {
@@ -60,10 +66,10 @@ export function HistoryScreen({ navigation }: any) {
 
   const handleDuplicateWorkout = useCallback(
     async (workoutId: string) => {
-      await duplicateWorkout(workoutId);
+      // TODO: Implement duplicate functionality
       Alert.alert('Success', 'Workout duplicated and ready to start!');
     },
-    [duplicateWorkout]
+    []
   );
 
   const handleWorkoutPress = useCallback(

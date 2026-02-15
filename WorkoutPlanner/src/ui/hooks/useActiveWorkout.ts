@@ -5,6 +5,7 @@ import { WorkoutTemplate, TemplateExercise } from '../../data/models/WorkoutTemp
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
 import { TemplateStorage } from '../../data/storage/TemplateStorage';
 import { PRDetector } from '../../domain/workout/PRDetector';
+import { getLocalDateTimeISO } from '../../utils/dateUtils';
 
 export function useActiveWorkout() {
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
@@ -54,7 +55,7 @@ export function useActiveWorkout() {
   };
 
   const startWorkout = useCallback(async (templateId?: string) => {
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     let exercises: Exercise[] = [];
 
     if (templateId) {
@@ -102,7 +103,7 @@ export function useActiveWorkout() {
   const addExercise = useCallback(async (name: string) => {
     if (!activeWorkout) return;
 
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     const newExercise: Exercise = {
       id: generateId(),
       workoutId: activeWorkout.id,
@@ -136,7 +137,7 @@ export function useActiveWorkout() {
     const exercise = activeWorkout.exercises.find(e => e.id === exerciseId);
     if (!exercise) return;
 
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     const newSet: Set = {
       id: generateId(),
       exerciseId,
@@ -172,7 +173,7 @@ export function useActiveWorkout() {
   const deleteSet = useCallback(async (exerciseId: string, setId: string) => {
     if (!activeWorkout) return;
 
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     const updatedExercises = activeWorkout.exercises.map(ex =>
       ex.id === exerciseId
         ? {
@@ -198,7 +199,7 @@ export function useActiveWorkout() {
   const deleteExercise = useCallback(async (exerciseId: string) => {
     if (!activeWorkout) return;
 
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     const updated = {
       ...activeWorkout,
       exercises: activeWorkout.exercises
@@ -214,7 +215,7 @@ export function useActiveWorkout() {
   const finishWorkout = useCallback(async () => {
     if (!activeWorkout) return;
 
-    const now = new Date().toISOString();
+    const now = getLocalDateTimeISO();
     const completed: Workout = {
       ...activeWorkout,
       endTime: now,
@@ -299,6 +300,25 @@ export function useActiveWorkout() {
     setTemplates(updatedTemplates);
   }, []);
 
+  const deleteWorkout = useCallback(async (id: string) => {
+    try {
+      await WorkoutStorage.deleteWorkout(id);
+      setWorkoutHistory(prev => prev.filter(w => w.id !== id));
+    } catch (error) {
+      console.error('Error deleting workout:', error);
+      throw error;
+    }
+  }, []);
+
+  const refreshWorkouts = useCallback(async () => {
+    try {
+      const history = await WorkoutStorage.getAllWorkouts();
+      setWorkoutHistory(history);
+    } catch (error) {
+      console.error('Error refreshing workouts:', error);
+    }
+  }, []);
+
   return {
     activeWorkout,
     workoutHistory,
@@ -315,6 +335,8 @@ export function useActiveWorkout() {
     updateWorkoutBodyweight,
     saveAsTemplate,
     deleteTemplate,
+    deleteWorkout,
+    refreshWorkouts,
   };
 }
 

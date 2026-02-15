@@ -26,6 +26,8 @@ interface WorkoutContextValue {
   updateWorkoutBodyweight: (bodyweight: number) => Promise<void>;
   saveAsTemplate: (name: string) => Promise<void>;
   deleteTemplate: (id: string) => Promise<void>;
+  deleteWorkout: (id: string) => Promise<void>;
+  refreshWorkouts: () => Promise<void>;
 }
 
 const WorkoutContext = createContext<WorkoutContextValue | null>(null);

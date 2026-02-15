@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Workout } from '../../data/models/Workout';
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
+import { getLocalDateTimeISO } from '../../utils/dateUtils';
+import { generateId } from '../../utils/uuid';
 
 export function useWorkoutHistory() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -51,12 +53,12 @@ export function useWorkoutHistory() {
         const newWorkout: Workout = {
           ...workout,
           id: generateId(),
-          date: new Date().toISOString(),
-          startTime: new Date().toISOString(),
+          date: getLocalDateTimeISO(),
+          startTime: getLocalDateTimeISO(),
           endTime: undefined,
           isCompleted: false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          createdAt: getLocalDateTimeISO(),
+          updatedAt: getLocalDateTimeISO(),
           exercises: workout.exercises.map(exercise => ({
             ...exercise,
             id: generateId(),

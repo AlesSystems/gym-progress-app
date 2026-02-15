@@ -1,4 +1,5 @@
 import { Workout, Set, PersonalRecord } from '../../data/models/Workout';
+import { getLocalDateTimeISO } from '../../utils/dateUtils';
 
 export class PRDetector {
   static detectPRs(
@@ -19,7 +20,7 @@ export class PRDetector {
         exerciseName,
         type: 'max_weight',
         value: newSet.weight,
-        date: new Date().toISOString(),
+        date: getLocalDateTimeISO(),
         workoutId: '',
         exerciseId: newSet.exerciseId,
         setId: newSet.id,
@@ -33,7 +34,7 @@ export class PRDetector {
         exerciseName,
         type: 'max_volume',
         value: newVolume,
-        date: new Date().toISOString(),
+        date: getLocalDateTimeISO(),
         workoutId: '',
         exerciseId: newSet.exerciseId,
         setId: newSet.id,
@@ -50,7 +51,7 @@ export class PRDetector {
         exerciseName,
         type: 'max_reps',
         value: newSet.reps,
-        date: new Date().toISOString(),
+        date: getLocalDateTimeISO(),
         workoutId: '',
         exerciseId: newSet.exerciseId,
         setId: newSet.id,

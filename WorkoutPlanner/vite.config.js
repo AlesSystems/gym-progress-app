@@ -59,8 +59,12 @@ export default defineConfig({
   resolve: {
     alias: {
       'react-native': 'react-native-web',
+      'react-native/Libraries/Utilities/codegenNativeComponent': path.resolve(__dirname, 'src/utils/codegenNativeComponent.js'),
     },
     extensions: ['.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.tsx', '.ts', '.jsx', '.js']
+  },
+  optimizeDeps: {
+    exclude: ['react-native-safe-area-context'],
   },
   root: '.',
   publicDir: 'public',

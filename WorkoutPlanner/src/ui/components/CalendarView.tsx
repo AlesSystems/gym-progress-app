@@ -65,7 +65,11 @@ export function CalendarView({
     today.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < 42; i++) {
-      const dateStr = currentDate.toISOString().split('T')[0];
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const dateStr = `${year}-${month}-${day}`;
+      
       const dayWorkouts = workouts.filter(w => {
         return w.date.split('T')[0] === dateStr;
       });

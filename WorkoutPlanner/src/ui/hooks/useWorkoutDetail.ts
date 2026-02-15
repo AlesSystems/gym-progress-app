@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Workout } from '../../data/models/Workout';
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
+import { getLocalDateTimeISO } from '../../utils/dateUtils';
+import { generateId } from '../../utils/uuid';
 
 export function useWorkoutDetail(workoutId: string) {
   const [workout, setWorkout] = useState<Workout | null>(null);
@@ -21,15 +23,6 @@ export function useWorkoutDetail(workoutId: string) {
     loadWorkout();
   }, [loadWorkout]);
 
-  const deleteWorkout = useCallback(async () => {
-    try {
-      await WorkoutStorage.deleteWorkout(workoutId);
-    } catch (error) {
-      console.error('Error deleting workout:', error);
-      throw error;
-    }
-  }, [workoutId]);
-
   const updateWorkout = useCallback(
     async (updates: Partial<Workout>) => {
       try {
@@ -38,7 +31,7 @@ export function useWorkoutDetail(workoutId: string) {
         const updatedWorkout: Workout = {
           ...workout,
           ...updates,
-          updatedAt: new Date().toISOString(),
+          updatedAt: getLocalDateTimeISO(),
         };
 
         await WorkoutStorage.saveWorkout(updatedWorkout);
@@ -58,8 +51,8 @@ export function useWorkoutDetail(workoutId: string) {
       const newWorkout: Workout = {
         ...workout,
         id: generateId(),
-        date: new Date().toISOString(),
-        startTime: new Date().toISOString(),
+        date: getLocalDateTimeISO(),
+        startTime: getLocalDateTimeISO(),
         endTime: undefined,
         isCompleted: false,
         notes: '',
@@ -97,7 +90,6 @@ export function useWorkoutDetail(workoutId: string) {
   return {
     workout,
     isLoading,
-    deleteWorkout,
     updateWorkout,
     duplicateAsTemplate,
   };
