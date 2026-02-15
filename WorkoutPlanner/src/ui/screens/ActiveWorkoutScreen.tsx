@@ -105,7 +105,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
     ]);
   };
 
-  const handleFinishWorkout = () => {
+  const handleFinishWorkout = async () => {
     if (activeWorkout.exercises.length === 0) {
       Alert.alert('No Exercises', 'Add at least one exercise before finishing.');
       return;
