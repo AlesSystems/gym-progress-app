@@ -16,6 +16,7 @@ import { CalendarView } from '../components/CalendarView';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 type ViewMode = 'list' | 'calendar';
 
@@ -196,6 +197,7 @@ export function HistoryScreen({ navigation }: any) {
             refreshing={refreshing}
           />
         )}
+        <ActiveWorkoutBanner navigation={navigation} currentScreen="History" />
       </View>
     </SafeAreaView>
   );

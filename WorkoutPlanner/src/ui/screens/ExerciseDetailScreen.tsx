@@ -15,6 +15,7 @@ import { useWeightChart, useVolumeChart } from '../hooks/useChartData';
 import { TimeRange } from '../../domain/progress/types';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -224,15 +225,16 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Stats')}>
-          <Text style={styles.backButton}>← Stats</Text>
-        </TouchableOpacity>
-        <Text style={styles.title} numberOfLines={1}>{exerciseName}</Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <View style={{ flex: 1 }}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.navigate('Stats')}>
+            <Text style={styles.backButton}>← Stats</Text>
+          </TouchableOpacity>
+          <Text style={styles.title} numberOfLines={1}>{exerciseName}</Text>
+          <View style={styles.headerSpacer} />
+        </View>
 
-      <ScrollView style={styles.content}>
+        <ScrollView style={styles.content}>
         {/* Stats Summary */}
         <View style={styles.summaryCard}>
           <View style={styles.statRow}>
@@ -367,6 +369,8 @@ export function ExerciseDetailScreen({ route, navigation }: any) {
 
         <View style={styles.footerSpacer} />
       </ScrollView>
+      <ActiveWorkoutBanner navigation={navigation} currentScreen="ExerciseDetail" />
+      </View>
     </SafeAreaView>
   );
 }

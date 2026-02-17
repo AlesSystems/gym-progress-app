@@ -12,14 +12,17 @@ import { useWorkoutContext } from '../context/WorkoutContext';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function DashboardScreen({ navigation }: any) {
   const { activeWorkout, workoutHistory, templates, startWorkout, discardWorkout } = useWorkoutContext();
   const { isDarkMode, colors } = useTheme();
   const [showTemplates, setShowTemplates] = React.useState(false);
+  const [hasShownResumeDialog, setHasShownResumeDialog] = React.useState(false);
 
   React.useEffect(() => {
-    if (activeWorkout && !activeWorkout.isCompleted) {
+    // Show resume dialog when coming back to Dashboard with an active workout
+    if (activeWorkout && !activeWorkout.isCompleted && !hasShownResumeDialog) {
       const timeSinceStart = activeWorkout.startTime
         ? Date.now() - new Date(activeWorkout.startTime).getTime()
         : 0;
@@ -29,13 +32,29 @@ export function DashboardScreen({ navigation }: any) {
           'Resume Workout',
           `You have an unfinished workout from ${formatTime(timeSinceStart)} ago. Would you like to resume?`,
           [
-            { text: 'Discard', onPress: discardWorkout, style: 'destructive' },
-            { text: 'Resume', onPress: () => navigation.navigate('ActiveWorkout') },
+            { 
+              text: 'Discard', 
+              onPress: () => {
+                discardWorkout();
+                setHasShownResumeDialog(false);
+              }, 
+              style: 'destructive' 
+            },
+            { 
+              text: 'Resume', 
+              onPress: () => navigation.navigate('ActiveWorkout') 
+            },
           ]
         );
+        setHasShownResumeDialog(true);
       }
     }
-  }, []);
+    
+    // Reset the flag when there's no active workout
+    if (!activeWorkout) {
+      setHasShownResumeDialog(false);
+    }
+  }, [activeWorkout, hasShownResumeDialog, navigation, discardWorkout]);
 
   const handleStartWorkout = async () => {
     if (templates.length > 0) {
@@ -127,6 +146,17 @@ export function DashboardScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.quickActions}>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.leaderboardButton]}
+            onPress={() => navigation.navigate('Leaderboard')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionIcon}>🏆</Text>
+            <Text style={styles.actionButtonText}>Leaderboard</Text>
+          </TouchableOpacity>
+        </View>
+
         {lastWorkout && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Last Session</Text>
@@ -182,6 +212,7 @@ export function DashboardScreen({ navigation }: any) {
           </View>
         )}
       </ScrollView>
+      <ActiveWorkoutBanner navigation={navigation} currentScreen="Dashboard" />
       </View>
     </SafeAreaView>
   );
@@ -298,6 +329,11 @@ function createStyles(colors: any, isDarkMode: boolean) {
     color: colors.text,
     fontSize: 16,
     fontWeight: '600',
+  },
+  leaderboardButton: {
+    flex: 1,
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   section: {
     marginBottom: spacing.xl,

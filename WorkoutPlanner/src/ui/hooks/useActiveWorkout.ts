@@ -5,6 +5,7 @@ import { WorkoutTemplate, TemplateExercise } from '../../data/models/WorkoutTemp
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
 import { TemplateStorage } from '../../data/storage/TemplateStorage';
 import { PRDetector } from '../../domain/workout/PRDetector';
+import { LeaderboardService } from '../../domain/leaderboard/LeaderboardService';
 import { getLocalDateTimeISO } from '../../utils/dateUtils';
 
 export function useActiveWorkout() {
@@ -18,11 +19,9 @@ export function useActiveWorkout() {
   }, []);
 
   useEffect(() => {
+    // Save immediately whenever activeWorkout changes
     if (activeWorkout && !activeWorkout.isCompleted) {
-      const timer = setInterval(() => {
-        WorkoutStorage.saveActiveWorkout(activeWorkout);
-      }, 30000);
-      return () => clearInterval(timer);
+      WorkoutStorage.saveActiveWorkout(activeWorkout);
     }
   }, [activeWorkout]);
 
@@ -227,8 +226,16 @@ export function useActiveWorkout() {
     await WorkoutStorage.clearActiveWorkout();
     
     setActiveWorkout(null);
-    setWorkoutHistory(prev => [...prev, completed]);
-  }, [activeWorkout]);
+    const updatedHistory = [...workoutHistory, completed];
+    setWorkoutHistory(updatedHistory);
+
+    // Update leaderboard stats after completing workout
+    try {
+      await LeaderboardService.updateUserStats(updatedHistory);
+    } catch (error) {
+      console.error('Error updating leaderboard stats:', error);
+    }
+  }, [activeWorkout, workoutHistory]);
 
   const discardWorkout = useCallback(async () => {
     await WorkoutStorage.clearActiveWorkout();

@@ -13,6 +13,7 @@ import { useTheme } from '../context/ThemeContext';
 import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function SettingsScreen({ navigation }: any) {
   const { themeMode, isDarkMode, setThemeMode, colors } = useTheme();
@@ -213,6 +214,7 @@ export function SettingsScreen({ navigation }: any) {
             <Text style={styles.footerText}>Made with 💪 by Altan Esmer</Text>
           </View>
         </ScrollView>
+        <ActiveWorkoutBanner navigation={navigation} currentScreen="Settings" />
       </View>
     </SafeAreaView>
   );

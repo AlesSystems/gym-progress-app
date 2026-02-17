@@ -63,6 +63,9 @@ export default defineConfig({
     },
     extensions: ['.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.tsx', '.ts', '.jsx', '.js']
   },
+  define: {
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+  },
   optimizeDeps: {
     exclude: ['react-native-safe-area-context'],
   },

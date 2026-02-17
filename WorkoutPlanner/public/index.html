@@ -59,6 +59,13 @@
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     
+    /* Logo/Icon optimization for PWA */
+    link[rel="icon"],
+    link[rel="apple-touch-icon"] {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+    
     @supports (-webkit-touch-callout: none) {
       body {
         min-height: -webkit-fill-available;

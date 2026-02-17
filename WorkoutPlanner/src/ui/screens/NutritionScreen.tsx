@@ -14,6 +14,7 @@ import { useNutritionContext } from '../context/NutritionContext';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function NutritionScreen({ navigation }: any) {
   const { goals, saveEntry, saveGoals, getEntryByDate } = useNutritionContext();
@@ -364,6 +365,7 @@ export function NutritionScreen({ navigation }: any) {
             </View>
           </View>
         </Modal>
+        <ActiveWorkoutBanner navigation={navigation} currentScreen="Nutrition" />
       </View>
     </SafeAreaView>
   );

@@ -14,6 +14,7 @@ import { ProgressUtils } from '../../domain/progress';
 import { TimeRange } from '../../domain/progress/types';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function StatsScreen({ navigation }: any) {
   const { workoutHistory } = useWorkoutContext();
@@ -171,6 +172,7 @@ export function StatsScreen({ navigation }: any) {
           {/* Footer Spacing */}
           <View style={styles.footerSpacer} />
         </ScrollView>
+        <ActiveWorkoutBanner navigation={navigation} currentScreen="Stats" />
       </View>
     </SafeAreaView>
   );

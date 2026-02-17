@@ -15,6 +15,7 @@ import { ExerciseDetailCard } from '../components/ExerciseDetailCard';
 import { useTheme } from '../context/ThemeContext';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
+import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function WorkoutDetailScreen({ route, navigation }: any) {
   const { workoutId } = route.params;
@@ -178,6 +179,7 @@ export function WorkoutDetailScreen({ route, navigation }: any) {
               ))}
           </View>
         </ScrollView>
+        <ActiveWorkoutBanner navigation={navigation} currentScreen="WorkoutDetail" />
       </View>
     </SafeAreaView>
   );

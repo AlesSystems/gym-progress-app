@@ -22,11 +22,13 @@ import { Alert } from '../utils/Alert';
 export function ActiveWorkoutScreen({ navigation }: any) {
   const {
     activeWorkout,
+    isLoading,
     addExercise,
     addSet,
     deleteSet,
     deleteExercise,
     finishWorkout,
+    discardWorkout,
     saveAsTemplate,
   } = useWorkoutContext();
   const { colors, isDarkMode } = useTheme();
@@ -56,10 +58,21 @@ export function ActiveWorkoutScreen({ navigation }: any) {
   };
 
   useEffect(() => {
-    if (!activeWorkout) {
+    // Only redirect if we're done loading AND there's no active workout
+    if (!isLoading && !activeWorkout) {
       navigation.navigate('Dashboard');
     }
-  }, [activeWorkout, navigation]);
+  }, [activeWorkout, isLoading, navigation]);
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+          <Text style={{ color: colors.text }}>Loading workout...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (!activeWorkout) {
     return null;
@@ -111,6 +124,24 @@ export function ActiveWorkoutScreen({ navigation }: any) {
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', onPress: () => deleteExercise(exerciseId), style: 'destructive' },
     ]);
+  };
+
+  const handleDiscardWorkout = () => {
+    Alert.alert(
+      'Discard Workout',
+      'Are you sure you want to discard this workout? All progress will be lost.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Discard',
+          style: 'destructive',
+          onPress: async () => {
+            await discardWorkout();
+            navigation.navigate('Dashboard');
+          },
+        },
+      ]
+    );
   };
 
   const handleFinishWorkout = async () => {
@@ -183,7 +214,13 @@ export function ActiveWorkoutScreen({ navigation }: any) {
               {activeWorkout.startTime && formatElapsedTime(activeWorkout.startTime, currentTime)}
             </Text>
           </View>
-          <View style={styles.headerSpacer} />
+          <TouchableOpacity 
+            style={styles.discardButton}
+            onPress={handleDiscardWorkout}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.discardButtonText}>🗑️</Text>
+          </TouchableOpacity>
         </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
@@ -286,7 +323,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
 }
 
 function formatElapsedTime(startTime: string, currentTime: number): string {
-  const elapsed = currentTime - new Date(startTime).getTime();
+  const elapsed = Math.max(0, currentTime - new Date(startTime).getTime());
   const minutes = Math.floor(elapsed / 60000);
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
@@ -342,8 +379,15 @@ function createStyles(colors: any, isDarkMode: boolean) {
     marginTop: 2,
     fontWeight: '600',
   },
-  headerSpacer: {
+  discardButton: {
     width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  discardButtonText: {
+    fontSize: 20,
+    color: colors.textOnPrimary,
   },
   content: {
     flex: 1,
