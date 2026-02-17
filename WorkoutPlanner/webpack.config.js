@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
         directory: path.join(__dirname, 'dist'),
       },
       compress: true,
-      port: 3000,
+      port: 3010,
       hot: true,
       historyApiFallback: true,
       open: true,

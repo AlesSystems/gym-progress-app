@@ -37,9 +37,17 @@ export function ActiveWorkoutScreen({ navigation }: any) {
   const [showRestTimer, setShowRestTimer] = useState(false);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [settings, setSettings] = useState<AppSettings | null>(null);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     loadSettings();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadSettings = async () => {
@@ -172,7 +180,7 @@ export function ActiveWorkoutScreen({ navigation }: any) {
           <View style={styles.headerCenter}>
             <Text style={styles.headerTitle}>Active Workout</Text>
             <Text style={styles.headerTime}>
-              {activeWorkout.startTime && formatElapsedTime(activeWorkout.startTime)}
+              {activeWorkout.startTime && formatElapsedTime(activeWorkout.startTime, currentTime)}
             </Text>
           </View>
           <View style={styles.headerSpacer} />
@@ -277,8 +285,8 @@ export function ActiveWorkoutScreen({ navigation }: any) {
   );
 }
 
-function formatElapsedTime(startTime: string): string {
-  const elapsed = Date.now() - new Date(startTime).getTime();
+function formatElapsedTime(startTime: string, currentTime: number): string {
+  const elapsed = currentTime - new Date(startTime).getTime();
   const minutes = Math.floor(elapsed / 60000);
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;

@@ -61,7 +61,8 @@ export function SetInputSheet({ visible, onSave, onClose, defaultValues }: SetIn
 
   const incrementWeight = (amount: number) => {
     const current = parseFloat(weight) || 0;
-    setWeight((current + amount).toString());
+    const newValue = Math.max(0, current + amount);
+    setWeight(newValue.toString());
   };
 
   const incrementReps = (amount: number) => {
@@ -70,7 +71,13 @@ export function SetInputSheet({ visible, onSave, onClose, defaultValues }: SetIn
     setReps(newValue.toString());
   };
 
-  const canSave = reps && weight && !isNaN(parseInt(reps, 10)) && !isNaN(parseFloat(weight));
+  const canSave = 
+    reps !== '' && 
+    weight !== '' && 
+    !isNaN(parseInt(reps, 10)) && 
+    parseInt(reps, 10) > 0 &&
+    !isNaN(parseFloat(weight)) && 
+    parseFloat(weight) >= 0;
 
   return (
     <Modal

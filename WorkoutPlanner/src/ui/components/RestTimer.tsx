@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Modal,
   TouchableOpacity,
+  Vibration,
+  AppState,
+  Platform,
 } from 'react-native';
 
 interface RestTimerProps {
@@ -16,29 +19,60 @@ interface RestTimerProps {
 
 export function RestTimer({ visible, duration, onClose, onSkip }: RestTimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration);
+  const startTimeRef = useRef<number | null>(null);
+  const targetTimeRef = useRef<number | null>(null);
+  const appState = useRef(AppState.currentState);
 
   useEffect(() => {
     if (visible) {
+      const now = Date.now();
+      startTimeRef.current = now;
+      targetTimeRef.current = now + duration * 1000;
       setTimeLeft(duration);
+    } else {
+      startTimeRef.current = null;
+      targetTimeRef.current = null;
     }
   }, [visible, duration]);
 
   useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active' &&
+        visible &&
+        targetTimeRef.current
+      ) {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((targetTimeRef.current - now) / 1000));
+        setTimeLeft(remaining);
+      }
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [visible]);
+
+  useEffect(() => {
     if (!visible || timeLeft <= 0) {
       if (timeLeft <= 0 && visible) {
+        if (Platform.OS !== 'web') {
+          Vibration.vibrate([0, 200, 100, 200]);
+        }
         onClose();
       }
       return;
     }
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+      if (targetTimeRef.current) {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.ceil((targetTimeRef.current - now) / 1000));
+        setTimeLeft(remaining);
+      }
+    }, 100);
 
     return () => clearInterval(interval);
   }, [visible, timeLeft, onClose]);
@@ -50,7 +84,12 @@ export function RestTimer({ visible, duration, onClose, onSkip }: RestTimerProps
   };
 
   const addTime = (seconds: number) => {
-    setTimeLeft((prev) => prev + seconds);
+    if (targetTimeRef.current) {
+      targetTimeRef.current += seconds * 1000;
+      const now = Date.now();
+      const remaining = Math.max(0, Math.ceil((targetTimeRef.current - now) / 1000));
+      setTimeLeft(remaining);
+    }
   };
 
   const progress = duration > 0 ? (duration - timeLeft) / duration : 0;

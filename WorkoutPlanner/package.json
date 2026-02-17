@@ -16,7 +16,7 @@
     "web": "vite",
     "web:build": "vite build",
     "web:preview": "vite preview",
-    "web:serve": "npx serve dist -s -p 3000"
+    "web:serve": "npx serve dist -s -p 3010"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
