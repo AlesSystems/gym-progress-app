@@ -12,6 +12,7 @@ import { ExerciseDetailScreen } from './src/ui/screens/ExerciseDetailScreen';
 import { SettingsScreen } from './src/ui/screens/SettingsScreen';
 import { NutritionScreen } from './src/ui/screens/NutritionScreen';
 import { LeaderboardScreen } from './src/ui/screens/LeaderboardScreen';
+import { WeightTrackingScreen } from './src/ui/screens/WeightTrackingScreen';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
 import { NutritionProvider } from './src/ui/context/NutritionContext';
 import { ThemeProvider, useTheme } from './src/ui/context/ThemeContext';
@@ -39,6 +40,7 @@ function AppNavigator() {
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Nutrition" component={NutritionScreen} />
         <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
+        <Stack.Screen name="WeightTracking" component={WeightTrackingScreen} />
       </Stack.Navigator>
     </>
   );

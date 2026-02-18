@@ -148,12 +148,21 @@ export function DashboardScreen({ navigation }: any) {
 
         <View style={styles.quickActions}>
           <TouchableOpacity
-            style={[styles.actionButton, styles.leaderboardButton]}
+            style={styles.actionButton}
             onPress={() => navigation.navigate('Leaderboard')}
             activeOpacity={0.8}
           >
             <Text style={styles.actionIcon}>🏆</Text>
             <Text style={styles.actionButtonText}>Leaderboard</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('WeightTracking')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionIcon}>⚖️</Text>
+            <Text style={styles.actionButtonText}>Weight</Text>
           </TouchableOpacity>
         </View>
 
