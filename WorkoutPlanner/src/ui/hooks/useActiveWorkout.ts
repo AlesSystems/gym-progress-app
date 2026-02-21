@@ -4,15 +4,18 @@ import { Workout, Exercise, Set } from '../../data/models/Workout';
 import { WorkoutTemplate, TemplateExercise } from '../../data/models/WorkoutTemplate';
 import { WorkoutStorage } from '../../data/storage/WorkoutStorage';
 import { TemplateStorage } from '../../data/storage/TemplateStorage';
+import { FirebaseSync } from '../../data/storage/FirebaseSync';
 import { PRDetector } from '../../domain/workout/PRDetector';
 import { LeaderboardService } from '../../domain/leaderboard/LeaderboardService';
 import { getLocalDateTimeISO } from '../../utils/dateUtils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function useActiveWorkout() {
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
   const [workoutHistory, setWorkoutHistory] = useState<Workout[]>([]);
   const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     loadInitialData();
@@ -38,18 +41,59 @@ export function useActiveWorkout() {
 
   const loadInitialData = async () => {
     try {
+      // Load local data first for fast startup
       const [active, history, templateList] = await Promise.all([
         WorkoutStorage.getActiveWorkout(),
         WorkoutStorage.getAllWorkouts(),
         TemplateStorage.getAllTemplates(),
       ]);
+      
       setActiveWorkout(active);
       setWorkoutHistory(history);
       setTemplates(templateList);
+      setIsLoading(false);
+
+      // Perform Firebase sync in background
+      performBackgroundSync(history, templateList);
     } catch (error) {
       console.error('Error loading initial data:', error);
-    } finally {
       setIsLoading(false);
+    }
+  };
+
+  const performBackgroundSync = async (
+    localWorkouts: Workout[],
+    localTemplates: WorkoutTemplate[]
+  ) => {
+    try {
+      setIsSyncing(true);
+      console.log('[useActiveWorkout] Starting background sync...');
+
+      const { workouts, templates } = await FirebaseSync.performFullSync(
+        localWorkouts,
+        localTemplates
+      );
+
+      // Update local storage with synced data
+      await AsyncStorage.setItem('@workouts', JSON.stringify(workouts));
+      await AsyncStorage.setItem('@workout_templates', JSON.stringify(templates));
+
+      // Update state if data changed
+      if (workouts.length !== localWorkouts.length) {
+        setWorkoutHistory(workouts);
+        console.log(`[useActiveWorkout] Synced ${workouts.length} workouts`);
+      }
+      
+      if (templates.length !== localTemplates.length) {
+        setTemplates(templates);
+        console.log(`[useActiveWorkout] Synced ${templates.length} templates`);
+      }
+
+      console.log('[useActiveWorkout] Background sync completed');
+    } catch (error) {
+      console.error('[useActiveWorkout] Background sync error:', error);
+    } finally {
+      setIsSyncing(false);
     }
   };
 

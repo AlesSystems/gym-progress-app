@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WorkoutTemplate } from '../models/WorkoutTemplate';
+import { FirebaseSync } from './FirebaseSync';
 
 const TEMPLATES_KEY = '@workout_templates';
 
@@ -16,6 +17,11 @@ export class TemplateStorage {
       }
       
       await AsyncStorage.setItem(TEMPLATES_KEY, JSON.stringify(templates));
+      
+      // Sync to Firebase in background
+      FirebaseSync.pushTemplates(templates).catch(err =>
+        console.error('[TemplateStorage] Background sync failed:', err)
+      );
     } catch (error) {
       console.error('Error saving template:', error);
       throw error;
@@ -47,6 +53,11 @@ export class TemplateStorage {
       const templates = await this.getAllTemplates();
       const filtered = templates.filter(t => t.id !== id);
       await AsyncStorage.setItem(TEMPLATES_KEY, JSON.stringify(filtered));
+      
+      // Delete from Firebase
+      FirebaseSync.deleteTemplate(id).catch(err =>
+        console.error('[TemplateStorage] Firebase delete failed:', err)
+      );
     } catch (error) {
       console.error('Error deleting template:', error);
       throw error;

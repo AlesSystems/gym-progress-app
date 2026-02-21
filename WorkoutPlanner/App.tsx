@@ -13,6 +13,7 @@ import { SettingsScreen } from './src/ui/screens/SettingsScreen';
 import { NutritionScreen } from './src/ui/screens/NutritionScreen';
 import { LeaderboardScreen } from './src/ui/screens/LeaderboardScreen';
 import { WeightTrackingScreen } from './src/ui/screens/WeightTrackingScreen';
+import { AuthProvider } from './src/ui/context/AuthContext';
 import { WorkoutProvider } from './src/ui/context/WorkoutContext';
 import { NutritionProvider } from './src/ui/context/NutritionContext';
 import { ThemeProvider, useTheme } from './src/ui/context/ThemeContext';
@@ -51,13 +52,15 @@ function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <AlertProvider>
-          <WorkoutProvider>
-            <NutritionProvider>
-              <NavigationContainer>
-                <AppNavigator />
-              </NavigationContainer>
-            </NutritionProvider>
-          </WorkoutProvider>
+          <AuthProvider>
+            <WorkoutProvider>
+              <NutritionProvider>
+                <NavigationContainer>
+                  <AppNavigator />
+                </NavigationContainer>
+              </NutritionProvider>
+            </WorkoutProvider>
+          </AuthProvider>
         </AlertProvider>
       </ThemeProvider>
     </SafeAreaProvider>

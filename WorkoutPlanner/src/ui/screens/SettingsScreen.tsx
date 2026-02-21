@@ -8,24 +8,58 @@ import {
   SafeAreaView,
   Switch,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { SettingsStorage, AppSettings } from '../../data/storage/SettingsStorage';
+import { FirebaseSync } from '../../data/storage/FirebaseSync';
 import { spacing, borderRadius, typography } from '../theme';
 import { Alert } from '../utils/Alert';
 import { ActiveWorkoutBanner } from '../components/ActiveWorkoutBanner';
 
 export function SettingsScreen({ navigation }: any) {
   const { themeMode, isDarkMode, setThemeMode, colors } = useTheme();
+  const { user, isAuthenticated, isFirebaseEnabled } = useAuth();
   const [settings, setSettings] = useState<AppSettings | null>(null);
+  const [syncStatus, setSyncStatus] = useState<any>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     loadSettings();
+    loadSyncStatus();
   }, []);
 
   const loadSettings = async () => {
     const loaded = await SettingsStorage.getSettings();
     setSettings(loaded);
+  };
+
+  const loadSyncStatus = async () => {
+    const status = await FirebaseSync.getSyncStatus();
+    setSyncStatus(status);
+  };
+
+  const handleManualSync = async () => {
+    setIsSyncing(true);
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      const workoutsData = await AsyncStorage.getItem('@workouts');
+      const templatesData = await AsyncStorage.getItem('@workout_templates');
+      
+      const workouts = workoutsData ? JSON.parse(workoutsData) : [];
+      const templates = templatesData ? JSON.parse(templatesData) : [];
+      
+      await FirebaseSync.performFullSync(workouts, templates);
+      await loadSyncStatus();
+      
+      Alert.alert('Success', 'Your data has been synced to the cloud!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to sync data. Please try again.');
+      console.error('[Settings] Manual sync error:', error);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const updateSetting = async <K extends keyof AppSettings>(
@@ -184,6 +218,73 @@ export function SettingsScreen({ navigation }: any) {
               </View>
             </>
           )}
+
+          {/* Cloud Backup Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Cloud Backup</Text>
+            
+            {isFirebaseEnabled ? (
+              <>
+                <View style={styles.settingRow}>
+                  <View style={styles.settingLabelContainer}>
+                    <Text style={styles.settingLabel}>Sync Status</Text>
+                    <Text style={styles.settingDescription}>
+                      {isAuthenticated 
+                        ? '✅ Connected - Your data is backed up' 
+                        : '⚠️ Connecting...'}
+                    </Text>
+                  </View>
+                </View>
+
+                {syncStatus && (
+                  <>
+                    <View style={styles.settingRow}>
+                      <Text style={styles.settingLabel}>Last Sync</Text>
+                      <Text style={styles.settingValue}>
+                        {new Date(syncStatus.lastSync).toLocaleString()}
+                      </Text>
+                    </View>
+                    
+                    <View style={styles.settingRow}>
+                      <Text style={styles.settingLabel}>Workouts Synced</Text>
+                      <Text style={styles.settingValue}>{syncStatus.workoutsCount}</Text>
+                    </View>
+
+                    <View style={styles.settingRow}>
+                      <Text style={styles.settingLabel}>Templates Synced</Text>
+                      <Text style={styles.settingValue}>{syncStatus.templatesCount}</Text>
+                    </View>
+                  </>
+                )}
+
+                <TouchableOpacity
+                  style={styles.syncButton}
+                  onPress={handleManualSync}
+                  disabled={isSyncing}
+                >
+                  {isSyncing ? (
+                    <ActivityIndicator size="small" color={colors.textOnPrimary} />
+                  ) : (
+                    <Text style={styles.syncButtonText}>🔄 Sync Now</Text>
+                  )}
+                </TouchableOpacity>
+
+                <View style={styles.infoCard}>
+                  <Text style={styles.infoText}>
+                    💡 Your workout data is automatically backed up to the cloud. 
+                    You won't lose your data when updating the app!
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <View style={styles.infoCard}>
+                <Text style={styles.infoText}>
+                  ⚠️ Cloud backup is not configured. Your data is stored locally only.
+                  To enable cloud backup, configure Firebase in your environment.
+                </Text>
+              </View>
+            )}
+          </View>
 
           {/* About Section */}
           <View style={styles.section}>
@@ -350,6 +451,37 @@ function createStyles(colors: any) {
     versionText: {
       ...typography.body,
       color: colors.textSecondary,
+    },
+    settingValue: {
+      ...typography.body,
+      color: colors.textSecondary,
+      fontWeight: '400',
+    },
+    syncButton: {
+      backgroundColor: colors.primary,
+      padding: spacing.md,
+      borderRadius: borderRadius.md,
+      alignItems: 'center',
+      marginTop: spacing.md,
+      marginBottom: spacing.md,
+    },
+    syncButtonText: {
+      color: colors.textOnPrimary,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    infoCard: {
+      backgroundColor: colors.surfaceHighlight,
+      padding: spacing.md,
+      borderRadius: borderRadius.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      marginTop: spacing.sm,
+    },
+    infoText: {
+      ...typography.caption1,
+      color: colors.textSecondary,
+      lineHeight: 18,
     },
     resetButton: {
       backgroundColor: colors.surface,

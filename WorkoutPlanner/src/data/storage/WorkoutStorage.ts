@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Workout } from '../models/Workout';
+import { FirebaseSync } from './FirebaseSync';
 
 const WORKOUTS_KEY = '@workouts';
 const ACTIVE_WORKOUT_KEY = '@active_workout';
@@ -17,6 +18,11 @@ export class WorkoutStorage {
       }
       
       await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
+      
+      // Sync to Firebase in background
+      FirebaseSync.pushWorkouts(workouts).catch(err => 
+        console.error('[WorkoutStorage] Background sync failed:', err)
+      );
     } catch (error) {
       console.error('Error saving workout:', error);
       throw error;
@@ -48,6 +54,11 @@ export class WorkoutStorage {
       const workouts = await this.getAllWorkouts();
       const filtered = workouts.filter(w => w.id !== id);
       await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(filtered));
+      
+      // Delete from Firebase
+      FirebaseSync.deleteWorkout(id).catch(err =>
+        console.error('[WorkoutStorage] Firebase delete failed:', err)
+      );
     } catch (error) {
       console.error('Error deleting workout:', error);
       throw error;

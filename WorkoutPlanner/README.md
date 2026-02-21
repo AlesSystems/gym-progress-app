@@ -1,5 +1,44 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# Workout Planner - PWA Gym Progress Tracker
+
+A comprehensive workout tracking Progressive Web App (PWA) built with React Native Web.
+
+## 🔥 Features
+
+- ✅ Track workouts with exercises, sets, reps, and weights
+- ✅ Create custom workout templates
+- ✅ View workout history and progress charts
+- ✅ Nutrition and meal tracking
+- ✅ Body weight tracking
+- ✅ Personal records (PR) tracking
+- ✅ Leaderboard with competitive scoring
+- ✅ **☁️ Cloud Backup** - Never lose your data again!
+- ✅ Dark/Light theme support
+- ✅ Offline-first architecture
+- ✅ Progressive Web App (installable)
+
+## ☁️ Cloud Backup (NEW!)
+
+Your workout data is automatically backed up to Firebase! This means:
+
+- 🔄 **No data loss** when updating the app
+- 📱 **Multi-device support** - Access your data from any device
+- 🔒 **Secure** - Your data is private and encrypted
+- ⚡ **Fast** - Local-first with background sync
+
+### Setup Firebase Backup
+
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for complete instructions on enabling cloud backup.
+
+**Quick Start:**
+1. Create a Firebase project
+2. Copy `.env.example` to `.env` and add your Firebase config
+3. Enable Firestore Database and Anonymous Authentication
+4. Build and deploy!
+
+Without Firebase configured, the app works perfectly in offline mode with local storage.
+
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
@@ -61,6 +100,30 @@ yarn ios
 If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
 
 This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+
+## Web / PWA Deployment
+
+To build and run the Progressive Web App:
+
+```sh
+# Development mode with hot reload
+npm run web
+
+# Build for production
+npm run web:build
+
+# Preview production build
+npm run web:preview
+
+# Serve production build
+npm run web:serve
+```
+
+The built files will be in the `dist/` directory. Deploy these to any static hosting service (Netlify, Vercel, Firebase Hosting, etc.).
+
+### PWA Installation
+
+Once deployed, users can install the app to their home screen on mobile devices or desktop browsers for a native-like experience.
 
 ## Step 3: Modify your app
 
