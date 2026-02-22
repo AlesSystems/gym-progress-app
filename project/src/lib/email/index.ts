@@ -23,3 +23,15 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     html: `<p>Click <a href="${resetUrl}">here</a> to reset your password. This link expires in 1 hour.</p>`,
   });
 }
+
+export async function sendMagicLinkEmail(email: string, token: string) {
+  const magicUrl = `${process.env.APP_URL}/auth/verify?token=${token}`;
+
+  await resend.emails.send({
+    from: process.env.EMAIL_FROM ?? "noreply@gymapp.com",
+    to: email,
+    subject: "Your magic sign-in link",
+    html: `<p>Click <a href="${magicUrl}">here</a> to sign in. This link expires in 15 minutes.</p><p>If you did not request this, ignore this email.</p>`,
+  });
+}
+

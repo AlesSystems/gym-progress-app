@@ -16,9 +16,37 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        magicToken: { label: "Magic Token", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials) return null;
+
+        // Magic token flow
+        if (credentials.magicToken) {
+          const verToken = await db.verificationToken.findUnique({
+            where: { token: credentials.magicToken },
+          });
+
+          if (!verToken || verToken.expiresAt < new Date()) return null;
+
+          await db.verificationToken.delete({ where: { id: verToken.id } });
+
+          const user = await db.user.findUnique({
+            where: { email: verToken.email },
+          });
+
+          if (!user) return null;
+
+          await db.user.update({
+            where: { id: user.id },
+            data: { lastLoginAt: new Date() },
+          });
+
+          return { id: user.id, email: user.email, name: user.name };
+        }
+
+        // Email/password flow
+        if (!credentials.email || !credentials.password) return null;
 
         const user = await db.user.findUnique({
           where: { email: credentials.email },
@@ -32,6 +60,11 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isValidPassword) return null;
+
+        await db.user.update({
+          where: { id: user.id },
+          data: { lastLoginAt: new Date() },
+        });
 
         return { id: user.id, email: user.email, name: user.name };
       },
@@ -50,3 +83,4 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
