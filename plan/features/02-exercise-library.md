@@ -280,3 +280,153 @@ const CreateExerciseSchema = z.object({
 - Equipment tags (barbell, dumbbell, machine, bodyweight, cable)
 - Favourite / bookmark system
 - Exercise history shortcut ("last time you did Squat: 100 kg × 5")
+
+---
+
+## List of gym exercises
+
+🏋️‍♂️ Exercise Library (Organized by Muscle Group)
+Chest / Pecs
+
+Bench Press (Flat, Incline, Decline — Barbell)
+
+Dumbbell Chest Press (Flat, Incline, Decline)
+
+Machine Chest Press (Seated/Incline/Decline)
+
+Dumbbell Flyes
+
+Cable Crossovers
+
+Push-Ups (Standard, Wide, Diamond)
+
+Chest Dips
+
+Back
+
+Pull-Ups & Chin-Ups
+
+Lat Pulldown (Wide, Close, Neutral grip)
+
+Barbell Bent-Over Row
+
+Dumbbell Row (One-arm)
+
+Seated Cable Row
+
+T-Bar Row
+
+Inverted Row
+
+Machine Row
+
+Deadlift (Conventional, Romanian, Sumo)
+
+Shoulders / Delts
+
+Overhead Press (Barbell / Dumbbell)
+
+Arnold Press
+
+Dumbbell Lateral Raises
+
+Front Raises
+
+Upright Row
+
+Rear Delt Fly
+
+Face Pulls
+
+Arms
+Biceps
+
+Barbell Curl
+
+Dumbbell Curl (Standing, Incline)
+
+Hammer Curl
+
+Cable Curl
+
+Preacher Curl
+
+Concentration Curl
+
+Triceps
+
+Tricep Dips
+
+Close-Grip Bench Press
+
+Skull Crushers
+
+Tricep Pushdowns (Cable)
+
+Overhead Tricep Extensions
+
+Legs / Lower Body
+
+Squats (Back, Front, Goblet)
+
+Lunges (Walking, Reverse, Bulgarian Split)
+
+Leg Press
+
+Romanian Deadlift
+
+Hamstring Leg Curl
+
+Leg Extension
+
+Calf Raise (Standing, Seated, Machine)
+
+Hip Thrust / Glute Bridge
+
+Step-Ups
+
+Core / Abs
+
+Crunches (Standard / Weighted)
+
+Planks (Front, Side)
+
+Leg Raises (Hanging / Lying)
+
+Cable Woodchoppers
+
+Russian Twists
+
+Ab Wheel Rollout
+
+Compound / Functional
+
+These involve multiple muscle groups and often use kettlebells, barbells, or bodyweight:
+
+Deadlift (all variations)
+
+Squat (all variations)
+
+Clean & Press
+
+Turkish Get-Up
+
+Kettlebell Swing
+
+Calisthenics (Bodyweight)
+
+Pull-Ups / Chin-Ups
+
+Push-Ups (many variations)
+
+Dips
+
+Air Squats
+
+Burpees
+
+Box Jumps
+
+Jumping Jacks
+
+Rope Skipping
