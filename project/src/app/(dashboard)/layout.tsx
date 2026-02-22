@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ToastContainer from "@/components/ui/ToastContainer";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,8 +14,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/templates" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
           Templates
         </Link>
+        <Link href="/sessions" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+          Sessions
+        </Link>
+        <Link href="/calendar" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+          Calendar
+        </Link>
       </nav>
       {children}
+      <ToastContainer />
     </div>
   );
 }

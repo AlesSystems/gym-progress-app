@@ -13,6 +13,15 @@ export function formatDate(date: Date | string): string {
   });
 }
 
+// Prisma Decimal fields serialize to strings in JSON; convert them to numbers.
+export function serializeSet<T extends { weight?: unknown; rpe?: unknown }>(set: T): T {
+  return {
+    ...set,
+    weight: set.weight != null ? Number(set.weight) : null,
+    rpe: set.rpe != null ? Number(set.rpe) : null,
+  };
+}
+
 export function generateApiResponse<T>(
   success: boolean,
   data?: T,
