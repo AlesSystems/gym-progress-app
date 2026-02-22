@@ -1,10 +1,12 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import ProfileEditor from "@/components/profile/ProfileEditor";
 import MaxLiftsList from "@/components/profile/MaxLiftsList";
 import InviteGenerator from "@/components/profile/InviteGenerator";
+import LogoutButton from "@/components/profile/LogoutButton";
 
 export const metadata = { title: "Profile – Gym Progress" };
 
@@ -32,7 +34,7 @@ export default async function ProfilePage() {
     }),
     db.maxLift.findMany({
       where: { userId },
-      include: { exercise: { select: { name: true, category: true } } },
+      include: { exercise: { select: { name: true, movementCategory: true } } },
       orderBy: { updatedAt: "desc" },
     }),
   ]);
@@ -43,6 +45,14 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-6">
+        <Link href="/profile" className="text-sm font-medium text-indigo-600">
+          Profile
+        </Link>
+        <Link href="/exercises" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+          Exercise Library
+        </Link>
+      </nav>
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -112,6 +122,15 @@ export default async function ProfilePage() {
               {user.emailVerified ? "Yes" : "No"}
             </dd>
           </dl>
+        </div>
+
+        {/* Sign out */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-base font-semibold text-gray-900 mb-2">Sign Out</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Sign out of your account on this device.
+          </p>
+          <LogoutButton />
         </div>
       </div>
     </div>

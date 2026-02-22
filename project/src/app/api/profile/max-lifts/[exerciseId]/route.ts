@@ -26,7 +26,7 @@ export async function GET(
     where: { userId_exerciseId: { userId, exerciseId } },
     include: {
       exercise: {
-        select: { id: true, name: true, category: true },
+        select: { id: true, name: true, movementCategory: true },
       },
     },
   });

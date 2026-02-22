@@ -25,7 +25,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 }
 
 export async function sendMagicLinkEmail(email: string, token: string) {
-  const magicUrl = `${process.env.APP_URL}/auth/verify?token=${token}`;
+  const magicUrl = `${process.env.APP_URL}/api/auth/magic-link/verify/${token}`;
 
   await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "noreply@gymapp.com",

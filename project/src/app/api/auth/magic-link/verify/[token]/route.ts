@@ -45,6 +45,6 @@ export async function GET(
   });
 
   return NextResponse.redirect(
-    new URL(`/auth/verify?signin_token=${signinToken.token}`, appUrl || req.url)
+    new URL(`/verify?signin_token=${signinToken.token}`, appUrl || req.url)
   );
 }

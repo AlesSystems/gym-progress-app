@@ -6,7 +6,7 @@ interface MaxLift {
   weight: number;
   unit: string;
   achievedAt: string;
-  exercise?: { name: string; category: string };
+  exercise?: { name: string; movementCategory: string };
 }
 
 interface MaxLiftsListProps {
@@ -50,7 +50,7 @@ export default function MaxLiftsList({ maxLifts, unitPreference }: MaxLiftsListP
                   {lift.exercise?.name ?? lift.exerciseId}
                 </td>
                 <td className="py-2 pr-4 text-gray-500">
-                  {lift.exercise?.category ?? "—"}
+                  {lift.exercise?.movementCategory ?? "—"}
                 </td>
                 <td className="py-2 pr-4 font-semibold text-indigo-600">
                   {displayWeight} {unitPreference}

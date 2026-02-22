@@ -22,7 +22,7 @@ export async function GET() {
     where: { userId },
     include: {
       exercise: {
-        select: { id: true, name: true, category: true },
+        select: { id: true, name: true, movementCategory: true },
       },
     },
     orderBy: { achievedAt: "desc" },

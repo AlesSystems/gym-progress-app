@@ -23,10 +23,11 @@ model User {
 
   workouts        Workout[]
   teamMemberships TeamMember[]
-  inviter         User?     @relation("InvitedBy", fields: [invitedBy], references: [id])
-  invitees        User[]    @relation("InvitedBy")
+  inviter         User?      @relation("InvitedBy", fields: [invitedBy], references: [id])
+  invitees        User[]     @relation("InvitedBy")
   invites         Invite[]
   maxLifts        MaxLift[]
+  exercises       Exercise[] @relation("ExerciseCreator")
 
   @@index([email])
 }
@@ -49,20 +50,35 @@ model Workout {
 }
 
 model Exercise {
-  id           String   @id @default(cuid())
-  name         String   @unique
-  category     String
-  muscleGroups String[]
-  description  String?
-  isCustom     Boolean  @default(false)
-  createdById  String?
-  createdAt    DateTime @default(now())
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  type             String   @default("compound")     // compound | isolation
+  movementCategory String   @default("other")         // push | pull | legs | core | cardio | other
+  primaryMuscle    String   @default("")
+  secondaryMuscles Json     @default("[]")
+  defaultUnit      String?                             // kg | lb
+  defaultReps      Int?
+  defaultWeight    Decimal? @db.Decimal(6, 2)
+  demoImageUrl     String?
+  demoVideoUrl     String?
+  description      String?
+  isSystemExercise Boolean  @default(false)
+  isDeleted        Boolean  @default(false)
+  createdBy        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
+  creator          User?             @relation("ExerciseCreator", fields: [createdBy], references: [id])
   workoutExercises WorkoutExercise[]
   maxLifts         MaxLift[]
 
-  @@index([name])
-  @@index([category])
+  @@unique([name, createdBy])
+  @@index([slug])
+  @@index([movementCategory])
+  @@index([type])
+  @@index([createdBy])
+  @@index([isSystemExercise])
 }
 
 model WorkoutExercise {

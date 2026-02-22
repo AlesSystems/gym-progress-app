@@ -27,9 +27,21 @@ export interface Workout {
 export interface Exercise {
   id: string;
   name: string;
-  category: string;
-  muscleGroups: string[];
+  slug: string;
+  type: string;
+  movementCategory: string;
+  primaryMuscle: string;
+  secondaryMuscles: string[];
+  defaultUnit?: string | null;
+  defaultReps?: number | null;
+  defaultWeight?: number | null;
+  demoImageUrl?: string | null;
+  demoVideoUrl?: string | null;
   description?: string | null;
+  isSystemExercise: boolean;
+  createdBy?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface WorkoutExercise {

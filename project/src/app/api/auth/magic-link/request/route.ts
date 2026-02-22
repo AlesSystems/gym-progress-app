@@ -53,7 +53,13 @@ export async function POST(req: NextRequest) {
   try {
     await sendMagicLinkEmail(email, magicLink.token);
   } catch {
-    // Non-fatal
+    return NextResponse.json(
+      generateApiResponse(false, undefined, undefined, {
+        code: "EMAIL_ERROR",
+        message: "Failed to send magic link email. Please try again.",
+      }),
+      { status: 500 }
+    );
   }
 
   return NextResponse.json(
