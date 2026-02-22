@@ -10,6 +10,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/exercises" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
           Exercise Library
         </Link>
+        <Link href="/templates" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+          Templates
+        </Link>
       </nav>
       {children}
     </div>
