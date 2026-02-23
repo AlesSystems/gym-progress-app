@@ -84,34 +84,39 @@ export default async function ExerciseLibraryPage({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-7xl w-full">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Exercises</h1>
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-7xl w-full mx-auto">
+      {/* Header with glassmorphism feel */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Exercise Library</h1>
+          <p className="text-muted-foreground text-lg font-medium">Browse and manage your movements</p>
+        </div>
         <Link
           href="/exercises/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
         >
-          <Plus size={14} />
-          Custom
+          <Plus size={20} strokeWidth={3} />
+          Create Custom
         </Link>
-      </div>
+      </header>
 
-      {/* Filters */}
-      <div>
+      {/* Filters with better spacing */}
+      <section className="relative z-10">
         <Suspense>
           <ExerciseFilters />
         </Suspense>
-      </div>
+      </section>
 
-      {/* Grid */}
+      {/* Grid with glassmorphism cards */}
       {exercises.length === 0 ? (
-        <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
-          <Dumbbell size={32} className="text-muted-foreground/30" />
-          <p className="text-sm text-muted-foreground">No exercises found.</p>
+        <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm">
+          <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+            <Dumbbell size={40} />
+          </div>
+          <p className="text-lg font-medium text-muted-foreground italic">No exercises found matching your filters.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {exercises.map((ex) => (
             <ExerciseCard
               key={ex.id}
@@ -131,29 +136,33 @@ export default async function ExerciseLibraryPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Modern Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          {page > 1 && (
+        <nav className="flex items-center justify-center gap-4 pt-10">
+          {page > 1 ? (
             <Link
               href={buildPageUrl(page - 1)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground hover:bg-secondary transition-colors"
+              className="h-12 w-12 flex items-center justify-center rounded-2xl border border-border bg-card/50 backdrop-blur-sm text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-sm"
             >
-              ← Prev
+              ←
             </Link>
-          )}
-          <span className="text-sm text-muted-foreground">
-            {page} / {totalPages}
-          </span>
-          {page < totalPages && (
+          ) : <div className="h-12 w-12" />}
+          
+          <div className="h-12 px-6 flex items-center justify-center rounded-2xl border border-border bg-card/30 backdrop-blur-sm">
+            <span className="text-sm font-black text-foreground tabular-nums">
+              {page} <span className="text-muted-foreground font-medium mx-1">/</span> {totalPages}
+            </span>
+          </div>
+
+          {page < totalPages ? (
             <Link
               href={buildPageUrl(page + 1)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground hover:bg-secondary transition-colors"
+              className="h-12 w-12 flex items-center justify-center rounded-2xl border border-border bg-card/50 backdrop-blur-sm text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-sm"
             >
-              Next →
+              →
             </Link>
-          )}
-        </div>
+          ) : <div className="h-12 w-12" />}
+        </nav>
       )}
     </div>
   );

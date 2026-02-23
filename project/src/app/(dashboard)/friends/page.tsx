@@ -48,44 +48,65 @@ export default async function FriendsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-2xl w-full">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Friends</h1>
-      </div>
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-4xl w-full mx-auto">
+      {/* Header */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
+        <div className="space-y-2">
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-xl shadow-primary/5">
+              <Users size={28} />
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Social Circle</h1>
+          </div>
+          <p className="text-muted-foreground text-lg font-medium">Your network of training partners</p>
+        </div>
+      </header>
 
       {friends.length === 0 ? (
-        <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
-          <Users size={32} className="text-muted-foreground/30" />
-          <p className="text-sm text-muted-foreground">No connections yet.</p>
+        <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-8 backdrop-blur-sm text-center">
+          <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+            <Users size={40} />
+          </div>
+          <div className="space-y-3">
+            <p className="text-xl font-bold text-foreground">No connections yet</p>
+            <p className="text-muted-foreground italic max-w-xs mx-auto">Everything is better with friends. Invite someone to start sharing routines!</p>
+          </div>
           <Link
-            href="/profile"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+            href="/settings"
+            className="inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-3 text-base font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-xl shadow-primary/20"
           >
-            Get invite link
+            Get Invite Link
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {friends.map((f) => (
             <div
               key={f.userId}
-              className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3"
+              className="group relative flex items-center justify-between rounded-[2rem] border border-border bg-card/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/60"
             >
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent-foreground">
+              <div className="flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center text-lg font-black text-muted-foreground group-hover:from-primary/20 group-hover:to-primary/10 group-hover:text-primary transition-all duration-500 shadow-inner">
                   {f.displayName.slice(0, 2).toUpperCase()}
                 </div>
-                <span className="text-sm font-medium text-foreground">{f.displayName}</span>
+                <div>
+                  <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">{f.displayName}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className={`h-1.5 w-1.5 rounded-full ${f.relationship === "invited_you" ? "bg-accent" : "bg-primary"}`} />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+                      {f.relationship === "invited_you" ? "Invited You" : "You Invited"}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
-                  f.relationship === "invited_you"
-                    ? "bg-accent/10 text-accent-foreground border-accent/20"
-                    : "bg-primary/10 text-primary border-primary/20"
-                }`}
-              >
-                {f.relationship === "invited_you" ? "Invited you" : "You invited"}
-              </span>
+              
+              <div className={`rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.1em] border ${
+                f.relationship === "invited_you"
+                  ? "bg-accent/10 text-accent-foreground border-accent/20"
+                  : "bg-primary/10 text-primary border-primary/20"
+              }`}>
+                Connected
+              </div>
             </div>
           ))}
         </div>

@@ -85,71 +85,101 @@ export default function ExerciseAccordion({
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
+    <div className="rounded-3xl border border-border bg-card/30 overflow-hidden backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/40 shadow-sm">
+      {/* Header with glassmorphism */}
+      <div className="flex items-center justify-between px-6 py-4 bg-secondary/20 border-b border-border/50">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2 flex-1 min-w-0 text-left"
+          className="flex items-center gap-3 flex-1 min-w-0 text-left group"
         >
-          <span className="text-sm font-semibold text-gray-900 truncate">{exercise.exerciseName}</span>
-          {open ? <ChevronUp size={16} className="shrink-0 text-gray-400" /> : <ChevronDown size={16} className="shrink-0 text-gray-400" />}
+          <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+            <Dumbbell size={18} />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-foreground truncate">{exercise.exerciseName}</h3>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{sets.length} sets logged</span>
+          </div>
+          <div className="ml-2 text-muted-foreground/50 group-hover:text-primary transition-colors">
+            {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </div>
         </button>
         <button
           onClick={handleRemoveExercise}
-          className="shrink-0 ml-2 rounded p-1 text-gray-400 hover:text-red-500 transition-colors"
+          className="shrink-0 ml-4 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-all"
           aria-label={`Remove ${exercise.exerciseName}`}
         >
-          <Trash2 size={14} />
+          <Trash2 size={18} />
         </button>
       </div>
 
       {open && (
-        <div className="px-4 py-3 space-y-2">
+        <div className="px-6 py-6 space-y-4">
           {previousBest && (
-            <PreviousBestHint
-              weight={previousBest.weight}
-              weightUnit={previousBest.weightUnit}
-              reps={previousBest.reps}
-              rpe={previousBest.rpe}
-            />
+            <div className="rounded-2xl bg-primary/5 border border-primary/10 p-3 flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Trophy size={14} className="text-primary" />
+              </div>
+              <PreviousBestHint
+                weight={previousBest.weight}
+                weightUnit={previousBest.weightUnit}
+                reps={previousBest.reps}
+                rpe={previousBest.rpe}
+              />
+            </div>
           )}
 
-          {/* Column headers */}
-          <div className="flex items-center gap-2 px-3 text-xs text-gray-400 font-medium">
-            <span className="w-5 shrink-0">#</span>
-            <span className="w-7 shrink-0">W</span>
-            <span className="w-16 text-center">Weight</span>
-            <span className="w-6 shrink-0" />
-            <span className="w-14 text-center">Reps</span>
-            <span className="w-14 text-center">RPE</span>
+          {/* Column headers with better typography */}
+          <div className="flex items-center gap-4 px-4 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] opacity-60">
+            <span className="w-6 shrink-0 text-center">#</span>
+            <span className="w-8 shrink-0 text-center">W</span>
+            <span className="w-20 text-center">Weight</span>
+            <span className="w-4 shrink-0" />
+            <span className="w-16 text-center">Reps</span>
+            <span className="w-16 text-center">RPE</span>
+            <span className="flex-1 shrink-0" />
           </div>
 
-          {sets.length === 0 ? (
-            <p className="text-xs text-gray-400 text-center py-2">No sets yet. Add your first set!</p>
-          ) : (
-            sets.map((set) => (
-              <SetRow
-                key={set.id}
-                set={set}
-                sessionId={sessionId}
-                exerciseId={exercise.id}
-                onUpdate={handleSetUpdate}
-                onDelete={handleSetDelete}
-              />
-            ))
-          )}
+          <div className="space-y-3">
+            {sets.length === 0 ? (
+              <div className="rounded-2xl border-2 border-dashed border-border/50 bg-secondary/10 p-10 text-center">
+                <p className="text-sm font-medium text-muted-foreground">No sets recorded yet.</p>
+              </div>
+            ) : (
+              sets.map((set) => (
+                <SetRow
+                  key={set.id}
+                  set={set}
+                  sessionId={sessionId}
+                  exerciseId={exercise.id}
+                  onUpdate={handleSetUpdate}
+                  onDelete={handleSetDelete}
+                />
+              ))
+            )}
+          </div>
 
           <button
             onClick={handleAddSet}
             disabled={adding}
-            className="flex items-center gap-1 rounded-lg border border-dashed border-gray-300 px-3 py-2 text-xs text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors w-full justify-center disabled:opacity-50"
+            className="flex items-center gap-2 rounded-2xl border-2 border-dashed border-border/50 bg-secondary/5 px-4 py-4 text-sm font-bold text-muted-foreground hover:border-primary/40 hover:bg-primary/5 hover:text-primary transition-all w-full justify-center disabled:opacity-50 group"
           >
-            <Plus size={12} />
-            {adding ? "Adding…" : "Add Set"}
+            {adding ? (
+              <span className="flex items-center gap-2">
+                <div className="h-4 w-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                Adding Set…
+              </span>
+            ) : (
+              <>
+                <Plus size={18} className="group-hover:scale-110 transition-transform" />
+                Add New Set
+              </>
+            )}
           </button>
         </div>
       )}
     </div>
   );
 }
+
+// Helper icons for the header update
+import { Dumbbell, Trophy } from "lucide-react";

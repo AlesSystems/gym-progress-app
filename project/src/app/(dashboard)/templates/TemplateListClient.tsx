@@ -92,39 +92,42 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
 
   return (
     <>
-      <div className="flex flex-col gap-6 p-4 md:p-6 max-w-5xl w-full">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-foreground">Templates</h1>
+      <div className="flex flex-col gap-10 p-6 md:p-12 max-w-7xl w-full mx-auto">
+        {/* Header with modern typography */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Workout Templates</h1>
+            <p className="text-muted-foreground text-lg font-medium">Your collection of training routines</p>
+          </div>
           {tab === "mine" && (
             <Link
               href="/templates/new"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
             >
-              <Plus size={14} />
-              New
+              <Plus size={20} strokeWidth={3} />
+              Create Template
             </Link>
           )}
-        </div>
+        </header>
 
-        {/* Primary tabs */}
-        <div className="flex gap-2">
+        {/* Primary glassmorphism tabs */}
+        <div className="flex p-1.5 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50 w-fit">
           <button
             onClick={() => handleTabChange("mine")}
-            className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+            className={`rounded-xl px-6 py-2.5 text-sm font-black uppercase tracking-widest transition-all duration-300 ${
               tab === "mine"
-                ? "bg-primary text-primary-foreground"
-                : "border border-border text-muted-foreground hover:bg-secondary"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            My Templates
+            My Routines
           </button>
           <button
             onClick={() => handleTabChange("friends")}
-            className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+            className={`rounded-xl px-6 py-2.5 text-sm font-black uppercase tracking-widest transition-all duration-300 ${
               tab === "friends"
-                ? "bg-primary text-primary-foreground"
-                : "border border-border text-muted-foreground hover:bg-secondary"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Friends
@@ -132,25 +135,25 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
         </div>
 
         {tab === "mine" && (
-          <>
-            {/* Active / Archived sub-tabs */}
-            <div className="flex gap-2">
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Active / Archived modern toggle */}
+            <div className="flex items-center gap-4 px-2">
               <button
                 onClick={() => setShowArchived(false)}
-                className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+                className={`text-sm font-bold transition-all border-b-2 pb-1 ${
                   !showArchived
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:bg-secondary"
+                    ? "border-primary text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Active
               </button>
               <button
                 onClick={() => setShowArchived(true)}
-                className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+                className={`text-sm font-bold transition-all border-b-2 pb-1 ${
                   showArchived
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:bg-secondary"
+                    ? "border-primary text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Archived
@@ -158,14 +161,16 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
             </div>
 
             {filtered.length === 0 ? (
-              <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
-                <ClipboardList size={32} className="text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">
-                  {showArchived ? "No archived templates." : "No templates yet."}
+              <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm">
+                <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+                  <ClipboardList size={40} />
+                </div>
+                <p className="text-lg font-medium text-muted-foreground italic">
+                  {showArchived ? "Your archive is currently empty." : "No templates yet. Start by creating one!"}
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map((t) => (
                   <TemplateCard
                     key={t.id}
@@ -176,31 +181,36 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
                 ))}
               </div>
             )}
-          </>
+          </div>
         )}
 
         {tab === "friends" && (
-          <>
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {friendsLoading ? (
-              <div className="flex items-center justify-center rounded-xl border border-border bg-card p-12">
-                <p className="text-sm text-muted-foreground">Loading…</p>
+              <div className="flex flex-col items-center justify-center py-20 gap-4">
+                <div className="h-10 w-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                <p className="text-sm font-bold text-muted-foreground uppercase tracking-widest animate-pulse">Loading friend templates...</p>
               </div>
             ) : friendTemplates === null || friendTemplates.length === 0 ? (
-              <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
-                <Users size={32} className="text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">No shared templates from friends yet.</p>
-                <Link href="/friends" className="text-xs text-primary hover:underline">
-                  View your connections →
-                </Link>
+              <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm text-center">
+                <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+                  <Users size={40} />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-lg font-medium text-muted-foreground italic">No shared templates from friends yet.</p>
+                  <Link href="/friends" className="inline-flex text-sm font-bold text-primary hover:underline">
+                    Find and follow your friends →
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {friendTemplates.map((t) => (
                   <FriendTemplateCard key={t.id} {...t} onClone={handleFriendClone} />
                 ))}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
 

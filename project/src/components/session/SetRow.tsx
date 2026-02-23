@@ -59,88 +59,109 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
 
   return (
     <div
-      className={`flex items-center gap-2 rounded-lg px-3 py-2 ${
-        set.isWarmup ? "bg-amber-50 border border-amber-200" : "bg-gray-50 border border-gray-200"
-      } ${saving ? "opacity-60" : ""}`}
+      className={`group flex items-center gap-3 rounded-2xl px-4 py-3 transition-all duration-300 border ${
+        set.isWarmup 
+          ? "bg-amber-500/5 border-amber-500/20 shadow-sm shadow-amber-500/5" 
+          : "bg-secondary/20 border-border/50 hover:border-primary/30 hover:bg-secondary/30"
+      } ${saving ? "opacity-50 grayscale" : ""}`}
     >
-      {/* Set number */}
-      <span className="w-5 text-center text-xs font-semibold text-gray-500 shrink-0">
-        {set.isWarmup ? "W" : set.setNumber}
-      </span>
+      {/* Set number / indicator */}
+      <div className="w-8 flex flex-col items-center shrink-0">
+        <span className={`text-xs font-black ${set.isWarmup ? "text-amber-500" : "text-muted-foreground group-hover:text-primary transition-colors"}`}>
+          {set.isWarmup ? "W" : set.setNumber}
+        </span>
+      </div>
 
-      {/* Warmup toggle */}
+      {/* Warmup toggle - styled as a small pill */}
       <button
         onClick={toggleWarmup}
         title={set.isWarmup ? "Mark as working set" : "Mark as warm-up"}
-        className={`shrink-0 rounded px-1.5 py-0.5 text-xs font-medium transition-colors ${
+        className={`shrink-0 h-8 w-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
           set.isWarmup
-            ? "bg-amber-200 text-amber-800"
-            : "bg-gray-200 text-gray-500 hover:bg-amber-100 hover:text-amber-700"
+            ? "bg-amber-500 text-white shadow-lg shadow-amber-500/30"
+            : "bg-secondary text-muted-foreground hover:bg-amber-500/20 hover:text-amber-500"
         }`}
       >
         W
       </button>
 
-      {/* Weight */}
-      <input
-        type="number"
-        defaultValue={set.weight ?? ""}
-        placeholder="kg"
-        min={0}
-        max={9999}
-        step={0.5}
-        onBlur={(e) => {
-          const v = e.target.value === "" ? null : parseFloat(e.target.value);
-          handleBlur("weight", v);
-        }}
-        className="w-16 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
-        aria-label="Weight"
-      />
+      {/* Weight Input */}
+      <div className="relative flex items-center gap-2">
+        <input
+          type="number"
+          defaultValue={set.weight ?? ""}
+          placeholder="0.0"
+          min={0}
+          max={9999}
+          step={0.5}
+          onBlur={(e) => {
+            const v = e.target.value === "" ? null : parseFloat(e.target.value);
+            handleBlur("weight", v);
+          }}
+          className="w-20 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          aria-label="Weight"
+        />
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+          {set.weightUnit ?? "kg"}
+        </span>
+      </div>
 
-      <span className="text-xs text-gray-400 shrink-0">{set.weightUnit ?? "kg"}</span>
+      <div className="w-2 shrink-0" />
 
-      {/* Reps */}
-      <input
-        type="number"
-        defaultValue={set.reps ?? ""}
-        placeholder="reps"
-        min={0}
-        max={999}
-        step={1}
-        onBlur={(e) => {
-          const v = e.target.value === "" ? null : parseInt(e.target.value, 10);
-          handleBlur("reps", v);
-        }}
-        className="w-14 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
-        aria-label="Reps"
-      />
+      {/* Reps Input */}
+      <div className="relative">
+        <input
+          type="number"
+          defaultValue={set.reps ?? ""}
+          placeholder="0"
+          min={0}
+          max={999}
+          step={1}
+          onBlur={(e) => {
+            const v = e.target.value === "" ? null : parseInt(e.target.value, 10);
+            handleBlur("reps", v);
+          }}
+          className="w-16 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          aria-label="Reps"
+        />
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+          Reps
+        </span>
+      </div>
 
-      {/* RPE */}
-      <input
-        type="number"
-        defaultValue={set.rpe ?? ""}
-        placeholder="RPE"
-        min={1}
-        max={10}
-        step={0.5}
-        onBlur={(e) => {
-          const v = e.target.value === "" ? null : parseFloat(e.target.value);
-          handleBlur("rpe", v);
-        }}
-        className="w-14 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
-        aria-label="RPE"
-      />
+      {/* RPE Input */}
+      <div className="relative">
+        <input
+          type="number"
+          defaultValue={set.rpe ?? ""}
+          placeholder="-"
+          min={1}
+          max={10}
+          step={0.5}
+          onBlur={(e) => {
+            const v = e.target.value === "" ? null : parseFloat(e.target.value);
+            handleBlur("rpe", v);
+          }}
+          className="w-16 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          aria-label="RPE"
+        />
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+          RPE
+        </span>
+      </div>
 
       {/* PR badge */}
-      {set.isNewPR && <PRBadge />}
+      <div className="flex-1 flex justify-center">
+        {set.isNewPR && <PRBadge />}
+      </div>
 
       {/* Delete */}
       <button
         onClick={handleDelete}
-        className="ml-auto shrink-0 rounded p-1 text-gray-400 hover:text-red-500 transition-colors"
+        className="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground/30 hover:bg-destructive/10 hover:text-destructive transition-all"
         aria-label="Delete set"
       >
-        <Trash2 size={14} />
+        <Trash2 size={16} />
       </button>
     </div>
   );

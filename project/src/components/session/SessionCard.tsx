@@ -30,33 +30,52 @@ export default function SessionCard({
   return (
     <Link
       href={`/sessions/${id}`}
-      className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors"
+      className="group relative flex flex-col gap-4 rounded-[2rem] border border-border bg-card/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:bg-card/60 hover:scale-[1.01] hover:shadow-2xl hover:shadow-primary/5"
     >
-      <div>
-        <p className="text-xs text-muted-foreground">{formatDate(startedAt)}</p>
-        <h3 className="mt-0.5 text-sm font-semibold text-foreground truncate">{name ?? "Workout"}</h3>
+      {/* Decorative background element */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
+      <div className="flex items-start justify-between gap-4 relative z-10">
+        <div className="min-w-0">
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">{formatDate(startedAt)}</p>
+          <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors truncate tracking-tight">{name ?? "Workout Session"}</h3>
+        </div>
+        
+        {totalVolume > 0 && (
+          <div className="shrink-0 flex flex-col items-end">
+            <span className="text-sm font-black text-foreground tabular-nums">{totalVolume.toLocaleString()} <span className="text-[10px] text-muted-foreground uppercase tracking-widest">{totalVolumeUnit ?? "kg"}</span></span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">Volume</span>
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-6 relative z-10 pt-4 border-t border-border/50">
         {durationMinutes !== null && durationMinutes !== undefined && (
-          <span className="flex items-center gap-1">
-            <Clock size={12} />
-            {durationMinutes} min
-          </span>
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+              <Clock size={16} />
+            </div>
+            <span className="text-xs font-bold text-muted-foreground tabular-nums">{durationMinutes} <span className="text-[10px] font-medium opacity-60 lowercase">min</span></span>
+          </div>
         )}
-        <span className="flex items-center gap-1">
-          <Dumbbell size={12} />
-          {exerciseCount} exercise{exerciseCount !== 1 ? "s" : ""}
-        </span>
-        <span className="flex items-center gap-1">
-          <BarChart2 size={12} />
-          {totalSets} sets
-        </span>
-        {totalVolume > 0 && (
-          <span className="ml-auto font-semibold text-foreground tabular-nums">
-            {totalVolume.toLocaleString()} {totalVolumeUnit ?? "kg"}
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
+            <Dumbbell size={16} />
+          </div>
+          <span className="text-xs font-bold text-muted-foreground">{exerciseCount} <span className="text-[10px] font-medium opacity-60 lowercase">exercises</span></span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
+            <BarChart2 size={16} />
+          </div>
+          <span className="text-xs font-bold text-muted-foreground tabular-nums">{totalSets} <span className="text-[10px] font-medium opacity-60 lowercase">sets</span></span>
+        </div>
+        
+        <div className="flex-1 flex justify-end">
+          <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+            View Details →
           </span>
-        )}
+        </div>
       </div>
     </Link>
   );

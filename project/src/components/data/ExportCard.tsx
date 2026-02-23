@@ -44,8 +44,8 @@ export default function ExportCard({ title, description, href, filename }: Expor
   return (
     <div className="flex items-start justify-between gap-4">
       <div>
-        <p className="text-sm font-medium text-gray-900">{title}</p>
-        <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+        <p className="text-sm font-medium text-inherit">{title}</p>
+        <p className="text-sm text-inherit mt-0.5">{description}</p>
         {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
       </div>
       <button

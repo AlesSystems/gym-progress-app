@@ -33,46 +33,63 @@ export default function SessionHistoryClient({ initialSessions }: SessionHistory
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-3xl w-full">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-foreground">Sessions</h1>
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-5xl w-full mx-auto">
+      {/* Header with modern typography */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Workout History</h1>
+          <p className="text-muted-foreground text-lg font-medium">Relive your past gains and progress</p>
+        </div>
         <Link
           href="/sessions/start"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
         >
-          <Play size={14} />
-          New Session
+          <Play size={20} strokeWidth={3} />
+          Start New Workout
         </Link>
-      </div>
+      </header>
 
+      {/* Sessions list with glassmorphism cards */}
       {sessions.length === 0 ? (
-        <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
-          <Dumbbell size={32} className="text-muted-foreground/30" />
-          <p className="text-sm text-muted-foreground">No completed sessions yet.</p>
-          <Link href="/sessions/start" className="text-sm font-medium text-primary hover:underline">
-            Start your first workout →
-          </Link>
+        <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm text-center animate-in fade-in zoom-in duration-500">
+          <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+            <History size={40} />
+          </div>
+          <div className="space-y-2">
+            <p className="text-lg font-medium text-muted-foreground italic">No completed sessions yet.</p>
+            <Link href="/sessions/start" className="inline-flex text-sm font-bold text-primary hover:underline">
+              Start your first workout now →
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {sessions.map((s) => (
             <SessionCard key={s.id} {...s} />
           ))}
         </div>
       )}
 
+      {/* Modern Load More button */}
       {hasMore && (
-        <div className="text-center">
+        <div className="text-center pt-8">
           <button
             onClick={loadMore}
             disabled={loading}
-            className="rounded-lg border border-border px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors disabled:opacity-50"
+            className="h-12 px-8 rounded-2xl border border-border bg-card/50 backdrop-blur-sm text-sm font-black uppercase tracking-widest text-muted-foreground hover:bg-secondary hover:text-foreground transition-all active:scale-95 disabled:opacity-50"
           >
-            {loading ? "Loading…" : "Load more"}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <div className="h-4 w-4 border-2 border-muted-foreground/30 border-t-muted-foreground rounded-full animate-spin" />
+                Loading…
+              </span>
+            ) : "Load More Activity"}
           </button>
         </div>
       )}
     </div>
   );
 }
+
+// Helper icons
+import { History } from "lucide-react";

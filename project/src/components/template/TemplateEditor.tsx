@@ -238,64 +238,82 @@ export default function TemplateEditor({
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="px-6 py-8">
       {/* Header fields */}
-      <div className="space-y-3 mb-6">
-        <div>
-          <label className="text-xs font-medium text-gray-600 block mb-1">Template Name *</label>
-          <input
-            type="text"
-            value={name}
-            maxLength={100}
-            placeholder="e.g. Push Day A"
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-          />
+      <div className="grid gap-6 mb-8 md:grid-cols-2">
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-2 px-1">
+              Template Name *
+            </label>
+            <input
+              type="text"
+              value={name}
+              maxLength={100}
+              placeholder="e.g. Push Day A"
+              onChange={(e) => setName(e.target.value)}
+              className="w-full h-12 rounded-xl border border-border bg-background/50 backdrop-blur-md px-4 py-2 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-muted-foreground/50"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-2 px-1">
+              Description
+            </label>
+            <textarea
+              value={description}
+              maxLength={500}
+              rows={3}
+              placeholder="Optional notes about this routine..."
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-xl border border-border bg-background/50 backdrop-blur-md px-4 py-3 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none placeholder:text-muted-foreground/50"
+            />
+          </div>
         </div>
-        <div>
-          <label className="text-xs font-medium text-gray-600 block mb-1">Description</label>
-          <textarea
-            value={description}
-            maxLength={500}
-            rows={2}
-            placeholder="Optional description"
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
-          />
+        
+        <div className="space-y-4">
+          {templateId && (
+            <div className="rounded-2xl border border-border bg-secondary/20 p-4">
+              <VisibilityToggle templateId={templateId} initialVisibility={initialVisibility} />
+            </div>
+          )}
         </div>
-        {templateId && (
-          <VisibilityToggle templateId={templateId} initialVisibility={initialVisibility} />
-        )}
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-6 rounded-xl bg-destructive/10 border border-destructive/20 px-5 py-3 text-sm text-destructive flex items-center gap-3">
+          <X size={18} />
           {error}
         </div>
       )}
 
       {/* Exercise list */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-gray-800">
-            Exercises <span className="text-gray-400 font-normal">({exercises.length}/30)</span>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-5 px-1">
+          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            Exercises 
+            <span className="text-sm font-normal text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-full">
+              {exercises.length}/30
+            </span>
           </h2>
           <button
             onClick={() => setDrawerOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors"
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
           >
-            <Plus size={14} /> Add Exercise
+            <Plus size={18} strokeWidth={2.5} /> Add Exercise
           </button>
         </div>
 
         {exercises.length === 0 ? (
-          <div className="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center">
-            <p className="text-sm text-gray-400">No exercises yet. Click &quot;Add Exercise&quot; to get started.</p>
+          <div className="rounded-2xl border-2 border-dashed border-border/50 bg-secondary/10 p-12 text-center group hover:border-primary/30 transition-colors">
+            <div className="h-16 w-16 bg-secondary/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+              <Plus className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
+            </div>
+            <p className="text-sm font-medium text-muted-foreground">No exercises yet. Build your routine now.</p>
           </div>
         ) : (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={exercises.map((e) => e.id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {exercises.map((ex) => (
                   <ExerciseRow
                     key={ex.id}
@@ -310,20 +328,30 @@ export default function TemplateEditor({
         )}
       </div>
 
-      {/* Action buttons */}
-      <div className="flex items-center justify-end gap-3 border-t border-gray-200 pt-4">
+      {/* Action buttons with glassmorphism */}
+      <div className="flex items-center justify-end gap-4 border-t border-border pt-8 mt-4">
         <button
           onClick={() => router.push("/templates")}
-          className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          className="h-12 flex items-center gap-2 rounded-xl border border-border bg-background px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
         >
-          <X size={14} /> Discard
+          Discard
         </button>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50 transition-colors"
+          className="h-12 flex items-center gap-2 rounded-xl bg-primary px-8 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all shadow-lg shadow-primary/25"
         >
-          <Save size={14} /> {saving ? "Saving…" : "Save Template"}
+          {saving ? (
+            <span className="flex items-center gap-2">
+              <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+              Saving…
+            </span>
+          ) : (
+            <>
+              <Save size={18} />
+              Save Template
+            </>
+          )}
         </button>
       </div>
 

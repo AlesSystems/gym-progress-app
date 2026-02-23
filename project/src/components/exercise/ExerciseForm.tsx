@@ -80,14 +80,14 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
   };
 
   const fieldClass =
-    "w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500";
-  const labelClass = "block text-sm font-medium text-gray-700 mb-1";
-  const errorClass = "mt-1 text-xs text-red-600";
+    "w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
+  const labelClass = "block text-sm font-medium text-foreground mb-1";
+  const errorClass = "mt-1 text-xs text-destructive";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {serverError && (
-        <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+        <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
           {serverError}
         </div>
       )}
@@ -95,7 +95,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
       {/* Name */}
       <div>
         <label htmlFor="name" className={labelClass}>
-          Name <span className="text-red-500">*</span>
+          Name <span className="text-destructive">*</span>
         </label>
         <input {...register("name")} id="name" type="text" className={fieldClass} />
         {errors.name && <p className={errorClass}>{errors.name.message}</p>}
@@ -104,12 +104,12 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
       {/* Type */}
       <div>
         <p className={labelClass}>
-          Type <span className="text-red-500">*</span>
+          Type <span className="text-destructive">*</span>
         </p>
         <div className="flex gap-4">
           {EXERCISE_TYPES.map((t) => (
-            <label key={t} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
-              <input {...register("type")} type="radio" value={t} className="accent-indigo-600" />
+            <label key={t} className="flex items-center gap-2 cursor-pointer text-sm text-foreground">
+              <input {...register("type")} type="radio" value={t} className="accent-primary" />
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </label>
           ))}
@@ -120,7 +120,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
       {/* Movement Category */}
       <div>
         <label htmlFor="movementCategory" className={labelClass}>
-          Movement Category <span className="text-red-500">*</span>
+          Movement Category <span className="text-destructive">*</span>
         </label>
         <select {...register("movementCategory")} id="movementCategory" className={fieldClass}>
           {MOVEMENT_CATEGORIES.map((c) => (
@@ -135,7 +135,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
       {/* Primary Muscle */}
       <div>
         <label htmlFor="primaryMuscle" className={labelClass}>
-          Primary Muscle <span className="text-red-500">*</span>
+          Primary Muscle <span className="text-destructive">*</span>
         </label>
         <input
           {...register("primaryMuscle")}
@@ -166,8 +166,8 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
                 onClick={() => toggleSecondary(m)}
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                   active
-                    ? "bg-indigo-600 border-indigo-600 text-white"
-                    : "border-gray-300 bg-white text-gray-600 hover:border-indigo-400"
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "border-border bg-background text-muted-foreground hover:border-primary hover:text-foreground"
                 }`}
               >
                 {m}
@@ -273,7 +273,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded-md bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isSubmitting
             ? mode === "create"
@@ -286,7 +286,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
         >
           Cancel
         </button>

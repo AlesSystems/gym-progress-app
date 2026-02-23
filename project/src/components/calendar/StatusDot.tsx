@@ -8,9 +8,9 @@ interface StatusDotProps {
 }
 
 const variantStyles: Record<StatusDotProps["variant"], string> = {
-  completed: "bg-indigo-500",
-  planned: "border-2 border-indigo-400 bg-transparent",
-  missed: "bg-gray-300",
+  completed: "bg-emerald-500",
+  planned: "border-2 border-primary bg-transparent",
+  missed: "bg-muted-foreground",
 };
 
 export default function StatusDot({ variant, className }: StatusDotProps) {

@@ -54,19 +54,26 @@ interface SettingsClientProps {
 function Section({
   icon: Icon,
   title,
+  titleClassName,
   children,
 }: {
   icon: React.ElementType;
   title: string;
+  titleClassName?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl bg-card border border-border overflow-hidden">
-      <div className="flex items-center gap-2.5 px-4 py-3 border-b border-border/60 bg-muted/30">
-        <Icon size={15} className="text-primary" />
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{title}</p>
+    <div className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-xl transition-all duration-300 hover:border-primary/30">
+      {/* Decorative background gradient */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
+      
+      <div className="flex items-center gap-3 px-8 py-5 border-b border-border/50 bg-secondary/10">
+        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+          <Icon size={18} strokeWidth={2.5} />
+        </div>
+        <p className={cn("text-xs font-black uppercase tracking-[0.2em]", titleClassName ?? "text-muted-foreground")}>{title}</p>
       </div>
-      <div className="p-4">{children}</div>
+      <div className="px-8 py-6">{children}</div>
     </div>
   );
 }
@@ -85,14 +92,14 @@ function Toggle({
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={cn(
-        "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        checked ? "bg-primary" : "bg-muted"
+        "relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background shadow-inner",
+        checked ? "bg-primary" : "bg-secondary/50"
       )}
     >
       <span
         className={cn(
-          "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition-transform duration-200",
-          checked ? "translate-x-5" : "translate-x-0"
+          "pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-xl ring-0 transition-transform duration-300 ease-in-out",
+          checked ? "translate-x-7" : "translate-x-0"
         )}
       />
     </button>
@@ -109,10 +116,10 @@ function RowItem({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0 border-b border-border/40 last:border-0">
+    <div className="flex items-center justify-between gap-6 py-5 first:pt-0 last:pb-0 border-b border-border/30 last:border-0 group/row">
       <div className="min-w-0">
-        <p className="text-sm font-medium text-foreground">{label}</p>
-        {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
+        <p className="text-base font-bold text-foreground group-hover/row:text-primary transition-colors">{label}</p>
+        {description && <p className="text-xs font-medium text-muted-foreground mt-1 opacity-70 italic">{description}</p>}
       </div>
       <div className="shrink-0">{children}</div>
     </div>
@@ -151,69 +158,80 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
       setServerError(json.error?.message ?? "Failed to update profile.");
       return;
     }
-    setServerMessage("Profile saved!");
+    setServerMessage("Profile updated successfully! ✨");
+    setTimeout(() => setServerMessage(null), 3000);
   };
 
   return (
-    <Section icon={User} title="Profile">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Section icon={User} title="Profile Details">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {serverMessage && (
-          <div className="rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2 text-sm text-green-400">
+          <div className="rounded-2xl bg-green-500/10 border border-green-500/20 px-4 py-3 text-sm font-bold text-green-500 animate-in fade-in zoom-in duration-300">
             {serverMessage}
           </div>
         )}
         {serverError && (
-          <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-sm text-destructive">
+          <div className="rounded-2xl bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm font-bold text-destructive animate-in fade-in zoom-in duration-300">
             {serverError}
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Full Name</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-2">Full Name</label>
             <input
               {...register("name")}
               type="text"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full h-12 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-4 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
-            {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name.message}</p>}
+            {errors.name && <p className="mt-1 text-xs font-bold text-destructive px-2">{errors.name.message}</p>}
           </div>
-          <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Display Name</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-2">Display Name</label>
             <input
               {...register("displayName")}
               type="text"
-              placeholder="How others see you"
-              className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="Username"
+              className="w-full h-12 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-4 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
             {errors.displayName && (
-              <p className="mt-1 text-xs text-destructive">{errors.displayName.message}</p>
+              <p className="mt-1 text-xs font-bold text-destructive px-2">{errors.displayName.message}</p>
             )}
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-medium text-muted-foreground mb-1.5">Email</label>
-          <input
-            value={user.email}
-            readOnly
-            className="w-full rounded-lg border border-input bg-muted/40 px-3 py-2 text-sm text-muted-foreground cursor-not-allowed"
-          />
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-2">Registered Email</label>
+          <div className="relative group">
+            <input
+              value={user.email}
+              readOnly
+              className="w-full h-12 rounded-2xl border border-border bg-secondary/30 px-4 py-2 text-base font-medium text-muted-foreground cursor-not-allowed"
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-secondary/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Zap size={12} className="text-muted-foreground/30" />
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between pt-1">
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-muted-foreground">Member since</span>
-            <span className="text-xs font-medium text-foreground">
-              {new Date(user.createdAt).toLocaleDateString()}
-            </span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border/30">
+          <div className="flex items-center gap-2 px-2">
+            <div className="h-8 w-8 rounded-lg bg-secondary flex items-center justify-center">
+              <Timer size={14} className="text-muted-foreground" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Member Since</span>
+              <span className="text-sm font-bold text-foreground tracking-tight">
+                {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+              </span>
+            </div>
           </div>
           <button
             type="submit"
             disabled={isSubmitting || !isDirty}
-            className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full sm:w-auto h-12 rounded-2xl bg-primary px-8 py-2 text-sm font-black uppercase tracking-widest text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed transition-all shadow-xl shadow-primary/20"
           >
-            {isSubmitting ? "Saving…" : "Save changes"}
+            {isSubmitting ? "Syncing..." : "Update Profile"}
           </button>
         </div>
       </form>
@@ -243,28 +261,30 @@ function PreferencesSection({ unitPreference }: { unitPreference: string }) {
       body: JSON.stringify({ unitPreference: u }),
     });
     setUnitSaving(false);
-    setUnitMsg(res.ok ? "Saved" : "Failed");
+    setUnitMsg(res.ok ? "Unit Saved" : "Error");
     setTimeout(() => setUnitMsg(null), 2000);
   };
 
   return (
-    <Section icon={SlidersHorizontal} title="Preferences">
-      <RowItem label="Weight Unit" description="Used across workouts and records">
-        <div className="flex items-center gap-1">
+    <Section icon={SlidersHorizontal} title="App Preferences">
+      <RowItem label="Weight System" description="Primary unit for all your lifts">
+        <div className="flex items-center gap-4">
           {unitMsg && (
-            <span className="text-xs text-muted-foreground mr-2">{unitSaving ? "…" : unitMsg}</span>
+            <span className="text-[10px] font-black uppercase text-primary animate-in fade-in slide-in-from-right-2 duration-300">
+              {unitSaving ? "Saving..." : unitMsg}
+            </span>
           )}
-          <div className="flex rounded-lg border border-border overflow-hidden">
+          <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50">
             {(["kg", "lb"] as const).map((u) => (
               <button
                 key={u}
                 type="button"
                 onClick={() => saveUnit(u)}
                 className={cn(
-                  "px-3 py-1.5 text-xs font-medium transition-colors",
+                  "px-4 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300",
                   unit === u
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-background text-muted-foreground hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {u}
@@ -274,47 +294,50 @@ function PreferencesSection({ unitPreference }: { unitPreference: string }) {
         </div>
       </RowItem>
 
-      <RowItem label="Default Rest Timer" description="Seconds between sets">
-        <input
-          type="number"
-          min={10}
-          max={600}
-          value={defaultRestSeconds}
-          onChange={(e) => setDefaultRestSeconds(Number(e.target.value))}
-          className="w-20 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-ring"
-        />
+      <RowItem label="Auto Rest Timer" description="Seconds between your workout sets">
+        <div className="relative group">
+          <input
+            type="number"
+            min={10}
+            max={600}
+            value={defaultRestSeconds}
+            onChange={(e) => setDefaultRestSeconds(Number(e.target.value))}
+            className="w-24 h-12 rounded-2xl border border-border bg-background/50 px-4 py-2 text-center text-lg font-black tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+          />
+          <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-black uppercase text-muted-foreground/40">Secs</span>
+        </div>
       </RowItem>
 
-      <RowItem label="Auto-start Timer" description="Start rest timer automatically after logging a set">
+      <RowItem label="Quick Log" description="Start rest timer automatically after a set">
         <Toggle checked={autoStartTimer} onChange={setAutoStartTimer} />
       </RowItem>
 
-      <RowItem label="Theme" description="Choose your preferred appearance">
-        <div className="flex rounded-lg border border-border overflow-hidden">
+      <RowItem label="Visual Appearance" description="Select your preferred UI style">
+        <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50">
           <button
             type="button"
             onClick={() => setTheme("dark")}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex items-center gap-2 px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300",
               theme === "dark"
-                ? "bg-primary text-primary-foreground"
-                : "bg-background text-muted-foreground hover:text-foreground"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Moon size={12} />
+            <Moon size={14} strokeWidth={3} />
             Dark
           </button>
           <button
             type="button"
             onClick={() => setTheme("light")}
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex items-center gap-2 px-5 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300",
               theme === "light"
-                ? "bg-primary text-primary-foreground"
-                : "bg-background text-muted-foreground hover:text-foreground"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Sun size={12} />
+            <Sun size={14} strokeWidth={3} />
             Light
           </button>
         </div>
@@ -341,50 +364,69 @@ function DataSection() {
       : "");
 
   return (
-    <Section icon={Download} title="Data & Export">
-      <div className="space-y-4">
-        <div className="space-y-2">
+    <Section icon={Download} title="Data Management" titleClassName="text-foreground">
+      <div className="space-y-8">
+        <div className="space-y-4">
           <ExportCard
-            title="Export as CSV"
-            description="Download your full session history as a spreadsheet."
+            title="Export Spreadsheet (CSV)"
+            description="Download your full training history for custom analysis."
             href={csvHref}
           />
-          <DateRangeFilter
-            from={fromDate}
-            to={toDate}
-            onFromChange={setFromDate}
-            onToChange={setToDate}
-          />
+          <div className="px-4">
+            <DateRangeFilter
+              from={fromDate}
+              to={toDate}
+              onFromChange={setFromDate}
+              onToChange={setToDate}
+            />
+          </div>
         </div>
 
-        <div className="h-px bg-border/60" />
+        <div className="h-px bg-border/30 mx-4" />
 
         <ExportCard
-          title="Download Full Backup (JSON)"
-          description="Complete backup of sessions, exercises, templates, and scheduled workouts."
+          title="Secure JSON Backup"
+          description="Complete system-compatible backup of all your records."
           href="/api/export/json"
         />
 
-        <div className="h-px bg-border/60" />
+        <div className="h-px bg-border/30 mx-4" />
 
-        <div>
+        <div className="px-4">
           <button
             type="button"
             onClick={() => setShowImport((v) => !v)}
-            className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+            className="flex items-center justify-between w-full group/btn"
           >
-            <ChevronDown
-              size={14}
-              className={cn("transition-transform duration-200", showImport && "rotate-180")}
-            />
-            Import / Restore
-          </button>
-          {showImport && (
-            <div className="mt-3 space-y-3">
-              <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-400">
-                <strong>Merge mode:</strong> Existing data won&apos;t be deleted. Duplicates are skipped.
+            <div className="flex items-center gap-4">
+              <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover/btn:text-primary transition-all">
+                <Download size={18} className={cn("transition-transform duration-300", showImport && "rotate-180")} />
               </div>
-              <ImportDropzone onComplete={setImportSummary} />
+              <div className="text-left">
+                <p className="text-base font-bold text-foreground">Import & Restore</p>
+                <p className="text-xs font-medium text-muted-foreground opacity-70 italic">Upload a previous JSON backup</p>
+              </div>
+            </div>
+            <ChevronDown
+              size={18}
+              className={cn("text-muted-foreground transition-transform duration-300", showImport && "rotate-180")}
+            />
+          </button>
+          
+          {showImport && (
+            <div className="mt-6 space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="rounded-[1.5rem] bg-amber-500/10 border border-amber-500/20 p-5 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-2">
+                  <Zap size={16} className="text-amber-500" />
+                  <p className="text-xs font-black uppercase tracking-widest text-amber-500">Safe Merge Mode</p>
+                </div>
+                <p className="text-sm font-medium text-amber-500/80 italic leading-relaxed">
+                  Existing records will not be deleted. Any duplicate entries in the backup file will be automatically skipped.
+                </p>
+              </div>
+              <div className="rounded-[2rem] border-2 border-dashed border-border bg-secondary/10 p-2 overflow-hidden">
+                <ImportDropzone onComplete={setImportSummary} />
+              </div>
             </div>
           )}
         </div>
@@ -407,8 +449,15 @@ function InviteSection({
   appUrl: string;
 }) {
   return (
-    <Section icon={UserPlus} title="Invite Friends">
-      <InviteGenerator personalInviteCode={personalInviteCode} appUrl={appUrl} />
+    <Section icon={UserPlus} title="Growth & Friends">
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-muted-foreground px-2 mb-4 italic">
+          Invite your training partners to share routines and stay motivated together.
+        </p>
+        <div className="rounded-[2rem] bg-primary/5 border border-primary/10 p-2 overflow-hidden">
+          <InviteGenerator personalInviteCode={personalInviteCode} appUrl={appUrl} />
+        </div>
+      </div>
     </Section>
   );
 }
@@ -441,86 +490,95 @@ function ChangePasswordForm() {
     if (!res.ok || !json.success) {
       setMsg({ type: "error", text: json.error?.message ?? "Failed to update password." });
     } else {
-      setMsg({ type: "success", text: "Password updated successfully!" });
+      setMsg({ type: "success", text: "Security update successful! ✨" });
       setCurrent("");
       setNext("");
       setConfirm("");
-      setTimeout(() => setOpen(false), 1500);
+      setTimeout(() => setOpen(false), 2000);
     }
   };
 
   return (
-    <div className="py-3 border-b border-border/40">
+    <div className="py-2 border-b border-border/30">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center justify-between w-full text-left"
+        className="flex items-center justify-between w-full p-4 rounded-2xl hover:bg-secondary/20 transition-all group/acc"
       >
-        <div className="flex items-center gap-2">
-          <KeyRound size={15} className="text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">Change Password</span>
+        <div className="flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover/acc:text-primary transition-all">
+            <KeyRound size={18} />
+          </div>
+          <div className="text-left">
+            <p className="text-base font-bold text-foreground">Change Security Code</p>
+            <p className="text-xs font-medium text-muted-foreground opacity-70 italic">Update your account password</p>
+          </div>
         </div>
         <ChevronDown
-          size={14}
+          size={18}
           className={cn(
-            "text-muted-foreground transition-transform duration-200",
+            "text-muted-foreground transition-transform duration-300",
             open && "rotate-180"
           )}
         />
       </button>
       {open && (
-        <form onSubmit={handleSubmit} className="mt-4 space-y-3">
+        <form onSubmit={handleSubmit} className="mt-4 px-4 pb-4 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
           {msg && (
             <div
               className={cn(
-                "rounded-lg px-3 py-2 text-xs border",
+                "rounded-2xl px-5 py-3 text-sm font-bold border",
                 msg.type === "success"
-                  ? "bg-green-500/10 border-green-500/20 text-green-400"
+                  ? "bg-green-500/10 border-green-500/20 text-green-500"
                   : "bg-destructive/10 border-destructive/20 text-destructive"
               )}
             >
               {msg.text}
             </div>
           )}
-          <input
-            type="password"
-            placeholder="Current password"
-            value={current}
-            onChange={(e) => setCurrent(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <input
-            type="password"
-            placeholder="New password (min 8 chars)"
-            value={next}
-            onChange={(e) => setNext(e.target.value)}
-            required
-            minLength={8}
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <div className="flex gap-2 justify-end">
+          <div className="space-y-3">
+            <input
+              type="password"
+              placeholder="Current security code"
+              value={current}
+              onChange={(e) => setCurrent(e.target.value)}
+              required
+              className="w-full h-12 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-6 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                type="password"
+                placeholder="New code"
+                value={next}
+                onChange={(e) => setNext(e.target.value)}
+                required
+                minLength={8}
+                className="w-full h-12 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-6 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+              />
+              <input
+                type="password"
+                placeholder="Confirm code"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                required
+                className="w-full h-12 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-6 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+              />
+            </div>
+          </div>
+          <div className="flex gap-4 justify-end">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="px-3 py-1.5 text-xs rounded-lg border border-border text-muted-foreground hover:text-foreground transition-colors"
+              className="px-6 h-10 text-xs font-bold uppercase tracking-widest rounded-xl border border-border text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-3 py-1.5 text-xs rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+              className="px-8 h-10 text-xs font-black uppercase tracking-widest rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] shadow-lg shadow-primary/20 transition-all disabled:opacity-50"
             >
-              {saving ? "Saving…" : "Update Password"}
+              {saving ? "Updating..." : "Update Security"}
             </button>
           </div>
         </form>
@@ -555,38 +613,49 @@ function DeleteAccountDialog() {
   };
 
   return (
-    <div className="pt-3">
+    <div className="p-4">
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 text-sm font-medium text-destructive hover:text-destructive/80 transition-colors"
+        className="flex items-center gap-3 text-sm font-black uppercase tracking-widest text-destructive hover:text-destructive/80 transition-all active:scale-[0.98]"
       >
-        <Trash2 size={15} />
-        Delete Account
+        <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+          <Trash2 size={18} />
+        </div>
+        Permanently Delete Account
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-xl bg-card border border-border p-6 shadow-2xl">
-            <h3 className="text-base font-semibold text-foreground mb-1">Delete Account</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              This will permanently delete your account and all your data. This cannot be undone.
-            </p>
-            <form onSubmit={handleDelete} className="space-y-3">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-background/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="w-full max-w-md rounded-[2.5rem] bg-card border border-border shadow-[0_0_50px_rgba(0,0,0,0.3)] p-10 animate-in zoom-in-95 duration-300">
+            <div className="flex flex-col items-center text-center space-y-4 mb-8">
+              <div className="h-20 w-20 rounded-full bg-destructive/10 flex items-center justify-center text-destructive mb-2">
+                <Trash2 size={40} />
+              </div>
+              <h3 className="text-3xl font-black text-foreground tracking-tight">Danger Zone</h3>
+              <p className="text-base font-medium text-muted-foreground italic leading-relaxed">
+                This will permanently remove your entire training history, custom exercises, and account settings. This action is irreversible.
+              </p>
+            </div>
+            
+            <form onSubmit={handleDelete} className="space-y-6">
               {error && (
-                <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs text-destructive">
+                <div className="rounded-2xl bg-destructive/10 border border-destructive/20 px-5 py-3 text-sm font-bold text-destructive">
                   {error}
                 </div>
               )}
-              <input
-                type="password"
-                placeholder="Enter your password to confirm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-              <div className="flex gap-2 justify-end">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-4">Confirm Security Code</label>
+                <input
+                  type="password"
+                  placeholder="Enter password to confirm deletion"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full h-14 rounded-2xl border border-border bg-background/50 px-6 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-destructive/40 transition-all"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   type="button"
                   onClick={() => {
@@ -594,16 +663,16 @@ function DeleteAccountDialog() {
                     setError(null);
                     setPassword("");
                   }}
-                  className="px-3 py-1.5 text-xs rounded-lg border border-border text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex-1 h-12 rounded-xl border border-border bg-background px-6 text-sm font-bold text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
                 >
-                  Cancel
+                  Keep Account
                 </button>
                 <button
                   type="submit"
                   disabled={deleting}
-                  className="px-3 py-1.5 text-xs rounded-lg bg-destructive text-destructive-foreground font-medium hover:bg-destructive/90 disabled:opacity-50 transition-colors"
+                  className="flex-1 h-12 rounded-xl bg-destructive text-destructive-foreground text-sm font-black uppercase tracking-widest hover:bg-destructive/90 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-xl shadow-destructive/20 disabled:opacity-50"
                 >
-                  {deleting ? "Deleting…" : "Yes, delete my account"}
+                  {deleting ? "Purging..." : "Delete All"}
                 </button>
               </div>
             </form>
@@ -616,9 +685,11 @@ function DeleteAccountDialog() {
 
 function AccountSection() {
   return (
-    <Section icon={KeyRound} title="Account">
-      <ChangePasswordForm />
-      <DeleteAccountDialog />
+    <Section icon={KeyRound} title="Security & Account">
+      <div className="space-y-2">
+        <ChangePasswordForm />
+        <DeleteAccountDialog />
+      </div>
     </Section>
   );
 }
@@ -627,7 +698,7 @@ function AccountSection() {
 
 function SignOutSection() {
   return (
-    <div className="rounded-xl bg-card border border-border p-4">
+    <div className="flex justify-center pt-4">
       <button
         type="button"
         onClick={async () => {
@@ -637,10 +708,12 @@ function SignOutSection() {
             window.location.href = "/login";
           }
         }}
-        className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        className="group flex items-center gap-3 px-8 py-4 rounded-[2rem] bg-secondary/30 border border-border hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive transition-all duration-300"
       >
-        <LogOut size={15} />
-        Sign out
+        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-destructive/20 transition-colors">
+          <LogOut size={16} />
+        </div>
+        <span className="text-base font-black uppercase tracking-widest">Sign out of session</span>
       </button>
     </div>
   );
@@ -650,21 +723,32 @@ function SignOutSection() {
 
 export default function SettingsClient({ user, appUrl }: SettingsClientProps) {
   return (
-    <div className="flex flex-col gap-5 p-4 md:p-6 max-w-2xl w-full pb-28 md:pb-6">
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-4xl w-full pb-32 md:pb-12 mx-auto animate-in fade-in duration-700">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-foreground">Settings</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          {user.displayName ?? user.name ?? user.email}
-        </p>
-      </div>
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
+        <div className="space-y-2">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 rounded-[2rem] bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-2xl shadow-primary/30">
+              <User size={32} className="text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground">App Settings</h1>
+              <p className="text-muted-foreground text-lg font-medium opacity-70">
+                {user.displayName ?? user.name ?? user.email}
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <ProfileSection user={user} />
-      <PreferencesSection unitPreference={user.unitPreference} />
-      <DataSection />
-      <InviteSection personalInviteCode={user.inviteCode} appUrl={appUrl} />
-      <AccountSection />
-      <SignOutSection />
+      <div className="grid gap-8">
+        <ProfileSection user={user} />
+        <PreferencesSection unitPreference={user.unitPreference} />
+        <DataSection />
+        <InviteSection personalInviteCode={user.inviteCode} appUrl={appUrl} />
+        <AccountSection />
+        <SignOutSection />
+      </div>
     </div>
   );
 }

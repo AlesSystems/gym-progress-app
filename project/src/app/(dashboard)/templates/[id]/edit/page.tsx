@@ -51,18 +51,25 @@ export default async function EditTemplatePage({ params }: PageProps) {
   }));
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 py-6 border-b border-gray-200 bg-white">
-        <h1 className="text-xl font-bold text-gray-900">Edit Template</h1>
-        <p className="text-sm text-gray-500 mt-0.5">{template.name}</p>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
+        <header className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Edit Template</h1>
+          <p className="text-muted-foreground flex items-center gap-2">
+            Currently editing: <span className="text-primary font-medium">{template.name}</span>
+          </p>
+        </header>
+
+        <div className="rounded-3xl border border-border bg-card/50 backdrop-blur-sm shadow-xl overflow-hidden">
+          <TemplateEditor
+            templateId={template.id}
+            initialName={template.name}
+            initialDescription={template.description ?? ""}
+            initialExercises={exercises}
+            initialVisibility={(template.visibility as "private" | "friends") ?? "private"}
+          />
+        </div>
       </div>
-      <TemplateEditor
-        templateId={template.id}
-        initialName={template.name}
-        initialDescription={template.description ?? ""}
-        initialExercises={exercises}
-        initialVisibility={(template.visibility as "private" | "friends") ?? "private"}
-      />
     </div>
   );
 }

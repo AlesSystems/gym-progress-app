@@ -33,14 +33,14 @@ export default function ExerciseFilters() {
         placeholder="Search exercises…"
         defaultValue={current("search")}
         onChange={(e) => update("search", e.target.value)}
-        className="h-9 rounded-lg border border-gray-300 px-3 py-1.5 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-52"
+        className="h-9 rounded-lg border border-border bg-background px-3 py-1.5 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-52"
       />
 
       {/* Type */}
       <select
         value={current("type")}
         onChange={(e) => update("type", e.target.value)}
-        className="h-9 rounded-lg border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        className="h-9 rounded-lg border border-border bg-background px-2 py-1.5 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       >
         <option value="">All types</option>
         {EXERCISE_TYPES.map((t) => (
@@ -54,7 +54,7 @@ export default function ExerciseFilters() {
       <select
         value={current("category")}
         onChange={(e) => update("category", e.target.value)}
-        className="h-9 rounded-lg border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        className="h-9 rounded-lg border border-border bg-background px-2 py-1.5 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       >
         <option value="">All categories</option>
         {MOVEMENT_CATEGORIES.map((c) => (
@@ -68,7 +68,7 @@ export default function ExerciseFilters() {
       <select
         value={current("source")}
         onChange={(e) => update("source", e.target.value)}
-        className="h-9 rounded-lg border border-gray-300 px-2 py-1.5 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+        className="h-9 rounded-lg border border-border bg-background px-2 py-1.5 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       >
         <option value="">System + Custom</option>
         <option value="system">System only</option>

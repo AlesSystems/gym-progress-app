@@ -13,21 +13,21 @@ interface ScheduledEntryCardProps {
 
 const statusConfig = {
   planned: {
-    dot: "bg-indigo-500",
-    badge: "bg-indigo-100 text-indigo-700",
-    border: "border-indigo-200 bg-indigo-50",
+    dot: "bg-primary",
+    badge: "bg-primary/20 text-primary",
+    border: "border-primary/20 bg-primary/10",
     label: "Planned",
   },
   completed: {
     dot: "bg-emerald-500",
-    badge: "bg-emerald-100 text-emerald-700",
-    border: "border-emerald-200 bg-emerald-50",
+    badge: "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+    border: "border-emerald-500/20 bg-emerald-500/10",
     label: "Done",
   },
   missed: {
-    dot: "bg-gray-300",
-    badge: "bg-gray-100 text-gray-500",
-    border: "border-gray-200 bg-gray-50",
+    dot: "bg-muted-foreground",
+    badge: "bg-muted text-muted-foreground",
+    border: "border-border bg-muted/50",
     label: "Missed",
   },
 };
@@ -40,11 +40,11 @@ export default function ScheduledEntryCard({ entry, onStartWorkout, onEdit, onDe
       <div className="flex items-start gap-2">
         <span className={cn("mt-1 w-2 h-2 rounded-full shrink-0", cfg.dot)} />
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-gray-900 truncate">
+          <p className="text-xs font-semibold text-foreground truncate">
             {entry.title ?? "Workout"}
           </p>
           {entry.notes && (
-            <p className="text-xs text-gray-500 mt-0.5 line-clamp-2 flex items-start gap-1">
+            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 flex items-start gap-1">
               <StickyNote size={10} className="mt-0.5 shrink-0" />
               {entry.notes}
             </p>
@@ -60,7 +60,7 @@ export default function ScheduledEntryCard({ entry, onStartWorkout, onEdit, onDe
           {entry.status === "planned" && (
             <button
               onClick={() => onStartWorkout(entry)}
-              className="flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors"
+              className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 transition-colors"
             >
               <Play size={11} />
               Start Workout
@@ -68,13 +68,13 @@ export default function ScheduledEntryCard({ entry, onStartWorkout, onEdit, onDe
           )}
           <button
             onClick={() => onEdit(entry)}
-            className="text-xs text-gray-500 hover:text-indigo-600 transition-colors px-2 py-1.5 rounded-lg hover:bg-white"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors px-2 py-1.5 rounded-lg hover:bg-background"
           >
             Edit
           </button>
           <button
             onClick={() => onDelete(entry.id)}
-            className="text-xs text-red-400 hover:text-red-600 transition-colors px-2 py-1.5 rounded-lg hover:bg-red-50"
+            className="text-xs text-destructive hover:text-destructive transition-colors px-2 py-1.5 rounded-lg hover:bg-destructive/10"
           >
             Delete
           </button>

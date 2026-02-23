@@ -33,9 +33,9 @@ export default function VisibilityToggle({ templateId, initialVisibility }: Visi
 
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-gray-600">Visibility</span>
+      <span className="text-xs font-medium text-muted-foreground">Visibility</span>
       <div
-        className="inline-flex rounded-lg border border-gray-200 overflow-hidden text-sm"
+        className="inline-flex rounded-lg border border-border overflow-hidden text-sm"
         title="Friends who are connected via your invite link will be able to see and clone this template."
       >
         <button
@@ -43,8 +43,8 @@ export default function VisibilityToggle({ templateId, initialVisibility }: Visi
           disabled={saving}
           className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
             visibility === "private"
-              ? "bg-gray-900 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
+              ? "bg-foreground text-background"
+              : "bg-background text-muted-foreground hover:bg-secondary"
           }`}
         >
           <Lock size={13} />
@@ -55,8 +55,8 @@ export default function VisibilityToggle({ templateId, initialVisibility }: Visi
           disabled={saving}
           className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
             visibility === "friends"
-              ? "bg-indigo-600 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
+              ? "bg-primary text-primary-foreground"
+              : "bg-background text-muted-foreground hover:bg-secondary"
           }`}
         >
           <Users size={13} />

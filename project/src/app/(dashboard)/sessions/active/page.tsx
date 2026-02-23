@@ -108,51 +108,63 @@ export default function ActiveSessionPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="min-h-screen bg-background pb-32">
         <ActiveSessionHeader name={session.name} startedAt={session.startedAt} />
 
-        <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+        <div className="max-w-3xl mx-auto px-6 py-8 space-y-6">
           {session.exercises.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center">
-              <p className="text-gray-500 text-sm mb-3">No exercises yet. Add your first exercise!</p>
+            <div className="rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 text-center backdrop-blur-sm group hover:border-primary/30 transition-all duration-500">
+              <div className="h-20 w-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                <Plus size={40} className="text-primary" />
+              </div>
+              <p className="text-muted-foreground font-medium mb-8 max-w-xs mx-auto text-lg italic">
+                Your workout is a blank canvas. Start by adding your first exercise!
+              </p>
               <button
                 onClick={() => setShowAddExercise(true)}
-                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors"
+                className="rounded-2xl bg-primary px-8 py-3 text-base font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-xl shadow-primary/20"
               >
                 + Add Exercise
               </button>
             </div>
           ) : (
-            session.exercises.map((ex) => (
-              <ExerciseAccordion
-                key={ex.id}
-                exercise={ex}
-                sessionId={session.id}
-                onExerciseRemove={handleExerciseRemove}
-                onExerciseUpdate={handleExerciseUpdate}
-              />
-            ))
-          )}
+            <>
+              <div className="space-y-4">
+                {session.exercises.map((ex) => (
+                  <ExerciseAccordion
+                    key={ex.id}
+                    exercise={ex}
+                    sessionId={session.id}
+                    onExerciseRemove={handleExerciseRemove}
+                    onExerciseUpdate={handleExerciseUpdate}
+                  />
+                ))}
+              </div>
 
-          {/* Finish Workout */}
-          <button
-            onClick={() => setShowSummary(true)}
-            className="w-full rounded-xl bg-green-600 px-6 py-3 text-sm font-bold text-white hover:bg-green-500 transition-colors shadow-sm"
-          >
-            Finish Workout ✓
-          </button>
+              {/* Finish Workout Action */}
+              <div className="pt-8 px-2">
+                <button
+                  onClick={() => setShowSummary(true)}
+                  className="w-full h-16 rounded-[2rem] bg-gradient-to-r from-green-500 to-emerald-600 px-8 py-4 text-xl font-black text-white hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-green-500/30 flex items-center justify-center gap-3"
+                >
+                  FINISH WORKOUT 
+                  <span className="text-2xl">✓</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* FAB: Add Exercise */}
+      {/* Modern Floating Action Button: Add Exercise */}
       <button
         onClick={() => setShowAddExercise(true)}
         disabled={addingExercise}
-        className="fixed right-4 bottom-20 z-40 flex items-center gap-1 rounded-full bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 transition-colors disabled:opacity-50"
+        className="fixed right-6 bottom-24 z-50 flex items-center gap-2 rounded-2xl bg-primary px-6 py-4 text-sm font-black uppercase tracking-widest text-primary-foreground shadow-2xl shadow-primary/40 hover:bg-primary/90 hover:-translate-y-1 active:translate-y-0 transition-all disabled:opacity-50"
         aria-label="Add exercise"
       >
-        <Plus size={16} />
-        Exercise
+        <Plus size={20} strokeWidth={3} />
+        Add Exercise
       </button>
 
       <RestTimerBar />

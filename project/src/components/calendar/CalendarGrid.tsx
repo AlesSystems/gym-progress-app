@@ -39,7 +39,7 @@ export default function CalendarGrid({ year, month, days, selectedDate, onDayCli
       {/* Weekday headers */}
       <div className="grid grid-cols-7 mb-1">
         {WEEKDAYS.map((wd) => (
-          <div key={wd} className="text-center text-xs font-semibold text-gray-400 py-1">
+          <div key={wd} className="text-center text-xs font-semibold text-muted-foreground py-1">
             {wd}
           </div>
         ))}

@@ -25,7 +25,7 @@ export default function RestTimePicker({ value, onChange }: RestTimePickerProps)
           if (e.target.value === "custom") return;
           onChange(e.target.value === "null" ? null : Number(e.target.value));
         }}
-        className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+        className="w-full h-10 rounded-xl border border-border bg-background/50 px-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium appearance-none"
       >
         {PRESETS.map((p) => (
           <option key={String(p.value)} value={String(p.value)}>

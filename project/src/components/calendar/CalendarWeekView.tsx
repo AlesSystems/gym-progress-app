@@ -29,8 +29,8 @@ export default function CalendarWeekView({ weekStart, days, selectedDate, onDayC
       <div className="grid grid-cols-7 mb-1">
         {WEEKDAYS.map((wd, i) => (
           <div key={wd} className="text-center">
-            <span className="text-xs font-semibold text-gray-400">{wd}</span>
-            <p className="text-xs text-gray-400 mt-0.5">{cells[i].getDate()}</p>
+            <span className="text-xs font-semibold text-muted-foreground">{wd}</span>
+            <p className="text-xs text-muted-foreground mt-0.5">{cells[i].getDate()}</p>
           </div>
         ))}
       </div>

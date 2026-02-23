@@ -1,6 +1,6 @@
 "use client";
 
-import { GripVertical } from "lucide-react";
+import { GripVertical, X } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import RepSchemeInput from "./RepSchemeInput";
@@ -46,41 +46,55 @@ export default function ExerciseRow({ item, onChange, onRemove }: ExerciseRowPro
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
+      className={`group flex items-start gap-4 rounded-2xl border border-border bg-card/40 p-4 shadow-sm backdrop-blur-sm transition-all hover:border-primary/30 ${
+        isDragging ? "shadow-2xl ring-2 ring-primary/20 scale-[1.02] z-50 bg-card/80" : ""
+      }`}
     >
       {/* Drag handle */}
-      <button
+      <div
         {...attributes}
         {...listeners}
-        className="mt-1 cursor-grab text-gray-400 hover:text-gray-600 active:cursor-grabbing shrink-0"
+        className="mt-1.5 cursor-grab text-muted-foreground/40 hover:text-primary active:cursor-grabbing shrink-0 transition-colors"
         aria-label="Drag to reorder"
       >
-        <GripVertical size={16} />
-      </button>
+        <GripVertical size={20} />
+      </div>
 
       <div className="flex-1 min-w-0">
-        {/* Exercise name */}
-        <p className="text-sm font-semibold text-gray-900 truncate">{item.exercise.name}</p>
-        <p className="text-xs text-gray-500 mb-2">{item.exercise.primaryMuscle}</p>
-
-        {/* Config row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {/* Sets */}
+        {/* Exercise header */}
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Sets</label>
+            <h4 className="text-base font-bold text-foreground truncate">{item.exercise.name}</h4>
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{item.exercise.primaryMuscle}</span>
+          </div>
+          
+          <button
+            onClick={() => onRemove(item.id)}
+            className="shrink-0 rounded-full h-8 w-8 flex items-center justify-center text-muted-foreground/50 hover:bg-destructive/10 hover:text-destructive transition-all"
+            aria-label="Remove exercise"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Config grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {/* Sets */}
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Sets</label>
             <input
               type="number"
               min={1}
               max={20}
               value={item.sets}
               onChange={(e) => onChange(item.id, "sets", parseInt(e.target.value, 10) || 1)}
-              className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              className="w-full h-10 rounded-xl border border-border bg-background/50 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
             />
           </div>
 
           {/* Reps */}
-          <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Reps</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Reps</label>
             <RepSchemeInput
               value={item.reps}
               onChange={(v) => onChange(item.id, "reps", v)}
@@ -88,9 +102,9 @@ export default function ExerciseRow({ item, onChange, onRemove }: ExerciseRowPro
           </div>
 
           {/* Weight */}
-          <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Target Weight</label>
-            <div className="flex gap-1">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Target Weight</label>
+            <div className="flex gap-1.5">
               <input
                 type="number"
                 min={0}
@@ -101,12 +115,12 @@ export default function ExerciseRow({ item, onChange, onRemove }: ExerciseRowPro
                 onChange={(e) =>
                   onChange(item.id, "targetWeight", e.target.value ? parseFloat(e.target.value) : null)
                 }
-                className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                className="w-full h-10 rounded-xl border border-border bg-background/50 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
               />
               <select
                 value={item.targetWeightUnit ?? "kg"}
                 onChange={(e) => onChange(item.id, "targetWeightUnit", e.target.value)}
-                className="rounded border border-gray-300 px-1 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                className="h-10 rounded-xl border border-border bg-background/50 px-2 text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
               >
                 <option value="kg">kg</option>
                 <option value="lb">lb</option>
@@ -115,8 +129,8 @@ export default function ExerciseRow({ item, onChange, onRemove }: ExerciseRowPro
           </div>
 
           {/* Rest */}
-          <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Rest</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Rest</label>
             <RestTimePicker
               value={item.restSeconds ?? null}
               onChange={(v) => onChange(item.id, "restSeconds", v)}
@@ -125,36 +139,27 @@ export default function ExerciseRow({ item, onChange, onRemove }: ExerciseRowPro
         </div>
 
         {/* Tempo + Notes */}
-        <div className="grid grid-cols-2 gap-2 mt-2">
-          <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Tempo</label>
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Tempo</label>
             <TempoInput
               value={item.tempoNotes ?? ""}
               onChange={(v) => onChange(item.id, "tempoNotes", v || null)}
             />
           </div>
-          <div>
-            <label className="text-xs text-gray-500 block mb-0.5">Notes</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter px-1">Notes</label>
             <input
               type="text"
               value={item.notes ?? ""}
               maxLength={500}
               placeholder="Optional notes"
               onChange={(e) => onChange(item.id, "notes", e.target.value || null)}
-              className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              className="w-full h-10 rounded-xl border border-border bg-background/50 px-3 text-sm text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
             />
           </div>
         </div>
       </div>
-
-      {/* Remove */}
-      <button
-        onClick={() => onRemove(item.id)}
-        className="shrink-0 rounded-md p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors mt-1"
-        aria-label="Remove exercise"
-      >
-        ✕
-      </button>
     </div>
   );
 }

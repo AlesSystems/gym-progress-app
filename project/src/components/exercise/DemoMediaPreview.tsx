@@ -33,14 +33,14 @@ export default function DemoMediaPreview({ imageUrl, videoUrl }: DemoMediaPrevie
         <img
           src={imageUrl}
           alt="Exercise demo"
-          className="w-full max-h-64 rounded-xl object-cover border border-gray-200"
+          className="w-full max-h-64 rounded-xl object-cover border border-border"
         />
       )}
 
       {videoUrl && (
         <div>
           {embedUrl ? (
-            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-gray-200">
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border">
               <iframe
                 src={embedUrl}
                 title="Exercise demo video"
@@ -54,7 +54,7 @@ export default function DemoMediaPreview({ imageUrl, videoUrl }: DemoMediaPrevie
               href={videoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
             >
               🎬 Watch demo video
             </a>

@@ -19,20 +19,20 @@ export default function DeleteButton({ exerciseId }: DeleteButtonProps) {
     router.refresh();
   };
 
-  if (confirming) {
+    if (confirming) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-600">Sure?</span>
+        <span className="text-xs text-muted-foreground">Sure?</span>
         <button
           onClick={handleDelete}
           disabled={loading}
-          className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-500 disabled:opacity-50"
+          className="rounded-md bg-destructive px-3 py-1.5 text-xs font-medium text-destructive-foreground hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Deleting…" : "Yes, delete"}
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+          className="rounded-md border border-border bg-background px-3 py-1.5 text-xs text-foreground hover:bg-secondary"
         >
           Cancel
         </button>
@@ -43,7 +43,7 @@ export default function DeleteButton({ exerciseId }: DeleteButtonProps) {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-100 transition-colors"
+      className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-1.5 text-sm font-medium text-destructive hover:bg-destructive/20 transition-colors"
     >
       Delete
     </button>

@@ -31,70 +31,94 @@ export default function TemplateCard({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
+    <div className="group relative flex flex-col gap-4 rounded-[2rem] border border-border bg-card/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:bg-card/60 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5">
+      {/* Decorative background element */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
       {/* Header */}
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-4 relative z-10">
         <Link href={`/templates/${id}/edit`} className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-foreground hover:text-primary transition-colors leading-tight truncate">
+          <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight truncate tracking-tight">
             {name}
           </h3>
         </Link>
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          className="shrink-0 rounded-md p-1 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+          className="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
           aria-label="Template options"
         >
-          <MoreVertical size={16} />
+          <MoreVertical size={20} />
         </button>
       </div>
 
-      {description && (
-        <p className="text-xs text-muted-foreground line-clamp-2">{description}</p>
-      )}
+      <div className="space-y-4 relative z-10">
+        {description && (
+          <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2 italic border-l-2 border-primary/20 pl-3">
+            {description}
+          </p>
+        )}
 
-      <div className="flex items-center gap-3 text-xs text-muted-foreground mt-auto">
-        <span>{exerciseCount} exercise{exerciseCount !== 1 ? "s" : ""}</span>
-        <span>·</span>
-        <span>Updated {formatDate(updatedAt)}</span>
-        {isArchived && (
-          <span className="ml-auto rounded-full bg-secondary border border-border px-2 py-0.5 text-xs font-medium text-muted-foreground">
-            Archived
-          </span>
-        )}
-        {!isArchived && visibility === "friends" && (
-          <span className="ml-auto rounded-full bg-accent/10 border border-accent/20 px-2 py-0.5 text-xs font-medium text-accent-foreground">
-            Shared
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mt-auto pt-4 border-t border-border/50">
+          <div className="flex items-center gap-1.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span>{exerciseCount} movements</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-secondary" />
+            <span>{formatDate(updatedAt)}</span>
+          </div>
+          
+          <div className="flex-1 flex justify-end gap-2">
+            {isArchived && (
+              <span className="rounded-full bg-secondary border border-border px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                Archived
+              </span>
+            )}
+            {!isArchived && visibility === "friends" && (
+              <span className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-primary">
+                Shared
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Context menu */}
+      {/* Context menu with glassmorphism */}
       {menuOpen && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-          <div className="absolute right-4 top-10 z-20 w-40 rounded-lg border border-border bg-card shadow-xl py-1">
+          <div className="fixed inset-0 z-40 bg-background/20 backdrop-blur-[1px]" onClick={() => setMenuOpen(false)} />
+          <div className="absolute right-6 top-16 z-50 w-48 rounded-[1.5rem] border border-border/50 bg-card/90 backdrop-blur-2xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in duration-200">
             <Link
               href={`/templates/${id}/edit`}
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-secondary"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              <Edit size={14} /> Edit
+              <Edit size={18} /> Edit Routine
             </Link>
             <button
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-foreground hover:bg-secondary"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
               onClick={() => { setMenuOpen(false); onClone(id); }}
             >
-              <Copy size={14} /> Clone
+              <Copy size={18} /> Duplicate
             </button>
+            <div className="h-px bg-border/50 my-1 mx-2" />
             <button
-              className="flex items-center gap-2 w-full px-3 py-2 text-sm text-destructive hover:bg-destructive/10"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-destructive hover:bg-destructive/10 transition-colors"
               onClick={() => { setMenuOpen(false); onArchive(id); }}
             >
-              <Archive size={14} /> {isArchived ? "Restore" : "Archive"}
+              <Archive size={18} /> {isArchived ? "Restore" : "Archive"}
             </button>
           </div>
         </>
       )}
+
+      {/* Quick view details */}
+      <Link 
+        href={`/templates/${id}/edit`}
+        className="mt-2 flex items-center justify-end opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0"
+      >
+        <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Edit Routine →</span>
+      </Link>
     </div>
   );
 }

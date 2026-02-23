@@ -24,29 +24,29 @@ export default function DayCell({ date, dayData, isToday, isCurrentMonth, isSele
       onClick={() => onClick(date)}
       className={cn(
         "relative flex flex-col items-center justify-start pt-1.5 pb-1 rounded-xl transition-all",
-        "h-14 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400",
-        isCurrentMonth ? "text-gray-900" : "text-gray-300",
-        isSelected && "bg-indigo-600 text-white shadow-md",
-        !isSelected && isToday && "bg-indigo-50 ring-1 ring-indigo-300",
-        !isSelected && !isToday && "hover:bg-gray-100"
+        "h-14 w-full focus:outline-none focus:ring-2 focus:ring-primary",
+        isCurrentMonth ? "text-foreground" : "text-muted-foreground/30",
+        isSelected && "bg-primary text-primary-foreground shadow-md",
+        !isSelected && isToday && "bg-primary/10 ring-1 ring-primary/30",
+        !isSelected && !isToday && "hover:bg-secondary"
       )}
       aria-label={date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
       aria-pressed={isSelected}
     >
-      <span className={cn("text-sm font-medium leading-none", isSelected && "text-white")}>
+      <span className={cn("text-sm font-medium leading-none", isSelected && "text-primary-foreground")}>
         {date.getDate()}
       </span>
 
       {hasAny && (
         <div className="flex items-center gap-0.5 mt-1.5">
           {hasCompleted && (
-            <StatusDot variant="completed" className={cn(isSelected && "bg-white")} />
+            <StatusDot variant="completed" className={cn(isSelected && "bg-primary-foreground")} />
           )}
           {hasPlanned && (
-            <StatusDot variant="planned" className={cn(isSelected && "border-white")} />
+            <StatusDot variant="planned" className={cn(isSelected && "border-primary-foreground")} />
           )}
           {hasMissed && (
-            <StatusDot variant="missed" className={cn(isSelected && "bg-white/60")} />
+            <StatusDot variant="missed" className={cn(isSelected && "bg-primary-foreground/60")} />
           )}
         </div>
       )}

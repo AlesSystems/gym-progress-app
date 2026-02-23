@@ -16,34 +16,43 @@ export default function CloneConfirmModal({ open, originalName, onConfirm, onCan
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/40" onClick={onCancel} />
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-sm rounded-xl bg-white shadow-xl p-6 space-y-4">
-          <h2 className="text-base font-semibold text-gray-900">Clone Template</h2>
-          <p className="text-sm text-gray-500">
-            A full copy of <span className="font-medium text-gray-700">&quot;{originalName}&quot;</span> will be created with all exercises.
-          </p>
-          <div>
-            <label className="text-xs text-gray-500 block mb-1">New template name</label>
+      <div className="fixed inset-0 z-[100] bg-background/40 backdrop-blur-md animate-in fade-in duration-300" onClick={onCancel} />
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 animate-in zoom-in-95 duration-300">
+        <div className="w-full max-w-md rounded-[2.5rem] border border-border bg-card shadow-[0_0_50px_rgba(0,0,0,0.3)] p-10 space-y-8 relative overflow-hidden">
+          {/* Decorative background gradient */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10" />
+
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black text-foreground tracking-tight">Duplicate Routine</h2>
+            <p className="text-muted-foreground font-medium">
+              Create a fresh copy of <span className="text-primary font-bold">&quot;{originalName}&quot;</span> with all its exercises.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-2">New Template Name</label>
             <input
               type="text"
               value={name}
               maxLength={100}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              className="w-full h-14 rounded-2xl border border-border bg-background/50 backdrop-blur-md px-6 py-2 text-base font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30 shadow-sm"
+              placeholder="Enter new name..."
+              autoFocus
             />
           </div>
-          <div className="flex justify-end gap-2">
+
+          <div className="flex flex-col sm:flex-row gap-4 pt-2">
             <button
               onClick={onCancel}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              className="flex-1 h-12 rounded-xl border border-border bg-background px-6 text-sm font-bold text-muted-foreground hover:bg-secondary hover:text-foreground transition-all active:scale-95"
             >
               Cancel
             </button>
             <button
               disabled={!name.trim()}
               onClick={() => onConfirm(name.trim())}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+              className="flex-1 h-12 rounded-xl bg-primary px-6 text-sm font-black uppercase tracking-widest text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] transition-all shadow-xl shadow-primary/25 disabled:opacity-50"
             >
               Clone
             </button>

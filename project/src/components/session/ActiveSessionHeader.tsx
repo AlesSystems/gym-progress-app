@@ -27,10 +27,26 @@ export default function ActiveSessionHeader({ name, startedAt }: ActiveSessionHe
   }, [startedAt]);
 
   return (
-    <div className="bg-indigo-600 px-4 py-4 text-white">
-      <p className="text-xs opacity-75 uppercase tracking-wide">Active Session</p>
-      <h1 className="mt-0.5 text-lg font-bold truncate">{name ?? "Workout"}</h1>
-      <p className="text-2xl font-mono font-semibold mt-1">{formatElapsed(elapsed)}</p>
+    <div className="sticky top-0 z-40 w-full overflow-hidden bg-background/80 backdrop-blur-xl border-b border-border shadow-2xl">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 -z-10" />
+      <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Active Session</span>
+          </div>
+          <h1 className="text-xl md:text-2xl font-black text-foreground truncate tracking-tight">{name ?? "Current Workout"}</h1>
+        </div>
+        
+        <div className="shrink-0 flex flex-col items-end">
+          <div className="rounded-2xl bg-secondary/50 border border-border px-4 py-2 flex items-center gap-3 backdrop-blur-md">
+            <div className="h-2 w-2 rounded-full bg-red-500 animate-ping" />
+            <span className="text-2xl font-black font-mono text-foreground tabular-nums tracking-tighter">
+              {formatElapsed(elapsed)}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

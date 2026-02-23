@@ -157,25 +157,31 @@ export default function CalendarClient() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-3xl w-full">
-      {/* Page header */}
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
-          <Calendar size={18} className="text-accent-foreground" />
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-7xl w-full mx-auto">
+      {/* Page header with glassmorphism */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-xl shadow-primary/5">
+              <Calendar size={28} />
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Training Calendar</h1>
+          </div>
+          <p className="text-muted-foreground text-lg font-medium">Plan and track your workout consistency</p>
         </div>
-        <h1 className="text-xl font-semibold text-foreground">Calendar</h1>
-      </div>
+      </header>
 
-      {/* Controls */}
-      <div className="rounded-xl bg-card border border-border p-4">
-        {/* View toggle */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex rounded-lg bg-secondary p-0.5">
+      {/* Main Calendar Container with Glassmorphism */}
+      <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-2xl p-8 transition-all duration-300">
+        {/* Controls Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 pb-8 border-b border-border/50">
+          {/* View Toggle */}
+          <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50">
             <button
               onClick={() => setViewMode("month")}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              className={`px-6 py-2 text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                 viewMode === "month"
-                  ? "bg-card shadow text-primary"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -183,9 +189,9 @@ export default function CalendarClient() {
             </button>
             <button
               onClick={() => setViewMode("week")}
-              className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              className={`px-6 py-2 text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                 viewMode === "week"
-                  ? "bg-card shadow text-primary"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -193,76 +199,82 @@ export default function CalendarClient() {
             </button>
           </div>
 
-          <button
-            onClick={goToToday}
-            className="text-xs font-semibold text-primary hover:opacity-80 transition-opacity px-3 py-1.5 rounded-lg hover:bg-primary/10"
-          >
-            Today
-          </button>
+          {/* Navigation with Heading */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={navigatePrev}
+              className="h-12 w-12 rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            
+            <div className="text-center min-w-[200px]">
+              <h2 className="text-xl font-black text-foreground tracking-tight">{headingLabel}</h2>
+              <button
+                onClick={goToToday}
+                className="text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-80 transition-opacity mt-1"
+              >
+                Back to Today
+              </button>
+            </div>
+
+            <button
+              onClick={navigateNext}
+              className="h-12 w-12 rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between mb-4">
-          <button
-            onClick={navigatePrev}
-            aria-label="Previous"
-            className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <h2 className="text-sm font-semibold text-foreground">{headingLabel}</h2>
-          <button
-            onClick={navigateNext}
-            aria-label="Next"
-            className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
-          >
-            <ChevronRight size={18} />
-          </button>
-        </div>
-
-        {/* Legend */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3 pl-1">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-primary" />
-            Completed
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full border-2 border-primary/60" />
-            Planned
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-muted-foreground/40" />
-            Missed
-          </span>
+        {/* Legend - simplified and modern */}
+        <div className="flex flex-wrap items-center justify-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-70">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-primary shadow-lg shadow-primary/30" />
+            <span>Completed</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full border-2 border-primary/60" />
+            <span>Scheduled</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-muted-foreground/30" />
+            <span>Rest Day</span>
+          </div>
         </div>
 
         {loading && (
-          <div className="flex justify-center py-2">
-            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+            <div className="h-12 w-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
           </div>
         )}
 
-        {/* Calendar grid */}
-        {viewMode === "month" ? (
-          <CalendarGrid
-            year={currentYear}
-            month={currentMonth}
-            days={calendarData}
-            selectedDate={selectedDate}
-            onDayClick={handleDayClick}
-          />
-        ) : (
-          <CalendarWeekView
-            weekStart={weekStart}
-            days={calendarData}
-            selectedDate={selectedDate}
-            onDayClick={handleDayClick}
-          />
-        )}
+        {/* Calendar grid with animation container */}
+        <div className={`transition-opacity duration-300 ${loading ? "opacity-20" : "opacity-100"}`}>
+          {viewMode === "month" ? (
+            <CalendarGrid
+              year={currentYear}
+              month={currentMonth}
+              days={calendarData}
+              selectedDate={selectedDate}
+              onDayClick={handleDayClick}
+            />
+          ) : (
+            <CalendarWeekView
+              weekStart={weekStart}
+              days={calendarData}
+              selectedDate={selectedDate}
+              onDayClick={handleDayClick}
+            />
+          )}
+        </div>
+        
+        {/* Decorative background element */}
+        <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
       </div>
 
-      <p className="text-center text-xs text-muted-foreground">
-        Tap any day to view details or schedule a workout
+      <p className="text-center text-sm font-medium text-muted-foreground italic">
+        Select any day to view detailed logs or schedule your next routine.
       </p>
 
       {/* Day detail sheet */}
