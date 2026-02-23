@@ -24,6 +24,7 @@ export default async function TemplatesPage() {
     description: t.description,
     exerciseCount: t._count.exercises,
     isArchived: t.isArchived,
+    visibility: t.visibility,
     clonedFrom: t.clonedFrom,
     updatedAt: t.updatedAt.toISOString(),
   }));

@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import ExerciseRow, { type TemplateExercise } from "./ExerciseRow";
 import ExerciseSearchDrawer from "./ExerciseSearchDrawer";
+import VisibilityToggle from "./VisibilityToggle";
 import { Plus, Save, X } from "lucide-react";
 
 interface Exercise {
@@ -37,6 +38,7 @@ interface TemplateEditorProps {
   initialName?: string;
   initialDescription?: string;
   initialExercises?: TemplateExercise[];
+  initialVisibility?: "private" | "friends";
 }
 
 export default function TemplateEditor({
@@ -44,6 +46,7 @@ export default function TemplateEditor({
   initialName = "",
   initialDescription = "",
   initialExercises = [],
+  initialVisibility = "private",
 }: TemplateEditorProps) {
   const router = useRouter();
 
@@ -260,6 +263,9 @@ export default function TemplateEditor({
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
           />
         </div>
+        {templateId && (
+          <VisibilityToggle templateId={templateId} initialVisibility={initialVisibility} />
+        )}
       </div>
 
       {error && (

@@ -14,6 +14,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/templates" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
           Templates
         </Link>
+        <Link href="/friends" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+          Friends
+        </Link>
         <Link href="/sessions" className="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
           Sessions
         </Link>

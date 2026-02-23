@@ -207,6 +207,7 @@ model WorkoutTemplate {
   userId      String
   name        String
   description String?
+  visibility  String   @default("private")
   isArchived  Boolean  @default(false)
   clonedFrom  String?
   createdAt   DateTime @default(now())

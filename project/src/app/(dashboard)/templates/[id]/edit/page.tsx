@@ -61,6 +61,7 @@ export default async function EditTemplatePage({ params }: PageProps) {
         initialName={template.name}
         initialDescription={template.description ?? ""}
         initialExercises={exercises}
+        initialVisibility={(template.visibility as "private" | "friends") ?? "private"}
       />
     </div>
   );

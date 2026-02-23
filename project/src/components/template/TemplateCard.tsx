@@ -11,6 +11,7 @@ export interface TemplateCardProps {
   description?: string | null;
   exerciseCount: number;
   isArchived: boolean;
+  visibility?: string;
   updatedAt: string | Date;
   onClone: (id: string) => void;
   onArchive: (id: string) => void;
@@ -22,6 +23,7 @@ export default function TemplateCard({
   description,
   exerciseCount,
   isArchived,
+  visibility,
   updatedAt,
   onClone,
   onArchive,
@@ -57,6 +59,11 @@ export default function TemplateCard({
         {isArchived && (
           <span className="ml-auto rounded-full bg-gray-100 border border-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
             Archived
+          </span>
+        )}
+        {!isArchived && visibility === "friends" && (
+          <span className="ml-auto rounded-full bg-indigo-50 border border-indigo-200 px-2 py-0.5 text-xs font-medium text-indigo-600">
+            Shared
           </span>
         )}
       </div>
