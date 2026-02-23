@@ -31,6 +31,7 @@ model User {
   templates         WorkoutTemplate[]
   workoutSessions   WorkoutSession[]
   scheduledWorkouts ScheduledWorkout[]
+  importJobs        ImportJob[]
 
   @@index([email])
 }
@@ -302,6 +303,20 @@ model WorkoutSessionExercise {
   sets     WorkoutSet[]
 
   @@index([sessionId])
+}
+
+model ImportJob {
+  id        String   @id @default(cuid())
+  userId    String
+  status    String   @default("pending") // pending | processing | completed | failed
+  summary   Json?
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model WorkoutSet {
