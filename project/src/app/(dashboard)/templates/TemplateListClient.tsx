@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Plus, ClipboardList, Users } from "lucide-react";
 import TemplateCard from "@/components/template/TemplateCard";
 import FriendTemplateCard, { type FriendTemplateSummary } from "@/components/template/FriendTemplateCard";
 import CloneConfirmModal from "@/components/template/CloneConfirmModal";
@@ -91,122 +92,116 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 py-10">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Workout Templates</h1>
-              {tab === "mine" && (
-                <p className="text-sm text-gray-500 mt-0.5">
-                  {filtered.length} template{filtered.length !== 1 ? "s" : ""}
-                </p>
-              )}
-            </div>
-            {tab === "mine" && (
-              <Link
-                href="/templates/new"
-                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
-              >
-                + New Template
-              </Link>
-            )}
-          </div>
-
-          {/* Primary tabs: My Templates / Friends */}
-          <div className="flex gap-2 mb-4">
-            <button
-              onClick={() => handleTabChange("mine")}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                tab === "mine"
-                  ? "bg-indigo-600 text-white"
-                  : "border border-gray-300 text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              My Templates
-            </button>
-            <button
-              onClick={() => handleTabChange("friends")}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                tab === "friends"
-                  ? "bg-indigo-600 text-white"
-                  : "border border-gray-300 text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              Friends
-            </button>
-          </div>
-
+      <div className="flex flex-col gap-6 p-4 md:p-6 max-w-5xl w-full">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-foreground">Templates</h1>
           {tab === "mine" && (
-            <>
-              {/* Active / Archived sub-tabs */}
-              <div className="flex gap-2 mb-6">
-                <button
-                  onClick={() => setShowArchived(false)}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                    !showArchived
-                      ? "bg-gray-900 text-white"
-                      : "border border-gray-300 text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Active
-                </button>
-                <button
-                  onClick={() => setShowArchived(true)}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                    showArchived
-                      ? "bg-gray-900 text-white"
-                      : "border border-gray-300 text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Archived
-                </button>
-              </div>
-
-              {filtered.length === 0 ? (
-                <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
-                  <p className="text-gray-500 text-sm">
-                    {showArchived ? "No archived templates." : "No templates yet. Create your first one!"}
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filtered.map((t) => (
-                    <TemplateCard
-                      key={t.id}
-                      {...t}
-                      onClone={handleClone}
-                      onArchive={handleArchive}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-
-          {tab === "friends" && (
-            <>
-              {friendsLoading ? (
-                <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
-                  <p className="text-gray-400 text-sm">Loading…</p>
-                </div>
-              ) : friendTemplates === null || friendTemplates.length === 0 ? (
-                <div className="rounded-xl border border-gray-200 bg-white p-12 text-center space-y-2">
-                  <p className="text-gray-500 text-sm">No shared templates from friends yet.</p>
-                  <Link href="/friends" className="text-xs text-indigo-600 hover:underline">
-                    View your connections →
-                  </Link>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {friendTemplates.map((t) => (
-                    <FriendTemplateCard key={t.id} {...t} onClone={handleFriendClone} />
-                  ))}
-                </div>
-              )}
-            </>
+            <Link
+              href="/templates/new"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              <Plus size={14} />
+              New
+            </Link>
           )}
         </div>
+
+        {/* Primary tabs */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleTabChange("mine")}
+            className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+              tab === "mine"
+                ? "bg-primary text-primary-foreground"
+                : "border border-border text-muted-foreground hover:bg-secondary"
+            }`}
+          >
+            My Templates
+          </button>
+          <button
+            onClick={() => handleTabChange("friends")}
+            className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+              tab === "friends"
+                ? "bg-primary text-primary-foreground"
+                : "border border-border text-muted-foreground hover:bg-secondary"
+            }`}
+          >
+            Friends
+          </button>
+        </div>
+
+        {tab === "mine" && (
+          <>
+            {/* Active / Archived sub-tabs */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowArchived(false)}
+                className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+                  !showArchived
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                Active
+              </button>
+              <button
+                onClick={() => setShowArchived(true)}
+                className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
+                  showArchived
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                Archived
+              </button>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
+                <ClipboardList size={32} className="text-muted-foreground/30" />
+                <p className="text-sm text-muted-foreground">
+                  {showArchived ? "No archived templates." : "No templates yet."}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filtered.map((t) => (
+                  <TemplateCard
+                    key={t.id}
+                    {...t}
+                    onClone={handleClone}
+                    onArchive={handleArchive}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {tab === "friends" && (
+          <>
+            {friendsLoading ? (
+              <div className="flex items-center justify-center rounded-xl border border-border bg-card p-12">
+                <p className="text-sm text-muted-foreground">Loading…</p>
+              </div>
+            ) : friendTemplates === null || friendTemplates.length === 0 ? (
+              <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
+                <Users size={32} className="text-muted-foreground/30" />
+                <p className="text-sm text-muted-foreground">No shared templates from friends yet.</p>
+                <Link href="/friends" className="text-xs text-primary hover:underline">
+                  View your connections →
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {friendTemplates.map((t) => (
+                  <FriendTemplateCard key={t.id} {...t} onClone={handleFriendClone} />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <CloneConfirmModal

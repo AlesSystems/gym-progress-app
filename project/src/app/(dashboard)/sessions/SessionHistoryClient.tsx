@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Play, Dumbbell } from "lucide-react";
 import SessionCard, { SessionCardProps } from "@/components/session/SessionCard";
 
 interface SessionHistoryClientProps {
@@ -32,49 +33,46 @@ export default function SessionHistoryClient({ initialSessions }: SessionHistory
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Session History</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{sessions.length} completed workouts</p>
-          </div>
-          <Link
-            href="/sessions/start"
-            className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
-          >
-            + New Session
+    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-3xl w-full">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold text-foreground">Sessions</h1>
+        <Link
+          href="/sessions/start"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+        >
+          <Play size={14} />
+          New Session
+        </Link>
+      </div>
+
+      {sessions.length === 0 ? (
+        <div className="flex flex-col items-center rounded-xl border border-border bg-card p-12 gap-3">
+          <Dumbbell size={32} className="text-muted-foreground/30" />
+          <p className="text-sm text-muted-foreground">No completed sessions yet.</p>
+          <Link href="/sessions/start" className="text-sm font-medium text-primary hover:underline">
+            Start your first workout →
           </Link>
         </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {sessions.map((s) => (
+            <SessionCard key={s.id} {...s} />
+          ))}
+        </div>
+      )}
 
-        {sessions.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
-            <p className="text-gray-500 text-sm">No completed sessions yet.</p>
-            <Link href="/sessions/start" className="mt-4 inline-block text-sm font-medium text-indigo-600 hover:underline">
-              Start your first workout →
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {sessions.map((s) => (
-              <SessionCard key={s.id} {...s} />
-            ))}
-          </div>
-        )}
-
-        {hasMore && (
-          <div className="mt-6 text-center">
-            <button
-              onClick={loadMore}
-              disabled={loading}
-              className="rounded-lg border border-gray-300 px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
-            >
-              {loading ? "Loading…" : "Load more"}
-            </button>
-          </div>
-        )}
-      </div>
+      {hasMore && (
+        <div className="text-center">
+          <button
+            onClick={loadMore}
+            disabled={loading}
+            className="rounded-lg border border-border px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors disabled:opacity-50"
+          >
+            {loading ? "Loading…" : "Load more"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

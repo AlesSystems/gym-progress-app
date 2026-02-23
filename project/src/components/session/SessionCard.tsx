@@ -30,14 +30,14 @@ export default function SessionCard({
   return (
     <Link
       href={`/sessions/${id}`}
-      className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all"
+      className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors"
     >
       <div>
-        <p className="text-xs text-gray-500">{formatDate(startedAt)}</p>
-        <h3 className="mt-0.5 text-sm font-semibold text-gray-900 truncate">{name ?? "Workout"}</h3>
+        <p className="text-xs text-muted-foreground">{formatDate(startedAt)}</p>
+        <h3 className="mt-0.5 text-sm font-semibold text-foreground truncate">{name ?? "Workout"}</h3>
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-gray-500">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground">
         {durationMinutes !== null && durationMinutes !== undefined && (
           <span className="flex items-center gap-1">
             <Clock size={12} />
@@ -53,7 +53,7 @@ export default function SessionCard({
           {totalSets} sets
         </span>
         {totalVolume > 0 && (
-          <span className="ml-auto font-medium text-gray-700">
+          <span className="ml-auto font-semibold text-foreground tabular-nums">
             {totalVolume.toLocaleString()} {totalVolumeUnit ?? "kg"}
           </span>
         )}

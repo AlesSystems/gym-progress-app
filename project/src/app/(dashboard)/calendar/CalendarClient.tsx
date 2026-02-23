@@ -157,119 +157,113 @@ export default function CalendarClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        {/* Page header */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-100 flex items-center justify-center">
-            <Calendar size={20} className="text-indigo-600" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Calendar</h1>
-            <p className="text-xs text-gray-500">Track your training schedule</p>
-          </div>
+    <div className="flex flex-col gap-6 p-4 md:p-6 max-w-3xl w-full">
+      {/* Page header */}
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
+          <Calendar size={18} className="text-accent-foreground" />
         </div>
-
-        {/* Controls */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
-          {/* View toggle */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex rounded-xl bg-gray-100 p-0.5">
-              <button
-                onClick={() => setViewMode("month")}
-                className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  viewMode === "month"
-                    ? "bg-white shadow text-indigo-700"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Month
-              </button>
-              <button
-                onClick={() => setViewMode("week")}
-                className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  viewMode === "week"
-                    ? "bg-white shadow text-indigo-700"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Week
-              </button>
-            </div>
-
-            <button
-              onClick={goToToday}
-              className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors px-3 py-1.5 rounded-lg hover:bg-indigo-50"
-            >
-              Today
-            </button>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={navigatePrev}
-              aria-label="Previous"
-              className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <h2 className="text-sm font-bold text-gray-900">{headingLabel}</h2>
-            <button
-              onClick={navigateNext}
-              aria-label="Next"
-              className="rounded-xl p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-
-          {/* Legend */}
-          <div className="flex items-center gap-4 text-xs text-gray-500 mb-3 pl-1">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-indigo-500" />
-              Completed
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full border-2 border-indigo-400" />
-              Planned
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-gray-300" />
-              Missed
-            </span>
-          </div>
-
-          {loading && (
-            <div className="flex justify-center py-2">
-              <div className="w-4 h-4 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin" />
-            </div>
-          )}
-
-          {/* Calendar grid */}
-          {viewMode === "month" ? (
-            <CalendarGrid
-              year={currentYear}
-              month={currentMonth}
-              days={calendarData}
-              selectedDate={selectedDate}
-              onDayClick={handleDayClick}
-            />
-          ) : (
-            <CalendarWeekView
-              weekStart={weekStart}
-              days={calendarData}
-              selectedDate={selectedDate}
-              onDayClick={handleDayClick}
-            />
-          )}
-        </div>
-
-        {/* Quick add hint */}
-        <p className="text-center text-xs text-gray-400 mt-2">
-          Tap any day to view details or schedule a workout
-        </p>
+        <h1 className="text-xl font-semibold text-foreground">Calendar</h1>
       </div>
+
+      {/* Controls */}
+      <div className="rounded-xl bg-card border border-border p-4">
+        {/* View toggle */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex rounded-lg bg-secondary p-0.5">
+            <button
+              onClick={() => setViewMode("month")}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                viewMode === "month"
+                  ? "bg-card shadow text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Month
+            </button>
+            <button
+              onClick={() => setViewMode("week")}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                viewMode === "week"
+                  ? "bg-card shadow text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Week
+            </button>
+          </div>
+
+          <button
+            onClick={goToToday}
+            className="text-xs font-semibold text-primary hover:opacity-80 transition-opacity px-3 py-1.5 rounded-lg hover:bg-primary/10"
+          >
+            Today
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={navigatePrev}
+            aria-label="Previous"
+            className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <h2 className="text-sm font-semibold text-foreground">{headingLabel}</h2>
+          <button
+            onClick={navigateNext}
+            aria-label="Next"
+            className="rounded-lg p-2 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
+        {/* Legend */}
+        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3 pl-1">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-primary" />
+            Completed
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full border-2 border-primary/60" />
+            Planned
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-muted-foreground/40" />
+            Missed
+          </span>
+        </div>
+
+        {loading && (
+          <div className="flex justify-center py-2">
+            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+          </div>
+        )}
+
+        {/* Calendar grid */}
+        {viewMode === "month" ? (
+          <CalendarGrid
+            year={currentYear}
+            month={currentMonth}
+            days={calendarData}
+            selectedDate={selectedDate}
+            onDayClick={handleDayClick}
+          />
+        ) : (
+          <CalendarWeekView
+            weekStart={weekStart}
+            days={calendarData}
+            selectedDate={selectedDate}
+            onDayClick={handleDayClick}
+          />
+        )}
+      </div>
+
+      <p className="text-center text-xs text-muted-foreground">
+        Tap any day to view details or schedule a workout
+      </p>
 
       {/* Day detail sheet */}
       {selectedDate && (

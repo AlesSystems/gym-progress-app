@@ -24,7 +24,7 @@ function convertWeight(weight: number, from: string, to: string): number {
 export default function MaxLiftsList({ maxLifts, unitPreference }: MaxLiftsListProps) {
   if (maxLifts.length === 0) {
     return (
-      <p className="text-sm text-gray-500 italic">
+      <p className="text-sm text-muted-foreground italic">
         No max lifts recorded yet. Complete workouts to track your personal records!
       </p>
     );
@@ -34,28 +34,28 @@ export default function MaxLiftsList({ maxLifts, unitPreference }: MaxLiftsListP
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <tr className="border-b border-border text-left text-xs font-medium text-muted-foreground uppercase tracking-wide">
             <th className="pb-2 pr-4">Exercise</th>
             <th className="pb-2 pr-4">Category</th>
             <th className="pb-2 pr-4">Max Lift</th>
             <th className="pb-2">Date</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-border">
           {maxLifts.map((lift) => {
             const displayWeight = convertWeight(lift.weight, lift.unit, unitPreference);
             return (
               <tr key={lift.id} className="py-2">
-                <td className="py-2 pr-4 font-medium text-gray-900">
+                <td className="py-2 pr-4 font-medium text-foreground">
                   {lift.exercise?.name ?? lift.exerciseId}
                 </td>
-                <td className="py-2 pr-4 text-gray-500">
+                <td className="py-2 pr-4 text-muted-foreground">
                   {lift.exercise?.movementCategory ?? "—"}
                 </td>
-                <td className="py-2 pr-4 font-semibold text-indigo-600">
+                <td className="py-2 pr-4 font-semibold text-primary">
                   {displayWeight} {unitPreference}
                 </td>
-                <td className="py-2 text-gray-500">
+                <td className="py-2 text-muted-foreground">
                   {new Date(lift.achievedAt).toLocaleDateString()}
                 </td>
               </tr>

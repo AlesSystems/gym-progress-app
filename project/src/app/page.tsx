@@ -1,39 +1,42 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth/next";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { Dumbbell, ArrowRight } from "lucide-react";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  if (session?.user) redirect("/profile");
-
+export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-4 font-sans dark:bg-zinc-950">
-      <main className="w-full max-w-md space-y-8 text-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Gym Progress
-          </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            Track your workouts and progress.
-          </p>
-        </div>
+    <div className="flex min-h-screen flex-col items-center justify-center p-8 text-center space-y-8 bg-background">
+      <div className="rounded-full bg-primary/10 p-6 ring-1 ring-primary/20 animate-pulse">
+        <Dumbbell className="h-16 w-16 text-primary" strokeWidth={1.5} />
+      </div>
+      
+      <div className="space-y-4 max-w-md">
+        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-foreground">
+          Gym Progress
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Track your workouts, visualize your progress, and crush your goals.
+          Simple, professional, effective.
+        </p>
+      </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Link
-            href="/login"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-zinc-900 px-6 font-medium text-white transition-colors hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-          >
-            Sign in
+      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
+        <Button size="lg" className="w-full text-base h-12 rounded-xl" asChild>
+          <Link href="/login">
+            Login <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
-          <Link
-            href="/signup"
-            className="inline-flex h-12 items-center justify-center rounded-full border border-zinc-300 bg-white px-6 font-medium text-zinc-900 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
-          >
-            Sign up
+        </Button>
+        <Button variant="outline" size="lg" className="w-full text-base h-12 rounded-xl" asChild>
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+      </div>
+      
+      <div className="pt-8">
+        <Button variant="link" className="text-muted-foreground hover:text-primary" asChild>
+          <Link href="/dashboard">
+            Go to Dashboard (Dev Shortcut)
           </Link>
-        </div>
-      </main>
+        </Button>
+      </div>
     </div>
   );
 }

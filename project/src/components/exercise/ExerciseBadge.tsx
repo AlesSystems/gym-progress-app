@@ -2,17 +2,17 @@ import { cn } from "@/lib/utils";
 import type { ExerciseType, MovementCategory } from "@/lib/validations/exercise";
 
 const typeColors: Record<ExerciseType, string> = {
-  compound: "bg-indigo-100 text-indigo-800 border-indigo-200",
-  isolation: "bg-purple-100 text-purple-800 border-purple-200",
+  compound: "bg-primary/10 text-primary border-primary/20",
+  isolation: "bg-accent/10 text-accent-foreground border-accent/20",
 };
 
 const categoryColors: Record<MovementCategory, string> = {
-  push:    "bg-orange-100 text-orange-800 border-orange-200",
-  pull:    "bg-blue-100  text-blue-800  border-blue-200",
-  legs:    "bg-green-100 text-green-800 border-green-200",
-  core:    "bg-yellow-100 text-yellow-800 border-yellow-200",
-  cardio:  "bg-red-100   text-red-800   border-red-200",
-  other:   "bg-gray-100  text-gray-800  border-gray-200",
+  push:    "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  pull:    "bg-blue-500/10  text-blue-400  border-blue-500/20",
+  legs:    "bg-green-500/10 text-green-400 border-green-500/20",
+  core:    "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+  cardio:  "bg-red-500/10   text-red-400   border-red-500/20",
+  other:   "bg-secondary  text-muted-foreground  border-border",
 };
 
 interface ExerciseBadgeProps {
