@@ -93,14 +93,14 @@ export default function ExerciseAccordion({
           className="flex items-center gap-2 md:gap-3 flex-1 min-w-0 text-left group"
         >
           <div className="h-9 w-9 md:h-10 md:w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-            <Dumbbell size={16} md:size={18} />
+            <Dumbbell className="h-4 w-4 md:h-[18px] md:w-[18px]" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm md:text-base font-bold text-foreground truncate">{exercise.exerciseName}</h3>
             <span className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{sets.length} sets logged</span>
           </div>
           <div className="ml-2 text-muted-foreground/50 group-hover:text-primary transition-colors">
-            {open ? <ChevronUp size={18} md:size={20} /> : <ChevronDown size={18} md:size={20} />}
+            {open ? <ChevronUp className="h-[18px] w-[18px] md:h-5 md:w-5" /> : <ChevronDown className="h-[18px] w-[18px] md:h-5 md:w-5" />}
           </div>
         </button>
         <button
@@ -108,7 +108,7 @@ export default function ExerciseAccordion({
           className="shrink-0 ml-2 md:ml-4 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-all"
           aria-label={`Remove ${exercise.exerciseName}`}
         >
-          <Trash2 size={16} md:size={18} />
+          <Trash2 className="h-4 w-4 md:h-[18px] md:w-[18px]" />
         </button>
       </div>
 
@@ -117,7 +117,7 @@ export default function ExerciseAccordion({
           {previousBest && (
             <div className="rounded-2xl bg-primary/5 border border-primary/10 p-2 md:p-3 flex items-center gap-2 md:gap-3">
               <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <Trophy size={12} md:size={14} className="text-primary" />
+                <Trophy className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
               </div>
               <PreviousBestHint
                 weight={previousBest.weight}

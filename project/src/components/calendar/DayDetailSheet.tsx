@@ -110,7 +110,7 @@ export default function DayDetailSheet({
             className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-all shrink-0"
             aria-label="Close"
           >
-            <X size={20} md:size={24} />
+            <X className="h-5 w-5 md:h-6 md:w-6" />
           </button>
         </div>
 
@@ -119,7 +119,7 @@ export default function DayDetailSheet({
           {isEmpty && (
             <div className="flex flex-col items-center justify-center py-12 md:py-20 text-center animate-in fade-in zoom-in duration-500">
               <div className="h-16 w-16 md:h-20 md:w-20 bg-secondary rounded-2xl md:rounded-[2rem] flex items-center justify-center text-muted-foreground/30 mb-4 md:mb-6">
-                <Calendar size={32} md:size={40} />
+                <Calendar className="h-8 w-8 md:h-10 md:w-10" />
               </div>
               <div className="space-y-1 md:space-y-2">
                 <p className="text-lg md:text-xl font-bold text-foreground">Nothing planned</p>
@@ -167,7 +167,7 @@ export default function DayDetailSheet({
             onClick={() => onAddPlan(date)}
             className="flex items-center justify-center gap-3 w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary text-sm md:text-base font-black uppercase tracking-widest text-primary-foreground shadow-xl shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <Plus size={18} md:size={20} strokeWidth={3} />
+            <Plus className="h-[18px] w-[18px] md:h-5 md:w-5" strokeWidth={3} />
             Add New Plan
           </button>
         </div>

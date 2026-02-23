@@ -47,7 +47,7 @@ export default function RestTimerBar() {
     >
       <div className="flex items-center gap-3 md:gap-4">
         <div className={`h-8 w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center shrink-0 ${isAlert ? "bg-white/20" : "bg-primary/10"}`}>
-          {isAlert ? <Bell size={18} md:size={20} className="animate-bounce" /> : <Clock size={18} md:size={20} className="text-primary" />}
+          {isAlert ? <Bell className="h-[18px] w-[18px] md:h-5 md:w-5 animate-bounce" /> : <Clock className="h-[18px] w-[18px] md:h-5 md:w-5 text-primary" />}
         </div>
         <div className="min-w-0">
           <p className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] truncate ${isAlert ? "text-white/70" : "text-muted-foreground"}`}>
@@ -68,7 +68,7 @@ export default function RestTimerBar() {
               : "bg-secondary hover:bg-primary/10 hover:text-primary text-foreground border border-border"
           }`}
         >
-          <Plus size={14} md:size={18} />
+          <Plus className="h-3.5 w-3.5 md:h-[18px] md:w-[18px]" />
           30s
         </button>
         <button

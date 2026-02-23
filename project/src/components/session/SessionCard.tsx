@@ -53,20 +53,20 @@ export default function SessionCard({
         {durationMinutes !== null && durationMinutes !== undefined && (
           <div className="flex items-center gap-1.5 md:gap-2">
             <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-              <Clock size={14} md:size={16} />
+              <Clock className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </div>
             <span className="text-[10px] md:text-xs font-bold text-muted-foreground tabular-nums truncate">{durationMinutes}<span className="text-[9px] md:text-[10px] font-medium opacity-60 lowercase ml-0.5">m</span></span>
           </div>
         )}
         <div className="flex items-center gap-1.5 md:gap-2">
           <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
-            <Dumbbell size={14} md:size={16} />
+            <Dumbbell className="h-3.5 w-3.5 md:h-4 md:w-4" />
           </div>
           <span className="text-[10px] md:text-xs font-bold text-muted-foreground truncate">{exerciseCount}<span className="text-[9px] md:text-[10px] font-medium opacity-60 lowercase ml-0.5">ex</span></span>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
           <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500 shrink-0">
-            <BarChart2 size={14} md:size={16} />
+            <BarChart2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
           </div>
           <span className="text-[10px] md:text-xs font-bold text-muted-foreground tabular-nums truncate">{totalSets}<span className="text-[9px] md:text-[10px] font-medium opacity-60 lowercase ml-0.5">sets</span></span>
         </div>

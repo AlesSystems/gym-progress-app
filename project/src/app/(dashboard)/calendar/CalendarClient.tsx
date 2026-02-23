@@ -163,7 +163,7 @@ export default function CalendarClient() {
         <div className="space-y-1 md:space-y-2">
           <div className="flex items-center gap-2 md:gap-3">
             <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-xl shadow-primary/5 shrink-0">
-              <Calendar size={22} md:size={28} />
+              <Calendar className="h-[22px] w-[22px] md:h-7 md:w-7" />
             </div>
             <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-foreground">Training Calendar</h1>
           </div>
@@ -205,7 +205,7 @@ export default function CalendarClient() {
               onClick={navigatePrev}
               className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
             >
-              <ChevronLeft size={20} md:size={24} />
+              <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
             </button>
             
             <div className="text-center min-w-[140px] md:min-w-[200px]">
@@ -222,7 +222,7 @@ export default function CalendarClient() {
               onClick={navigateNext}
               className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
             >
-              <ChevronRight size={20} md:size={24} />
+              <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
             </button>
           </div>
         </div>

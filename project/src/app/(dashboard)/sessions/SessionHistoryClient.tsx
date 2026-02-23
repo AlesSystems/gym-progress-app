@@ -53,7 +53,7 @@ export default function SessionHistoryClient({ initialSessions }: SessionHistory
       {sessions.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-10 md:p-20 gap-6 backdrop-blur-sm text-center animate-in fade-in zoom-in duration-500">
           <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
-            <History size={32} md:size={40} />
+            <History className="h-8 w-8 md:h-10 md:w-10" />
           </div>
           <div className="space-y-2">
             <p className="text-base md:text-lg font-medium text-muted-foreground italic">No completed sessions yet.</p>

@@ -115,7 +115,7 @@ export default function ActiveSessionPage() {
           {session.exercises.length === 0 ? (
             <div className="rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-10 md:p-20 text-center backdrop-blur-sm group hover:border-primary/30 transition-all duration-500">
               <div className="h-16 w-16 md:h-20 md:w-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                <Plus size={32} md:size={40} className="text-primary" />
+                <Plus className="h-8 w-8 md:h-10 md:w-10 text-primary" />
               </div>
               <p className="text-muted-foreground font-medium mb-6 md:mb-8 max-w-xs mx-auto text-base md:text-lg italic">
                 Your workout is a blank canvas. Start by adding your first exercise!

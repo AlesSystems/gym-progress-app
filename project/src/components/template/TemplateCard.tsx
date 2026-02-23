@@ -47,7 +47,7 @@ export default function TemplateCard({
           className="shrink-0 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
           aria-label="Template options"
         >
-          <MoreVertical size={18} md:size={20} />
+          <MoreVertical className="h-[18px] w-[18px] md:h-5 md:w-5" />
         </button>
       </div>
 
