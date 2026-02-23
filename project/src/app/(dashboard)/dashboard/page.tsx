@@ -340,7 +340,7 @@ export default async function DashboardPage() {
             <>
               <div className="h-32 flex items-end justify-between gap-1 md:gap-2 px-1">
                 {weeklyVolume.map((d, i) => (
-                  <div key={i} className="w-full bg-secondary rounded-t-sm relative group">
+                  <div key={i} className="h-full w-full bg-secondary rounded-t-sm relative group">
                     <div
                       className="absolute bottom-0 w-full bg-primary/80 rounded-t-sm transition-all hover:bg-primary"
                       style={{ height: `${d.volume}%` }}

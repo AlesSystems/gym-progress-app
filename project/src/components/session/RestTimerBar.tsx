@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useTimerStore } from "@/store/timer";
-import { Bell, BellOff, Plus } from "lucide-react";
+import { Bell, BellOff, Clock, Plus } from "lucide-react";
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -85,6 +85,3 @@ export default function RestTimerBar() {
     </div>
   );
 }
-
-// Helper icons
-import { Bell, Clock, Plus } from "lucide-react";
