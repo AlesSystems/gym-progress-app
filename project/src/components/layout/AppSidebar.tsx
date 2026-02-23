@@ -11,6 +11,7 @@ import {
   Users,
   UserCircle,
   Settings,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { href: "/templates", icon: ClipboardList, label: "Templates" },
   { href: "/sessions", icon: Play, label: "History" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
+  { href: "/leaderboard", icon: Trophy, label: "Leaderboard" },
 ];
 
 const BOTTOM_ITEMS = [

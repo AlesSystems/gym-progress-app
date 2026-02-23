@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Play, CalendarDays, ClipboardList, UserCircle } from "lucide-react";
+import { LayoutDashboard, Play, CalendarDays, UserCircle, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Home" },
   { href: "/sessions", icon: Play, label: "History" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
-  { href: "/templates", icon: ClipboardList, label: "Templates" },
+  { href: "/leaderboard", icon: Trophy, label: "Leaderboard" },
   { href: "/settings", icon: UserCircle, label: "Settings" },
 ];
 
