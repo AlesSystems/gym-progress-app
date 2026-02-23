@@ -80,14 +80,14 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
   };
 
   const fieldClass =
-    "w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
-  const labelClass = "block text-sm font-medium text-foreground mb-1";
-  const errorClass = "mt-1 text-xs text-destructive";
+    "w-full rounded-xl border border-border bg-background/50 px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/50";
+  const labelClass = "block text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1 px-1";
+  const errorClass = "mt-1 text-xs font-bold text-destructive px-1";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {serverError && (
-        <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
+        <div className="rounded-2xl bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm font-bold text-destructive">
           {serverError}
         </div>
       )}
@@ -273,7 +273,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded-xl bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           {isSubmitting
             ? mode === "create"
@@ -286,7 +286,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+          className="rounded-xl border border-border bg-background px-5 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
         >
           Cancel
         </button>

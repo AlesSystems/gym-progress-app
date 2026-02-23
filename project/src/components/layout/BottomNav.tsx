@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Play, CalendarDays, UserCircle, Trophy } from "lucide-react";
+import { LayoutDashboard, Dumbbell, Play, CalendarDays, UserCircle, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Home" },
+  { href: "/exercises", icon: Dumbbell, label: "Exercises" },
   { href: "/sessions", icon: Play, label: "History" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
   { href: "/leaderboard", icon: Trophy, label: "Leaderboard" },

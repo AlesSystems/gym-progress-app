@@ -11,15 +11,15 @@ export default async function NewExercisePage() {
   if (!session?.user) redirect("/login");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-4 py-10">
-        <Link href="/exercises" className="text-sm text-indigo-600 hover:underline">
+        <Link href="/exercises" className="text-sm font-medium text-primary hover:underline">
           ← Exercise Library
         </Link>
 
-        <h1 className="text-2xl font-bold text-gray-900 mt-4 mb-6">Add Custom Exercise</h1>
+        <h1 className="text-2xl font-bold text-foreground mt-4 mb-6">Add Custom Exercise</h1>
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-card rounded-2xl border border-border shadow-sm p-6">
           <ExerciseForm mode="create" />
         </div>
       </div>

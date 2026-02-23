@@ -20,6 +20,7 @@ export default async function SettingsPage() {
       displayName: true,
       email: true,
       emailVerified: true,
+      image: true,
       unitPreference: true,
       inviteCode: true,
       lastLoginAt: true,

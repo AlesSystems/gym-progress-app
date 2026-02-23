@@ -90,6 +90,20 @@ export default function ActiveSessionPage() {
     return { totalSets, totalVolume: Math.round(totalVolume), totalVolumeUnit };
   };
 
+  const [finishError, setFinishError] = useState<string | null>(null);
+
+  const handleFinishWorkout = () => {
+    if (!session) return;
+    const allWorkingSets = session.exercises.flatMap((e) => e.sets).filter((s) => !s.isWarmup);
+    const missing = allWorkingSets.find((s) => s.weight === null || s.weight === undefined);
+    if (missing) {
+      setFinishError("Please enter weight for all working sets before finishing.");
+      return;
+    }
+    setFinishError(null);
+    setShowSummary(true);
+  };
+
   const elapsedMinutes = session
     ? Math.round((Date.now() - new Date(session.startedAt).getTime()) / 60000)
     : 0;
@@ -143,8 +157,13 @@ export default function ActiveSessionPage() {
 
               {/* Finish Workout Action */}
               <div className="pt-6 md:pt-8 px-1 md:px-2">
+                {finishError && (
+                  <div className="mb-4 rounded-2xl bg-destructive/10 border border-destructive/20 px-5 py-3 text-sm font-bold text-destructive flex items-center gap-2">
+                    <span>⚠️</span> {finishError}
+                  </div>
+                )}
                 <button
-                  onClick={() => setShowSummary(true)}
+                  onClick={handleFinishWorkout}
                   className="w-full h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-gradient-to-r from-green-500 to-emerald-600 px-6 md:px-8 py-3 md:py-4 text-lg md:text-xl font-black text-white hover:from-green-600 hover:to-emerald-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-green-500/30 flex items-center justify-center gap-2 md:gap-3"
                 >
                   FINISH WORKOUT 

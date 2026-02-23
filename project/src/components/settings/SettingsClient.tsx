@@ -17,6 +17,7 @@ import {
   Zap,
   LogOut,
   ChevronDown,
+  Camera,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/shared/ThemeProvider";
@@ -41,6 +42,7 @@ interface SettingsClientProps {
     displayName?: string | null;
     email: string;
     emailVerified?: Date | null;
+    image?: string | null;
     unitPreference: string;
     inviteCode: string;
     createdAt: Date;
@@ -131,6 +133,10 @@ function RowItem({
 function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(user.image ?? null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
 
   const {
     register,
@@ -162,6 +168,29 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
     setTimeout(() => setServerMessage(null), 3000);
   };
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarError(null);
+    // Local preview
+    const reader = new FileReader();
+    reader.onload = (ev) => setAvatarPreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+    // Upload
+    setAvatarUploading(true);
+    const form = new FormData();
+    form.append("avatar", file);
+    const res = await fetch("/api/profile/avatar", { method: "POST", body: form });
+    const json = await res.json();
+    setAvatarUploading(false);
+    if (!res.ok || !json.success) {
+      setAvatarError(json.error?.message ?? "Failed to upload image.");
+      setAvatarPreview(null);
+      return;
+    }
+    setAvatarUrl(json.data.image);
+  };
+
   return (
     <Section icon={User} title="Profile Details">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -175,6 +204,45 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
             {serverError}
           </div>
         )}
+
+        {/* Avatar upload */}
+        <div className="flex items-center gap-5">
+          <div className="relative shrink-0">
+            {(avatarPreview ?? avatarUrl) ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={avatarPreview ?? avatarUrl ?? ""}
+                alt="Profile picture"
+                className="h-20 w-20 rounded-full object-cover border-2 border-border shadow-md"
+              />
+            ) : (
+              <div className="h-20 w-20 rounded-full bg-primary/10 border-2 border-border flex items-center justify-center text-2xl font-black text-primary select-none shadow-md">
+                {(user.displayName ?? user.name ?? user.email).charAt(0).toUpperCase()}
+              </div>
+            )}
+            {avatarUploading && (
+              <div className="absolute inset-0 rounded-full bg-background/60 flex items-center justify-center">
+                <div className="h-5 w-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              </div>
+            )}
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">Profile Picture</label>
+            <label className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-secondary/50 border border-border px-4 py-2 text-xs font-bold text-foreground hover:bg-secondary hover:border-primary/40 transition-all">
+              <Camera size={14} />
+              {avatarUploading ? "Uploading…" : "Change Photo"}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="sr-only"
+                onChange={handleAvatarChange}
+                disabled={avatarUploading}
+              />
+            </label>
+            {avatarError && <p className="text-xs font-bold text-destructive px-1">{avatarError}</p>}
+            <p className="text-[10px] text-muted-foreground px-1">JPEG, PNG, WebP or GIF · Max 2 MB</p>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">

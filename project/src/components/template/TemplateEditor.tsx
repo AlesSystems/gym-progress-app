@@ -167,6 +167,17 @@ export default function TemplateEditor({
       setError("Template name is required.");
       return;
     }
+    if (exercises.length === 0) {
+      setError("Add at least one exercise before saving.");
+      return;
+    }
+    const missingWeight = exercises.find(
+      (ex) => ex.targetWeight === null || ex.targetWeight === undefined
+    );
+    if (missingWeight) {
+      setError(`Please set a target weight for "${missingWeight.exercise.name}" before saving.`);
+      return;
+    }
     setSaving(true);
     setError(null);
 
