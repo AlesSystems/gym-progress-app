@@ -157,29 +157,29 @@ export default function CalendarClient() {
   };
 
   return (
-    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-7xl w-full mx-auto">
+    <div className="flex flex-col gap-6 md:gap-10 p-4 md:p-12 max-w-7xl w-full mx-auto pb-24 md:pb-12">
       {/* Page header with glassmorphism */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-xl shadow-primary/5">
-              <Calendar size={28} />
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
+        <div className="space-y-1 md:space-y-2">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-xl shadow-primary/5 shrink-0">
+              <Calendar size={22} md:size={28} />
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Training Calendar</h1>
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-foreground">Training Calendar</h1>
           </div>
-          <p className="text-muted-foreground text-lg font-medium">Plan and track your workout consistency</p>
+          <p className="text-muted-foreground text-sm md:text-lg font-medium">Plan and track your workout consistency</p>
         </div>
       </header>
 
       {/* Main Calendar Container with Glassmorphism */}
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-2xl p-8 transition-all duration-300">
+      <div className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-2xl p-4 md:p-8 transition-all duration-300">
         {/* Controls Row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8 pb-8 border-b border-border/50">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-border/50">
           {/* View Toggle */}
-          <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50">
+          <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50 w-full lg:w-fit">
             <button
               onClick={() => setViewMode("month")}
-              className={`px-6 py-2 text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
+              className={`flex-1 lg:flex-none px-4 md:px-6 py-2 text-[10px] md:text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                 viewMode === "month"
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground"
@@ -189,7 +189,7 @@ export default function CalendarClient() {
             </button>
             <button
               onClick={() => setViewMode("week")}
-              className={`px-6 py-2 text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
+              className={`flex-1 lg:flex-none px-4 md:px-6 py-2 text-[10px] md:text-sm font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                 viewMode === "week"
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground"
@@ -200,46 +200,46 @@ export default function CalendarClient() {
           </div>
 
           {/* Navigation with Heading */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center justify-between lg:justify-end gap-4 md:gap-6 w-full lg:w-auto">
             <button
               onClick={navigatePrev}
-              className="h-12 w-12 rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
+              className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={20} md:size={24} />
             </button>
             
-            <div className="text-center min-w-[200px]">
-              <h2 className="text-xl font-black text-foreground tracking-tight">{headingLabel}</h2>
+            <div className="text-center min-w-[140px] md:min-w-[200px]">
+              <h2 className="text-base md:text-xl font-black text-foreground tracking-tight">{headingLabel}</h2>
               <button
                 onClick={goToToday}
-                className="text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-80 transition-opacity mt-1"
+                className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-80 transition-opacity mt-1"
               >
-                Back to Today
+                Today
               </button>
             </div>
 
             <button
               onClick={navigateNext}
-              className="h-12 w-12 rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
+              className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl border border-border bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all active:scale-90"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={20} md:size={24} />
             </button>
           </div>
         </div>
 
         {/* Legend - simplified and modern */}
-        <div className="flex flex-wrap items-center justify-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-70">
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-primary shadow-lg shadow-primary/30" />
-            <span>Completed</span>
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] mb-6 md:mb-8 opacity-70">
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <div className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-primary shadow-lg shadow-primary/30" />
+            <span>Done</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full border-2 border-primary/60" />
-            <span>Scheduled</span>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <div className="h-2 w-2 md:h-3 md:w-3 rounded-full border border-primary/60" />
+            <span>Plan</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-muted-foreground/30" />
-            <span>Rest Day</span>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <div className="h-2 w-2 md:h-3 md:w-3 rounded-full bg-muted-foreground/30" />
+            <span>Rest</span>
           </div>
         </div>
 

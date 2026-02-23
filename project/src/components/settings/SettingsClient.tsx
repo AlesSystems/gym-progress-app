@@ -63,17 +63,17 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-xl transition-all duration-300 hover:border-primary/30">
+    <div className="group relative overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] border border-border bg-card/40 backdrop-blur-md shadow-xl transition-all duration-300 hover:border-primary/30">
       {/* Decorative background gradient */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
       
-      <div className="flex items-center gap-3 px-8 py-5 border-b border-border/50 bg-secondary/10">
-        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-          <Icon size={18} strokeWidth={2.5} />
+      <div className="flex items-center gap-2 md:gap-3 px-5 md:px-8 py-4 md:py-5 border-b border-border/50 bg-secondary/10">
+        <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+          <Icon size={16} md:size={18} strokeWidth={2.5} />
         </div>
-        <p className={cn("text-xs font-black uppercase tracking-[0.2em]", titleClassName ?? "text-muted-foreground")}>{title}</p>
+        <p className={cn("text-[10px] md:text-xs font-black uppercase tracking-[0.2em]", titleClassName ?? "text-muted-foreground")}>{title}</p>
       </div>
-      <div className="px-8 py-6">{children}</div>
+      <div className="px-5 md:px-8 py-5 md:py-6">{children}</div>
     </div>
   );
 }
@@ -92,14 +92,14 @@ function Toggle({
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={cn(
-        "relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background shadow-inner",
+        "relative inline-flex h-6 w-12 md:h-7 md:w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background shadow-inner",
         checked ? "bg-primary" : "bg-secondary/50"
       )}
     >
       <span
         className={cn(
-          "pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-xl ring-0 transition-transform duration-300 ease-in-out",
-          checked ? "translate-x-7" : "translate-x-0"
+          "pointer-events-none inline-block h-5 w-5 md:h-6 md:w-6 transform rounded-full bg-white shadow-xl ring-0 transition-transform duration-300 ease-in-out",
+          checked ? "translate-x-6 md:translate-x-7" : "translate-x-0"
         )}
       />
     </button>
@@ -116,10 +116,10 @@ function RowItem({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-6 py-5 first:pt-0 last:pb-0 border-b border-border/30 last:border-0 group/row">
+    <div className="flex items-center justify-between gap-4 md:gap-6 py-4 md:py-5 first:pt-0 last:pb-0 border-b border-border/30 last:border-0 group/row">
       <div className="min-w-0">
-        <p className="text-base font-bold text-foreground group-hover/row:text-primary transition-colors">{label}</p>
-        {description && <p className="text-xs font-medium text-muted-foreground mt-1 opacity-70 italic">{description}</p>}
+        <p className="text-sm md:text-base font-bold text-foreground group-hover/row:text-primary transition-colors">{label}</p>
+        {description && <p className="text-[10px] md:text-xs font-medium text-muted-foreground mt-0.5 md:mt-1 opacity-70 italic">{description}</p>}
       </div>
       <div className="shrink-0">{children}</div>
     </div>
@@ -214,14 +214,14 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border/30">
-          <div className="flex items-center gap-2 px-2">
-            <div className="h-8 w-8 rounded-lg bg-secondary flex items-center justify-center">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-border/30">
+          <div className="flex items-center gap-3 px-1 md:px-2 w-full md:w-auto">
+            <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-secondary flex items-center justify-center shrink-0">
               <Timer size={14} className="text-muted-foreground" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Member Since</span>
-              <span className="text-sm font-bold text-foreground tracking-tight">
+              <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Member Since</span>
+              <span className="text-xs md:text-sm font-bold text-foreground tracking-tight">
                 {new Date(user.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </span>
             </div>
@@ -229,7 +229,7 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
           <button
             type="submit"
             disabled={isSubmitting || !isDirty}
-            className="w-full sm:w-auto h-12 rounded-2xl bg-primary px-8 py-2 text-sm font-black uppercase tracking-widest text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed transition-all shadow-xl shadow-primary/20"
+            className="w-full md:w-auto h-12 rounded-2xl bg-primary px-8 py-2 text-xs md:text-sm font-black uppercase tracking-widest text-primary-foreground hover:bg-primary/90 hover:scale-[1.05] active:scale-[0.95] disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed transition-all shadow-xl shadow-primary/20"
           >
             {isSubmitting ? "Syncing..." : "Update Profile"}
           </button>
@@ -698,7 +698,7 @@ function AccountSection() {
 
 function SignOutSection() {
   return (
-    <div className="flex justify-center pt-4">
+    <div className="flex justify-center pt-2 md:pt-4">
       <button
         type="button"
         onClick={async () => {
@@ -708,12 +708,12 @@ function SignOutSection() {
             window.location.href = "/login";
           }
         }}
-        className="group flex items-center gap-3 px-8 py-4 rounded-[2rem] bg-secondary/30 border border-border hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive transition-all duration-300"
+        className="group flex items-center justify-center gap-3 w-full md:w-auto px-6 md:px-8 py-3 md:py-4 rounded-2xl md:rounded-[2rem] bg-secondary/30 border border-border hover:bg-destructive/10 hover:border-destructive/20 hover:text-destructive transition-all duration-300"
       >
-        <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-destructive/20 transition-colors">
-          <LogOut size={16} />
+        <div className="h-7 w-7 md:h-8 md:w-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-destructive/20 transition-colors">
+          <LogOut size={14} md:size={16} />
         </div>
-        <span className="text-base font-black uppercase tracking-widest">Sign out of session</span>
+        <span className="text-xs md:text-base font-black uppercase tracking-widest">Sign out of session</span>
       </button>
     </div>
   );
@@ -723,17 +723,17 @@ function SignOutSection() {
 
 export default function SettingsClient({ user, appUrl }: SettingsClientProps) {
   return (
-    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-4xl w-full pb-32 md:pb-12 mx-auto animate-in fade-in duration-700">
+    <div className="flex flex-col gap-6 md:gap-10 p-4 md:p-12 max-w-4xl w-full pb-32 md:pb-12 mx-auto animate-in fade-in duration-700">
       {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1 md:px-2">
         <div className="space-y-2">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-[2rem] bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-2xl shadow-primary/30">
-              <User size={32} className="text-primary-foreground" />
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="h-12 w-12 md:h-16 md:w-16 rounded-2xl md:rounded-[2rem] bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-2xl shadow-primary/30">
+              <User size={24} md:size={32} className="text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground">App Settings</h1>
-              <p className="text-muted-foreground text-lg font-medium opacity-70">
+              <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-foreground">App Settings</h1>
+              <p className="text-sm md:text-lg font-medium opacity-70">
                 {user.displayName ?? user.name ?? user.email}
               </p>
             </div>

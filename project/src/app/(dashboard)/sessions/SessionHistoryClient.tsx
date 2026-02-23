@@ -33,16 +33,16 @@ export default function SessionHistoryClient({ initialSessions }: SessionHistory
   };
 
   return (
-    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-5xl w-full mx-auto">
+    <div className="flex flex-col gap-6 md:gap-10 p-4 md:p-12 max-w-5xl w-full mx-auto">
       {/* Header with modern typography */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Workout History</h1>
-          <p className="text-muted-foreground text-lg font-medium">Relive your past gains and progress</p>
+        <div className="space-y-1 md:space-y-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">Workout History</h1>
+          <p className="text-muted-foreground text-base md:text-lg font-medium">Relive your past gains and progress</p>
         </div>
         <Link
           href="/sessions/start"
-          className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20 w-full md:w-auto"
         >
           <Play size={20} strokeWidth={3} />
           Start New Workout
@@ -51,19 +51,19 @@ export default function SessionHistoryClient({ initialSessions }: SessionHistory
 
       {/* Sessions list with glassmorphism cards */}
       {sessions.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm text-center animate-in fade-in zoom-in duration-500">
-          <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
-            <History size={40} />
+        <div className="flex flex-col items-center justify-center rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-10 md:p-20 gap-6 backdrop-blur-sm text-center animate-in fade-in zoom-in duration-500">
+          <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+            <History size={32} md:size={40} />
           </div>
           <div className="space-y-2">
-            <p className="text-lg font-medium text-muted-foreground italic">No completed sessions yet.</p>
+            <p className="text-base md:text-lg font-medium text-muted-foreground italic">No completed sessions yet.</p>
             <Link href="/sessions/start" className="inline-flex text-sm font-bold text-primary hover:underline">
               Start your first workout now →
             </Link>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="flex flex-col gap-3 md:gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {sessions.map((s) => (
             <SessionCard key={s.id} {...s} />
           ))}

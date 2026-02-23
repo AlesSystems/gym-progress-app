@@ -31,51 +31,51 @@ export default function TemplateCard({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="group relative flex flex-col gap-4 rounded-[2rem] border border-border bg-card/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:bg-card/60 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5">
+    <div className="group relative flex flex-col gap-3 md:gap-4 rounded-2xl md:rounded-[2rem] border border-border bg-card/40 p-4 md:p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:bg-card/60 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/5">
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 relative z-10">
+      <div className="flex items-start justify-between gap-3 relative z-10">
         <Link href={`/templates/${id}/edit`} className="flex-1 min-w-0">
-          <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight truncate tracking-tight">
+          <h3 className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight truncate tracking-tight">
             {name}
           </h3>
         </Link>
         <button
           onClick={() => setMenuOpen((v) => !v)}
-          className="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
+          className="shrink-0 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
           aria-label="Template options"
         >
-          <MoreVertical size={20} />
+          <MoreVertical size={18} md:size={20} />
         </button>
       </div>
 
-      <div className="space-y-4 relative z-10">
+      <div className="space-y-3 md:space-y-4 relative z-10">
         {description && (
-          <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2 italic border-l-2 border-primary/20 pl-3">
+          <p className="text-xs md:text-sm leading-relaxed text-muted-foreground line-clamp-2 italic border-l-2 border-primary/20 pl-3">
             {description}
           </p>
         )}
 
-        <div className="flex flex-wrap items-center gap-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mt-auto pt-4 border-t border-border/50">
-          <div className="flex items-center gap-1.5">
-            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-            <span>{exerciseCount} movements</span>
+        <div className="flex flex-wrap items-center gap-3 md:gap-4 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mt-auto pt-3 md:pt-4 border-t border-border/50">
+          <div className="flex items-center gap-1 md:gap-1.5">
+            <div className="h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-primary" />
+            <span>{exerciseCount} ex</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="h-1.5 w-1.5 rounded-full bg-secondary" />
+          <div className="flex items-center gap-1 md:gap-1.5">
+            <div className="h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-secondary" />
             <span>{formatDate(updatedAt)}</span>
           </div>
           
-          <div className="flex-1 flex justify-end gap-2">
+          <div className="flex-1 flex justify-end gap-1.5 md:gap-2">
             {isArchived && (
-              <span className="rounded-full bg-secondary border border-border px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+              <span className="rounded-full bg-secondary border border-border px-2 py-0.5 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 Archived
               </span>
             )}
             {!isArchived && visibility === "friends" && (
-              <span className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-primary">
+              <span className="rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary">
                 Shared
               </span>
             )}

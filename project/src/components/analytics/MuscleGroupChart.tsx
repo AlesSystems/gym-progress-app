@@ -66,7 +66,7 @@ export default function MuscleGroupChart({ data, unit }: Props) {
           <PolarGrid stroke="rgba(255,255,255,0.08)" />
           <PolarAngleAxis
             dataKey="muscle"
-            tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))", fontWeight: 600 }}
+            tick={{ fontSize: 10, fill: "#fff", fontWeight: 600 }}
             tickFormatter={(val: string) =>
               val.length > 10 ? val.slice(0, 9) + "…" : val
             }
@@ -74,7 +74,7 @@ export default function MuscleGroupChart({ data, unit }: Props) {
           <PolarRadiusAxis
             angle={30}
             domain={[0, 100]}
-            tick={{ fontSize: 9, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 9, fill: "#fff" }}
             axisLine={false}
             tickCount={4}
           />

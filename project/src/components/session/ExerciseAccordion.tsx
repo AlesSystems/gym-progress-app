@@ -87,37 +87,37 @@ export default function ExerciseAccordion({
   return (
     <div className="rounded-3xl border border-border bg-card/30 overflow-hidden backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/40 shadow-sm">
       {/* Header with glassmorphism */}
-      <div className="flex items-center justify-between px-6 py-4 bg-secondary/20 border-b border-border/50">
+      <div className="flex items-center justify-between px-4 md:px-6 py-4 bg-secondary/20 border-b border-border/50">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-3 flex-1 min-w-0 text-left group"
+          className="flex items-center gap-2 md:gap-3 flex-1 min-w-0 text-left group"
         >
-          <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-            <Dumbbell size={18} />
+          <div className="h-9 w-9 md:h-10 md:w-10 rounded-xl bg-secondary flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+            <Dumbbell size={16} md:size={18} />
           </div>
-          <div>
-            <h3 className="text-base font-bold text-foreground truncate">{exercise.exerciseName}</h3>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{sets.length} sets logged</span>
+          <div className="min-w-0">
+            <h3 className="text-sm md:text-base font-bold text-foreground truncate">{exercise.exerciseName}</h3>
+            <span className="text-[9px] md:text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{sets.length} sets logged</span>
           </div>
           <div className="ml-2 text-muted-foreground/50 group-hover:text-primary transition-colors">
-            {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            {open ? <ChevronUp size={18} md:size={20} /> : <ChevronDown size={18} md:size={20} />}
           </div>
         </button>
         <button
           onClick={handleRemoveExercise}
-          className="shrink-0 ml-4 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-all"
+          className="shrink-0 ml-2 md:ml-4 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground/40 hover:bg-destructive/10 hover:text-destructive transition-all"
           aria-label={`Remove ${exercise.exerciseName}`}
         >
-          <Trash2 size={18} />
+          <Trash2 size={16} md:size={18} />
         </button>
       </div>
 
       {open && (
-        <div className="px-6 py-6 space-y-4">
+        <div className="px-3 md:px-6 py-4 md:py-6 space-y-4">
           {previousBest && (
-            <div className="rounded-2xl bg-primary/5 border border-primary/10 p-3 flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Trophy size={14} className="text-primary" />
+            <div className="rounded-2xl bg-primary/5 border border-primary/10 p-2 md:p-3 flex items-center gap-2 md:gap-3">
+              <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <Trophy size={12} md:size={14} className="text-primary" />
               </div>
               <PreviousBestHint
                 weight={previousBest.weight}
@@ -129,13 +129,13 @@ export default function ExerciseAccordion({
           )}
 
           {/* Column headers with better typography */}
-          <div className="flex items-center gap-4 px-4 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] opacity-60">
-            <span className="w-6 shrink-0 text-center">#</span>
-            <span className="w-8 shrink-0 text-center">W</span>
-            <span className="w-20 text-center">Weight</span>
-            <span className="w-4 shrink-0" />
-            <span className="w-16 text-center">Reps</span>
-            <span className="w-16 text-center">RPE</span>
+          <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-[0.1em] md:tracking-[0.15em] opacity-60">
+            <span className="w-6 md:w-8 shrink-0 text-center">#</span>
+            <span className="w-7 md:w-8 shrink-0 text-center">W</span>
+            <span className="w-16 md:w-20 text-center">Weight</span>
+            <span className="w-1 md:w-2 shrink-0" />
+            <span className="w-12 md:w-16 text-center">Reps</span>
+            <span className="w-12 md:w-16 text-center">RPE</span>
             <span className="flex-1 shrink-0" />
           </div>
 

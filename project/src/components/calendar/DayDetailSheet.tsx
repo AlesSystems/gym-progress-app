@@ -81,49 +81,49 @@ export default function DayDetailSheet({
       />
 
       {/* Sheet with glassmorphism */}
-      <div className="fixed bottom-0 left-0 right-0 z-[110] flex flex-col rounded-t-[3rem] bg-card/80 backdrop-blur-2xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] max-h-[85vh] border-t border-border/50 animate-in slide-in-from-bottom duration-500 ease-out">
+      <div className="fixed bottom-0 left-0 right-0 z-[110] flex flex-col rounded-t-[2rem] md:rounded-t-[3rem] bg-card/80 backdrop-blur-2xl shadow-[0_-20px_50px_rgba(0,0,0,0.3)] max-h-[90vh] md:max-h-[85vh] border-t border-border/50 animate-in slide-in-from-bottom duration-500 ease-out">
         {/* Decorative background element */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
 
         {/* Handle */}
-        <div className="flex justify-center pt-4 pb-2">
-          <div className="w-12 h-1.5 rounded-full bg-muted/30" />
+        <div className="flex justify-center pt-3 pb-1 md:pt-4 md:pb-2">
+          <div className="w-10 md:w-12 h-1 md:h-1.5 rounded-full bg-muted/30" />
         </div>
 
         {/* Header */}
-        <div className="flex items-start justify-between px-8 py-6 border-b border-border/30 bg-secondary/10">
-          <div>
-            <h2 className="text-2xl font-black text-foreground tracking-tight">{formatDayHeading(date)}</h2>
-            <div className="flex items-center gap-3 mt-1 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+        <div className="flex items-start justify-between px-5 md:px-8 py-4 md:py-6 border-b border-border/30 bg-secondary/10">
+          <div className="min-w-0">
+            <h2 className="text-lg md:text-2xl font-black text-foreground tracking-tight truncate">{formatDayHeading(date)}</h2>
+            <div className="flex items-center gap-3 mt-1 text-[9px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                {sessions.length} session{sessions.length !== 1 ? "s" : ""}
+                <span className="h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-green-500" />
+                {sessions.length} done
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                {scheduled.length} plan{scheduled.length !== 1 ? "s" : ""}
+                <span className="h-1 w-1 md:h-1.5 md:w-1.5 rounded-full bg-primary" />
+                {scheduled.length} plan
               </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="h-12 w-12 rounded-2xl bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-all hover:rotate-90"
+            className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-secondary flex items-center justify-center text-muted-foreground hover:text-foreground transition-all shrink-0"
             aria-label="Close"
           >
-            <X size={24} />
+            <X size={20} md:size={24} />
           </button>
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto px-8 py-8 space-y-8 min-h-0 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-5 md:px-8 py-6 md:py-8 space-y-6 md:space-y-8 min-h-0 custom-scrollbar">
           {isEmpty && (
-            <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in duration-500">
-              <div className="h-20 w-20 bg-secondary rounded-[2rem] flex items-center justify-center text-muted-foreground/30 mb-6">
-                <Calendar size={40} />
+            <div className="flex flex-col items-center justify-center py-12 md:py-20 text-center animate-in fade-in zoom-in duration-500">
+              <div className="h-16 w-16 md:h-20 md:w-20 bg-secondary rounded-2xl md:rounded-[2rem] flex items-center justify-center text-muted-foreground/30 mb-4 md:mb-6">
+                <Calendar size={32} md:size={40} />
               </div>
-              <div className="space-y-2">
-                <p className="text-xl font-bold text-foreground">Nothing planned yet</p>
-                <p className="text-sm font-medium text-muted-foreground italic">Add a routine to schedule your next workout!</p>
+              <div className="space-y-1 md:space-y-2">
+                <p className="text-lg md:text-xl font-bold text-foreground">Nothing planned</p>
+                <p className="text-xs md:text-sm font-medium text-muted-foreground italic">Add a routine to schedule your next workout!</p>
               </div>
             </div>
           )}
@@ -162,12 +162,12 @@ export default function DayDetailSheet({
         </div>
 
         {/* Footer with primary action */}
-        <div className="px-8 py-6 border-t border-border/30 bg-background/50 backdrop-blur-md">
+        <div className="px-5 md:px-8 py-4 md:py-6 border-t border-border/30 bg-background/50 backdrop-blur-md">
           <button
             onClick={() => onAddPlan(date)}
-            className="flex items-center justify-center gap-3 w-full h-14 rounded-2xl bg-primary text-base font-black uppercase tracking-widest text-primary-foreground shadow-xl shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="flex items-center justify-center gap-3 w-full h-12 md:h-14 rounded-xl md:rounded-2xl bg-primary text-sm md:text-base font-black uppercase tracking-widest text-primary-foreground shadow-xl shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <Plus size={20} strokeWidth={3} />
+            <Plus size={18} md:size={20} strokeWidth={3} />
             Add New Plan
           </button>
         </div>

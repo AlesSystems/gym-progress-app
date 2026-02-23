@@ -164,19 +164,19 @@ export default async function DashboardPage() {
   const hasAnyVolume = weeklyVolume.some((d) => d.volume > 0);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 p-6 md:p-8">
+    <div className="mx-auto max-w-5xl space-y-6 p-4 md:space-y-8 md:p-8">
       {/* Header Section */}
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-medium tracking-tight text-foreground">
+          <h1 className="text-2xl font-medium tracking-tight text-foreground md:text-3xl">
             {getGreeting()}, {userName}
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1 md:text-base">
             Ready to crush your goals today?
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 rounded-full bg-secondary/50 px-4 py-2 text-sm font-medium text-secondary-foreground ring-1 ring-border/50">
+        <div className="flex items-center justify-between md:justify-end gap-4">
+          <div className="flex items-center gap-2 rounded-full bg-secondary/50 px-4 py-2 text-xs md:text-sm font-medium text-secondary-foreground ring-1 ring-border/50">
             <Zap
               className={`h-4 w-4 ${streak > 0 ? "text-orange-500 fill-orange-500" : "text-muted-foreground"}`}
             />
@@ -194,26 +194,26 @@ export default async function DashboardPage() {
 
       {/* Hero / Quick Action Section */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-background to-background p-1 ring-1 ring-border/50">
-        <div className="relative z-10 flex flex-col items-center justify-center gap-6 rounded-[22px] bg-background/40 p-8 text-center backdrop-blur-sm md:p-12">
-          <div className="rounded-full bg-primary/10 p-4 ring-1 ring-primary/20">
-            <Dumbbell className="h-12 w-12 text-primary" strokeWidth={1.5} />
+        <div className="relative z-10 flex flex-col items-center justify-center gap-6 rounded-[22px] bg-background/40 p-6 text-center backdrop-blur-sm md:p-12">
+          <div className="rounded-full bg-primary/10 p-3 md:p-4 ring-1 ring-primary/20">
+            <Dumbbell className="h-10 w-10 md:h-12 md:w-12 text-primary" strokeWidth={1.5} />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold md:text-3xl">
+            <h2 className="text-xl font-semibold md:text-3xl">
               Start Workout
             </h2>
-            <p className="text-muted-foreground max-w-md mx-auto">
+            <p className="text-sm text-muted-foreground max-w-md mx-auto md:text-base">
               Pick up where you left off or start a fresh session.
             </p>
           </div>
           <div className="flex flex-col w-full max-w-xs gap-3 sm:flex-row">
-            <Button size="lg" className="w-full text-base h-12 rounded-xl" asChild>
+            <Button size="lg" className="w-full text-sm md:text-base h-12 rounded-xl" asChild>
               <Link href="/workouts/start">Empty Session</Link>
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className="w-full text-base h-12 rounded-xl bg-background/50 backdrop-blur-md hover:bg-background/80"
+              className="w-full text-sm md:text-base h-12 rounded-xl bg-background/50 backdrop-blur-md hover:bg-background/80"
               asChild
             >
               <Link href="/templates">From Template</Link>
@@ -228,37 +228,41 @@ export default async function DashboardPage() {
 
       {/* Core Features Grid */}
       <section>
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <h3 className="text-lg font-medium">Quick Access</h3>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <DashboardCard
             title="Templates"
-            subtitle="Manage your routines"
+            subtitle="My routines"
             icon={LayoutList}
             href="/templates"
             accentColor="text-blue-500"
+            className="p-4 md:p-6"
           />
           <DashboardCard
             title="History"
-            subtitle="View past sessions"
+            subtitle="Past sessions"
             icon={History}
             href="/sessions"
             accentColor="text-green-500"
+            className="p-4 md:p-6"
           />
           <DashboardCard
             title="Exercises"
-            subtitle="Browse library"
+            subtitle="Library"
             icon={Dumbbell}
             href="/exercises"
             accentColor="text-purple-500"
+            className="p-4 md:p-6"
           />
           <DashboardCard
             title="Analytics"
-            subtitle="Track your progress"
+            subtitle="Progress"
             icon={LineChart}
             href="/analytics"
             accentColor="text-orange-500"
+            className="p-4 md:p-6"
           />
         </div>
       </section>
@@ -266,7 +270,7 @@ export default async function DashboardPage() {
       {/* Secondary Grid / Info */}
       <section className="grid gap-6 md:grid-cols-2">
         {/* Recent Activity */}
-        <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="rounded-2xl border border-border bg-card p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-medium flex items-center gap-2">
               <History className="h-4 w-4 text-muted-foreground" />
@@ -303,12 +307,12 @@ export default async function DashboardPage() {
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {s.completedAt ? relativeTime(s.completedAt) : "—"}
-                        {s.exerciseCount > 0 && ` · ${s.exerciseCount} exercise${s.exerciseCount !== 1 ? "s" : ""}`}
+                        {s.exerciseCount > 0 && ` · ${s.exerciseCount} ex`}
                       </p>
                     </div>
                   </div>
                   {s.durationMinutes != null && (
-                    <div className="text-xs font-medium text-muted-foreground bg-secondary/50 px-2 py-1 rounded shrink-0">
+                    <div className="text-[10px] md:text-xs font-medium text-muted-foreground bg-secondary/50 px-2 py-1 rounded shrink-0">
                       {s.durationMinutes} min
                     </div>
                   )}
@@ -319,7 +323,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Weekly Volume */}
-        <div className="rounded-2xl border border-border bg-card p-6">
+        <div className="rounded-2xl border border-border bg-card p-4 md:p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-medium flex items-center gap-2">
               <LineChart className="h-4 w-4 text-muted-foreground" />
@@ -334,7 +338,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <>
-              <div className="h-32 flex items-end justify-between gap-2 px-2">
+              <div className="h-32 flex items-end justify-between gap-1 md:gap-2 px-1">
                 {weeklyVolume.map((d, i) => (
                   <div key={i} className="w-full bg-secondary rounded-t-sm relative group">
                     <div
@@ -344,7 +348,7 @@ export default async function DashboardPage() {
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between mt-2 text-xs text-muted-foreground px-1">
+              <div className="flex justify-between mt-2 text-[10px] md:text-xs text-muted-foreground px-1">
                 {weeklyVolume.map((d, i) => (
                   <span key={i}>{d.day}</span>
                 ))}

@@ -59,15 +59,15 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
 
   return (
     <div
-      className={`group flex items-center gap-3 rounded-2xl px-4 py-3 transition-all duration-300 border ${
+      className={`group flex items-center gap-2 md:gap-3 rounded-2xl px-2 md:px-4 py-3 transition-all duration-300 border ${
         set.isWarmup 
           ? "bg-amber-500/5 border-amber-500/20 shadow-sm shadow-amber-500/5" 
           : "bg-secondary/20 border-border/50 hover:border-primary/30 hover:bg-secondary/30"
       } ${saving ? "opacity-50 grayscale" : ""}`}
     >
       {/* Set number / indicator */}
-      <div className="w-8 flex flex-col items-center shrink-0">
-        <span className={`text-xs font-black ${set.isWarmup ? "text-amber-500" : "text-muted-foreground group-hover:text-primary transition-colors"}`}>
+      <div className="w-6 md:w-8 flex flex-col items-center shrink-0">
+        <span className={`text-[10px] md:text-xs font-black ${set.isWarmup ? "text-amber-500" : "text-muted-foreground group-hover:text-primary transition-colors"}`}>
           {set.isWarmup ? "W" : set.setNumber}
         </span>
       </div>
@@ -76,7 +76,7 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
       <button
         onClick={toggleWarmup}
         title={set.isWarmup ? "Mark as working set" : "Mark as warm-up"}
-        className={`shrink-0 h-8 w-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
+        className={`shrink-0 h-7 w-7 md:h-8 md:w-8 rounded-lg md:rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${
           set.isWarmup
             ? "bg-amber-500 text-white shadow-lg shadow-amber-500/30"
             : "bg-secondary text-muted-foreground hover:bg-amber-500/20 hover:text-amber-500"
@@ -86,7 +86,7 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
       </button>
 
       {/* Weight Input */}
-      <div className="relative flex items-center gap-2">
+      <div className="relative flex items-center gap-1 md:gap-2">
         <input
           type="number"
           defaultValue={set.weight ?? ""}
@@ -98,15 +98,15 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
             const v = e.target.value === "" ? null : parseFloat(e.target.value);
             handleBlur("weight", v);
           }}
-          className="w-20 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          className="w-16 md:w-20 h-10 rounded-xl border border-border bg-background/50 px-1 md:px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
           aria-label="Weight"
         />
-        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+        <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
           {set.weightUnit ?? "kg"}
         </span>
       </div>
 
-      <div className="w-2 shrink-0" />
+      <div className="w-1 md:w-2 shrink-0" />
 
       {/* Reps Input */}
       <div className="relative">
@@ -121,10 +121,10 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
             const v = e.target.value === "" ? null : parseInt(e.target.value, 10);
             handleBlur("reps", v);
           }}
-          className="w-16 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          className="w-12 md:w-16 h-10 rounded-xl border border-border bg-background/50 px-1 md:px-2 text-center text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
           aria-label="Reps"
         />
-        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+        <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
           Reps
         </span>
       </div>
@@ -142,23 +142,23 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
             const v = e.target.value === "" ? null : parseFloat(e.target.value);
             handleBlur("rpe", v);
           }}
-          className="w-16 h-10 rounded-xl border border-border bg-background/50 px-2 text-center text-sm font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+          className="w-12 md:w-16 h-10 rounded-xl border border-border bg-background/50 px-1 md:px-2 text-center text-sm font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
           aria-label="RPE"
         />
-        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
+        <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
           RPE
         </span>
       </div>
 
       {/* PR badge */}
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center scale-90 md:scale-100">
         {set.isNewPR && <PRBadge />}
       </div>
 
       {/* Delete */}
       <button
         onClick={handleDelete}
-        className="shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-muted-foreground/30 hover:bg-destructive/10 hover:text-destructive transition-all"
+        className="shrink-0 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground/30 hover:bg-destructive/10 hover:text-destructive transition-all"
         aria-label="Delete set"
       >
         <Trash2 size={16} />

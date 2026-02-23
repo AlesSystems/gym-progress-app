@@ -42,26 +42,26 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+      <div className="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-10 space-y-6 md:space-y-8 pb-32 md:pb-12">
         {/* Breadcrumb */}
         <Link 
           href="/exercises" 
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors px-1"
         >
-          <span className="text-lg">←</span> Exercise Library
+          <span className="text-base md:text-lg">←</span> Exercise Library
         </Link>
 
         {/* Header card with glassmorphism */}
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card/50 p-8 backdrop-blur-sm shadow-xl space-y-6">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+        <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-border bg-card/50 p-5 md:p-8 backdrop-blur-sm shadow-xl space-y-6">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 md:gap-6">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
                 {exercise.name}
               </h1>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 md:gap-3">
                 {!exercise.isSystemExercise && (
-                  <span className="inline-flex items-center rounded-full bg-amber-500/10 border border-amber-500/20 px-3 py-1 text-xs font-medium text-amber-500">
-                    Custom Exercise
+                  <span className="inline-flex items-center rounded-full bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 text-[10px] md:text-xs font-medium text-amber-500">
+                    Custom
                   </span>
                 )}
                 <ExerciseBadge
@@ -71,10 +71,10 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
               </div>
             </div>
             {isOwner && (
-              <div className="flex gap-3 shrink-0">
+              <div className="flex gap-2 md:gap-3 shrink-0">
                 <Link
                   href={`/exercises/${exercise.slug}/edit`}
-                  className="inline-flex h-10 items-center justify-center rounded-xl border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+                  className="flex-1 md:flex-none inline-flex h-9 md:h-10 items-center justify-center rounded-xl border border-border bg-background px-4 text-xs md:text-sm font-medium text-foreground hover:bg-secondary transition-colors"
                 >
                   Edit
                 </Link>
@@ -83,10 +83,10 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
             )}
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2">
-            <div className="space-y-6">
+          <div className="grid gap-6 md:gap-8 md:grid-cols-2">
+            <div className="space-y-5 md:space-y-6">
               <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">
+                <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2 md:mb-3">
                   Target Muscles
                 </h3>
                 <MuscleTagList
@@ -97,28 +97,28 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
 
               {(exercise.defaultReps || exercise.defaultWeight || exercise.defaultUnit) && (
                 <div>
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">
-                    Default Parameters
+                  <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-2 md:mb-3">
+                    Defaults
                   </h3>
-                  <div className="grid grid-cols-3 gap-4 rounded-2xl bg-secondary/30 border border-border/50 p-4">
+                  <div className="grid grid-cols-3 gap-3 md:gap-4 rounded-xl md:rounded-2xl bg-secondary/30 border border-border/50 p-3 md:p-4">
                     {exercise.defaultReps && (
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-medium text-muted-foreground uppercase">Reps</p>
-                        <p className="text-lg font-semibold text-foreground">{exercise.defaultReps}</p>
+                      <div className="space-y-0.5">
+                        <p className="text-[8px] md:text-[10px] font-medium text-muted-foreground uppercase">Reps</p>
+                        <p className="text-base md:text-lg font-bold text-foreground">{exercise.defaultReps}</p>
                       </div>
                     )}
                     {exercise.defaultWeight && (
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-medium text-muted-foreground uppercase">Weight</p>
-                        <p className="text-lg font-semibold text-foreground">
-                          {Number(exercise.defaultWeight)} <span className="text-sm font-normal text-muted-foreground">{exercise.defaultUnit ?? "kg"}</span>
+                      <div className="space-y-0.5">
+                        <p className="text-[8px] md:text-[10px] font-medium text-muted-foreground uppercase">Weight</p>
+                        <p className="text-base md:text-lg font-bold text-foreground">
+                          {Number(exercise.defaultWeight)}<span className="text-xs md:text-sm font-normal text-muted-foreground ml-0.5">{exercise.defaultUnit ?? "kg"}</span>
                         </p>
                       </div>
                     )}
                     {exercise.defaultUnit && !exercise.defaultWeight && (
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-medium text-muted-foreground uppercase">Unit</p>
-                        <p className="text-lg font-semibold text-foreground">{exercise.defaultUnit}</p>
+                      <div className="space-y-0.5">
+                        <p className="text-[8px] md:text-[10px] font-medium text-muted-foreground uppercase">Unit</p>
+                        <p className="text-base md:text-lg font-bold text-foreground">{exercise.defaultUnit}</p>
                       </div>
                     )}
                   </div>
@@ -127,12 +127,12 @@ export default async function ExerciseDetailPage({ params }: PageProps) {
             </div>
 
             {exercise.description && (
-              <div className="space-y-3">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+              <div className="space-y-2 md:space-y-3">
+                <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                   Instructions
                 </h3>
-                <div className="rounded-2xl bg-secondary/20 border border-border/40 p-5">
-                  <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line italic">
+                <div className="rounded-xl md:rounded-2xl bg-secondary/20 border border-border/40 p-4 md:p-5">
+                  <p className="text-xs md:text-sm leading-relaxed text-muted-foreground whitespace-pre-line italic">
                     {exercise.description}
                   </p>
                 </div>

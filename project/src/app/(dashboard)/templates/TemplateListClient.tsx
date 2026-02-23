@@ -92,17 +92,17 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
 
   return (
     <>
-      <div className="flex flex-col gap-10 p-6 md:p-12 max-w-7xl w-full mx-auto">
+      <div className="flex flex-col gap-6 md:gap-10 p-4 md:p-12 max-w-7xl w-full mx-auto">
         {/* Header with modern typography */}
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Workout Templates</h1>
-            <p className="text-muted-foreground text-lg font-medium">Your collection of training routines</p>
+          <div className="space-y-1 md:space-y-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">Workout Templates</h1>
+            <p className="text-muted-foreground text-base md:text-lg font-medium">Your collection of training routines</p>
           </div>
           {tab === "mine" && (
             <Link
               href="/templates/new"
-              className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20 w-full md:w-auto"
             >
               <Plus size={20} strokeWidth={3} />
               Create Template
@@ -111,10 +111,10 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
         </header>
 
         {/* Primary glassmorphism tabs */}
-        <div className="flex p-1.5 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50 w-fit">
+        <div className="flex p-1 rounded-2xl bg-secondary/30 backdrop-blur-md border border-border/50 w-full md:w-fit">
           <button
             onClick={() => handleTabChange("mine")}
-            className={`rounded-xl px-6 py-2.5 text-sm font-black uppercase tracking-widest transition-all duration-300 ${
+            className={`flex-1 md:flex-none rounded-xl px-4 md:px-6 py-2.5 text-[10px] md:text-sm font-black uppercase tracking-widest transition-all duration-300 ${
               tab === "mine"
                 ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                 : "text-muted-foreground hover:text-foreground"
@@ -124,7 +124,7 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
           </button>
           <button
             onClick={() => handleTabChange("friends")}
-            className={`rounded-xl px-6 py-2.5 text-sm font-black uppercase tracking-widest transition-all duration-300 ${
+            className={`flex-1 md:flex-none rounded-xl px-4 md:px-6 py-2.5 text-[10px] md:text-sm font-black uppercase tracking-widest transition-all duration-300 ${
               tab === "friends"
                 ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                 : "text-muted-foreground hover:text-foreground"
@@ -135,7 +135,7 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
         </div>
 
         {tab === "mine" && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Active / Archived modern toggle */}
             <div className="flex items-center gap-4 px-2">
               <button
@@ -161,16 +161,16 @@ export default function TemplateListClient({ initialTemplates }: TemplateListCli
             </div>
 
             {filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-6 backdrop-blur-sm">
-                <div className="h-20 w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
-                  <ClipboardList size={40} />
+              <div className="flex flex-col items-center justify-center rounded-[2rem] md:rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-10 md:p-20 gap-6 backdrop-blur-sm">
+                <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-secondary flex items-center justify-center text-muted-foreground/30">
+                  <ClipboardList size={32} md:size={40} />
                 </div>
-                <p className="text-lg font-medium text-muted-foreground italic">
+                <p className="text-base md:text-lg font-medium text-muted-foreground italic text-center">
                   {showArchived ? "Your archive is currently empty." : "No templates yet. Start by creating one!"}
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {filtered.map((t) => (
                   <TemplateCard
                     key={t.id}

@@ -10,13 +10,13 @@ export default function LoginPage({
   searchParams: Promise<{ verified?: string; error?: string }>;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card/40 p-10 md:p-12 backdrop-blur-md shadow-2xl space-y-10">
+    <div className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-border bg-card/40 p-6 md:p-12 backdrop-blur-md shadow-2xl space-y-8 md:space-y-10">
       {/* Decorative inner element */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
 
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-black text-foreground tracking-tight">Welcome Back</h1>
-        <p className="text-muted-foreground font-medium text-lg">Continue your fitness journey</p>
+      <div className="text-center space-y-1 md:space-y-2">
+        <h1 className="text-3xl md:text-4xl font-black text-foreground tracking-tight">Welcome Back</h1>
+        <p className="text-muted-foreground font-medium text-base md:text-lg">Continue your fitness journey</p>
       </div>
 
       <div className="relative z-10">
