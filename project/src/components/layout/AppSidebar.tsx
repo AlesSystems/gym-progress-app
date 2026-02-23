@@ -23,7 +23,6 @@ const NAV_ITEMS = [
 ];
 
 const BOTTOM_ITEMS = [
-  { href: "/profile", icon: UserCircle, label: "Profile" },
   { href: "/settings", icon: Settings, label: "Settings" },
 ];
 

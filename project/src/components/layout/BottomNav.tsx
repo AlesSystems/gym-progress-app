@@ -10,7 +10,7 @@ const TABS = [
   { href: "/sessions", icon: Play, label: "History" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
   { href: "/templates", icon: ClipboardList, label: "Templates" },
-  { href: "/profile", icon: UserCircle, label: "Profile" },
+  { href: "/settings", icon: UserCircle, label: "Settings" },
 ];
 
 export default function BottomNav() {
