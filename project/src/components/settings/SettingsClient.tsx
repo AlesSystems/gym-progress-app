@@ -240,7 +240,7 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
               />
             </label>
             {avatarError && <p className="text-xs font-bold text-destructive px-1">{avatarError}</p>}
-            <p className="text-[10px] text-muted-foreground px-1">JPEG, PNG, WebP or GIF · Max 2 MB</p>
+            <p className="text-[10px] text-muted-foreground px-1">JPEG, PNG, WebP or GIF · Max 10 MB</p>
           </div>
         </div>
 

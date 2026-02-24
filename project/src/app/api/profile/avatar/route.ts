@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateApiResponse } from "@/lib/utils";
 
-const MAX_SIZE_BYTES = 2 * 1024 * 1024; // 2 MB
+const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(req: NextRequest) {
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       generateApiResponse(false, undefined, undefined, {
         code: "FILE_TOO_LARGE",
-        message: "Image must be 2 MB or smaller.",
+        message: "Image must be 10 MB or smaller.",
       }),
       { status: 400 }
     );
