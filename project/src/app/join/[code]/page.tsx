@@ -1,6 +1,9 @@
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import SignupForm from "@/components/auth/SignupForm";
+import ConnectButton from "@/components/invite/ConnectButton";
 
 interface JoinPageProps {
   params: Promise<{ code: string }>;
@@ -35,6 +38,9 @@ export default async function JoinPage({ params }: JoinPageProps) {
       }
     }
   }
+
+  const session = await getServerSession(authOptions);
+  const isLoggedIn = !!session?.user;
 
   if (!inviteValid) {
     return (
@@ -74,14 +80,30 @@ export default async function JoinPage({ params }: JoinPageProps) {
           )}
         </div>
 
-        <SignupForm defaultInviteCode={code} />
-
-        <p className="text-center text-sm text-gray-500">
-          Already have an account?{" "}
-          <Link href="/login" className="text-indigo-600 font-medium hover:underline">
-            Sign in
-          </Link>
-        </p>
+        {isLoggedIn ? (
+          <>
+            <p className="text-sm text-gray-600 text-center">
+              You&apos;re already signed in. Connect with{" "}
+              <span className="font-medium">{inviterName ?? "this user"}</span> to join their leaderboard.
+            </p>
+            <ConnectButton code={code} />
+            <p className="text-center text-sm text-gray-500">
+              <Link href="/leaderboard" className="text-indigo-600 font-medium hover:underline">
+                Go to leaderboard
+              </Link>
+            </p>
+          </>
+        ) : (
+          <>
+            <SignupForm defaultInviteCode={code} />
+            <p className="text-center text-sm text-gray-500">
+              Already have an account?{" "}
+              <Link href={`/login?callbackUrl=/join/${code}`} className="text-indigo-600 font-medium hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

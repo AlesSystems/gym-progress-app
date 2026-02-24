@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { put } from "@vercel/blob";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateApiResponse } from "@/lib/utils";
 
-const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(req: NextRequest) {
@@ -60,21 +59,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       generateApiResponse(false, undefined, undefined, {
         code: "FILE_TOO_LARGE",
-        message: "Image must be 10 MB or smaller.",
+        message: "Image must be 5 MB or smaller.",
       }),
       { status: 400 }
     );
   }
 
-  const ext = file.type.split("/")[1].replace("jpeg", "jpg");
-  const filename = `avatars/${userId}.${ext}`;
-
-  const blob = await put(filename, file, { access: "public", allowOverwrite: true });
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const base64 = buffer.toString("base64");
+  const dataUrl = `data:${file.type};base64,${base64}`;
 
   await db.user.update({
     where: { id: userId },
-    data: { image: blob.url },
+    data: { image: dataUrl },
   });
 
-  return NextResponse.json(generateApiResponse(true, { image: blob.url }, "Avatar updated."));
+  return NextResponse.json(generateApiResponse(true, { image: dataUrl }, "Avatar updated."));
 }

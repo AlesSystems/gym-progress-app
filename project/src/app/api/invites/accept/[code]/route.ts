@@ -22,46 +22,64 @@ export async function POST(
   const userId = (session.user as { id: string }).id;
   const { code } = await params;
 
-  const invite = await db.invite.findUnique({ where: { code } });
-  if (!invite) {
+  // Prevent self-invite
+  const currentUser = await db.user.findUnique({ where: { id: userId }, select: { invitedBy: true, inviteCode: true } });
+  if (currentUser?.inviteCode === code) {
     return NextResponse.json(
       generateApiResponse(false, undefined, undefined, {
-        code: "NOT_FOUND",
-        message: "Invite not found.",
-      }),
-      { status: 404 }
-    );
-  }
-
-  const now = new Date();
-  const notExpired = !invite.expiresAt || invite.expiresAt > now;
-  const notMaxed = invite.maxUses === null || invite.currentUses < invite.maxUses;
-
-  if (!notExpired || !notMaxed) {
-    return NextResponse.json(
-      generateApiResponse(false, undefined, undefined, {
-        code: "INVITE_INVALID",
-        message: "Invite is expired or has reached its usage limit.",
+        code: "SELF_INVITE",
+        message: "You cannot accept your own invite.",
       }),
       { status: 400 }
     );
   }
 
-  await db.invite.update({
-    where: { id: invite.id },
-    data: {
-      currentUses: { increment: 1 },
-      usedBy: userId,
-      usedAt: now,
-    },
-  });
+  let invitedById: string | null = null;
+
+  // Check if it's a personal invite code (User.inviteCode)
+  const inviterUser = await db.user.findUnique({ where: { inviteCode: code }, select: { id: true } });
+  if (inviterUser) {
+    invitedById = inviterUser.id;
+  } else {
+    // Check Invite table
+    const invite = await db.invite.findUnique({ where: { code } });
+    if (!invite) {
+      return NextResponse.json(
+        generateApiResponse(false, undefined, undefined, {
+          code: "NOT_FOUND",
+          message: "Invite not found.",
+        }),
+        { status: 404 }
+      );
+    }
+
+    const now = new Date();
+    const notExpired = !invite.expiresAt || invite.expiresAt > now;
+    const notMaxed = invite.maxUses === null || invite.currentUses < invite.maxUses;
+
+    if (!notExpired || !notMaxed) {
+      return NextResponse.json(
+        generateApiResponse(false, undefined, undefined, {
+          code: "INVITE_INVALID",
+          message: "Invite is expired or has reached its usage limit.",
+        }),
+        { status: 400 }
+      );
+    }
+
+    invitedById = invite.createdBy;
+
+    await db.invite.update({
+      where: { id: invite.id },
+      data: { currentUses: { increment: 1 }, usedBy: userId, usedAt: now },
+    });
+  }
 
   // Update user.invitedBy if not already set
-  const user = await db.user.findUnique({ where: { id: userId } });
-  if (user && !user.invitedBy) {
+  if (currentUser && !currentUser.invitedBy) {
     await db.user.update({
       where: { id: userId },
-      data: { invitedBy: invite.createdBy },
+      data: { invitedBy: invitedById },
     });
   }
 

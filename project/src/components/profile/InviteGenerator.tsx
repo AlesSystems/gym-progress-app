@@ -50,13 +50,13 @@ export default function InviteGenerator({ personalInviteCode, appUrl }: InviteGe
           <p className="text-xs text-primary/80 mb-2">
             Share this with friends — it never expires
           </p>
-          <div className="flex gap-2">
-            <code className="flex-1 font-mono text-sm bg-background border border-border rounded px-3 py-1.5 text-foreground">
+          <div className="flex items-center gap-2">
+            <code className="flex-1 min-w-0 font-mono text-sm bg-background border border-border rounded px-3 py-1.5 text-foreground truncate">
               {personalInviteCode}
             </code>
             <button
               onClick={() => copyToClipboard(personalInviteCode, "personal")}
-              className="px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent transition-colors"
+              className="shrink-0 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent transition-colors"
             >
               {copied === "personal" ? "Copied!" : "Copy"}
             </button>
@@ -64,15 +64,15 @@ export default function InviteGenerator({ personalInviteCode, appUrl }: InviteGe
         </div>
         <div>
           <p className="text-xs text-primary/80 mb-1">Invite URL</p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <input
               readOnly
               value={personalInviteUrl}
-              className="flex-1 text-xs bg-background border border-border rounded px-3 py-1.5 text-foreground"
+              className="flex-1 min-w-0 text-xs bg-background border border-border rounded px-3 py-1.5 text-foreground"
             />
             <button
               onClick={() => copyToClipboard(personalInviteUrl, "url")}
-              className="px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent transition-colors"
+              className="shrink-0 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent transition-colors"
             >
               {copied === "url" ? "Copied!" : "Copy"}
             </button>

@@ -172,23 +172,30 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
     const file = e.target.files?.[0];
     if (!file) return;
     setAvatarError(null);
-    // Local preview
     const reader = new FileReader();
     reader.onload = (ev) => setAvatarPreview(ev.target?.result as string);
     reader.readAsDataURL(file);
-    // Upload
     setAvatarUploading(true);
-    const form = new FormData();
-    form.append("avatar", file);
-    const res = await fetch("/api/profile/avatar", { method: "POST", body: form });
-    const json = await res.json();
-    setAvatarUploading(false);
-    if (!res.ok || !json.success) {
-      setAvatarError(json.error?.message ?? "Failed to upload image.");
+    try {
+      const form = new FormData();
+      form.append("avatar", file);
+      const res = await fetch("/api/profile/avatar", { method: "POST", body: form });
+      let json: { success?: boolean; error?: { message?: string }; data?: { image: string } };
+      try {
+        json = await res.json();
+      } catch {
+        throw new Error("Unexpected server error. Please try again.");
+      }
+      if (!res.ok || !json.success) {
+        throw new Error(json.error?.message ?? "Failed to upload image.");
+      }
+      setAvatarUrl(json.data!.image);
+    } catch (err) {
+      setAvatarError(err instanceof Error ? err.message : "Failed to upload image.");
       setAvatarPreview(null);
-      return;
+    } finally {
+      setAvatarUploading(false);
     }
-    setAvatarUrl(json.data.image);
   };
 
   return (
@@ -240,7 +247,7 @@ function ProfileSection({ user }: { user: SettingsClientProps["user"] }) {
               />
             </label>
             {avatarError && <p className="text-xs font-bold text-destructive px-1">{avatarError}</p>}
-            <p className="text-[10px] text-muted-foreground px-1">JPEG, PNG, WebP or GIF · Max 10 MB</p>
+            <p className="text-[10px] text-muted-foreground px-1">JPEG, PNG, WebP or GIF · Max 5 MB</p>
           </div>
         </div>
 
