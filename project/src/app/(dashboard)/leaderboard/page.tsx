@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Trophy, Flame, Dumbbell, Medal, Crown, Users } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = { title: "Leaderboard – Ales GYM" };
 
@@ -36,6 +37,7 @@ function calcStreak(completedDates: Date[]): number {
 type UserStats = {
   userId: string;
   displayName: string;
+  image: string | null;
   isCurrentUser: boolean;
   totalSessions: number;
   streak: number;
@@ -79,7 +81,7 @@ async function fetchLeaderboard(currentUserId: string): Promise<UserStats[]> {
   // Fetch user info
   const users = await db.user.findMany({
     where: { id: { in: userIds } },
-    select: { id: true, displayName: true, name: true },
+    select: { id: true, displayName: true, name: true, image: true },
   });
 
   // Fetch completed sessions with sets for volume calculation
@@ -141,6 +143,7 @@ async function fetchLeaderboard(currentUserId: string): Promise<UserStats[]> {
     return {
       userId: u.id,
       displayName: u.displayName ?? u.name ?? "Unknown",
+      image: u.image ?? null,
       isCurrentUser: u.id === currentUserId,
       totalSessions,
       streak,
@@ -178,6 +181,7 @@ function RankBadge({ rank }: { rank: number }) {
 type RankedEntry = {
   userId: string;
   displayName: string;
+  image: string | null;
   isCurrentUser: boolean;
   rank: number;
   value: number;
@@ -217,7 +221,7 @@ function LeaderboardList({ entries }: { entries: RankedEntry[] }) {
 
             {/* Avatar */}
             <div
-              className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-black shrink-0 transition-all ${
+              className={`h-10 w-10 rounded-xl flex items-center justify-center text-sm font-black shrink-0 transition-all overflow-hidden ${
                 entry.isCurrentUser
                   ? "bg-primary/20 text-primary"
                   : isPodium
@@ -225,7 +229,11 @@ function LeaderboardList({ entries }: { entries: RankedEntry[] }) {
                   : "bg-secondary text-muted-foreground"
               }`}
             >
-              {entry.displayName.slice(0, 2).toUpperCase()}
+              {entry.image ? (
+                <Image src={entry.image} alt={entry.displayName} width={40} height={40} className="object-cover w-full h-full" />
+              ) : (
+                entry.displayName.slice(0, 2).toUpperCase()
+              )}
             </div>
 
             {/* Name */}

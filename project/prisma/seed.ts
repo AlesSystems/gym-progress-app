@@ -1,10 +1,14 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) throw new Error("DATABASE_URL is not set");
-const adapter = new PrismaPg({ connectionString });
+const rawConnectionString = process.env.DATABASE_URL;
+if (!rawConnectionString) throw new Error("DATABASE_URL is not set");
+const dbUrl = new URL(rawConnectionString);
+dbUrl.searchParams.delete("sslmode");
+const pool = new Pool({ connectionString: dbUrl.toString(), ssl: { rejectUnauthorized: false } });
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 function slugify(name: string): string {

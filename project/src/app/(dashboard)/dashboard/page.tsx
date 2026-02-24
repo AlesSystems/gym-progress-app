@@ -15,6 +15,7 @@ import {
   Trophy,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 function relativeTime(date: Date): string {
   const diffMs = Date.now() - date.getTime();
   const diffMins = Math.floor(diffMs / 60000);
@@ -118,7 +119,7 @@ export default async function DashboardPage() {
   // Fetch user display name
   const user = await db.user.findUnique({
     where: { id: userId },
-    select: { displayName: true, name: true },
+    select: { displayName: true, name: true, image: true },
   });
   const userName = user?.displayName || user?.name || "there";
 
@@ -185,8 +186,12 @@ export default async function DashboardPage() {
             </span>
           </div>
           <Link href="/profile">
-            <div className="h-10 w-10 rounded-full bg-secondary ring-1 ring-border flex items-center justify-center hover:ring-primary/50 transition-all">
-              <User className="h-5 w-5 text-muted-foreground" />
+            <div className="h-10 w-10 rounded-full bg-secondary ring-1 ring-border flex items-center justify-center hover:ring-primary/50 transition-all overflow-hidden">
+              {user?.image ? (
+                <Image src={user.image} alt="Profile" width={40} height={40} className="object-cover w-full h-full" />
+              ) : (
+                <User className="h-5 w-5 text-muted-foreground" />
+              )}
             </div>
           </Link>
         </div>

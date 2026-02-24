@@ -26,7 +26,12 @@ export default function MagicLinkButton() {
       body: JSON.stringify(data),
     });
 
-    const json = await res.json();
+    let json: { error?: { message?: string } } = {};
+    try {
+      json = await res.json();
+    } catch {
+      // empty or non-JSON response
+    }
 
     if (!res.ok) {
       setServerError(json.error?.message ?? "Failed to send magic link.");

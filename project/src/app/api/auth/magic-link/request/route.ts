@@ -43,12 +43,23 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const magicLink = await db.magicLink.create({
-    data: {
-      email,
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
-    },
-  });
+  let magicLink;
+  try {
+    magicLink = await db.magicLink.create({
+      data: {
+        email,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      },
+    });
+  } catch {
+    return NextResponse.json(
+      generateApiResponse(false, undefined, undefined, {
+        code: "DB_ERROR",
+        message: "An internal error occurred. Please try again.",
+      }),
+      { status: 500 }
+    );
+  }
 
   try {
     await sendMagicLinkEmail(email, magicLink.token);

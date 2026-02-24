@@ -12,12 +12,15 @@ function createPrismaClient() {
     throw new Error("DATABASE_URL is not set");
   }
 
+  // Strip sslmode from the URL so the explicit ssl config below is not overridden.
+  // Newer versions of pg-connection-string treat sslmode=require as verify-full,
+  // which rejects Supabase's certificate chain even when rejectUnauthorized: false is set.
+  const url = new URL(connectionString);
+  url.searchParams.delete("sslmode");
+
   const pool = new Pool({
-    connectionString,
-    ssl:
-      process.env.NODE_ENV === "production"
-        ? { rejectUnauthorized: false }
-        : false,
+    connectionString: url.toString(),
+    ssl: { rejectUnauthorized: false },
   });
 
   const adapter = new PrismaPg(pool);

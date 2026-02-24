@@ -70,7 +70,9 @@ export const authOptions: NextAuthOptions = {
           return { id: user.id, email: user.email, name: user.name };
         } catch (error) {
           console.error("[authorize] error:", error);
-          return null;
+          // Throw so NextAuth signals a server error instead of "CredentialsSignin" (wrong password).
+          // The client can check res.error === "ServerError" to show a better message.
+          throw new Error("ServerError");
         }
       },
     }),

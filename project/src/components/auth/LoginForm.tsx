@@ -28,7 +28,11 @@ export default function LoginForm() {
     });
 
     if (res?.error) {
-      setServerError("Invalid email or password.");
+      if (res.error === "ServerError") {
+        setServerError("A server error occurred. Please try again later.");
+      } else {
+        setServerError("Invalid email or password.");
+      }
       return;
     }
 

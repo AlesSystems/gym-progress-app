@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateApiResponse } from "@/lib/utils";
@@ -68,20 +67,14 @@ export async function POST(req: NextRequest) {
   }
 
   const ext = file.type.split("/")[1].replace("jpeg", "jpg");
-  const filename = `${userId}.${ext}`;
-  const avatarsDir = path.join(process.cwd(), "public", "avatars");
-  const filePath = path.join(avatarsDir, filename);
+  const filename = `avatars/${userId}.${ext}`;
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await mkdir(avatarsDir, { recursive: true });
-  await writeFile(filePath, buffer);
-
-  const imageUrl = `/avatars/${filename}`;
+  const blob = await put(filename, file, { access: "public", allowOverwrite: true });
 
   await db.user.update({
     where: { id: userId },
-    data: { image: imageUrl },
+    data: { image: blob.url },
   });
 
-  return NextResponse.json(generateApiResponse(true, { image: imageUrl }, "Avatar updated."));
+  return NextResponse.json(generateApiResponse(true, { image: blob.url }, "Avatar updated."));
 }

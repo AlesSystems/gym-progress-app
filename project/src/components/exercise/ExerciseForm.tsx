@@ -199,7 +199,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
             Default Reps (optional)
           </label>
           <input
-            {...register("defaultReps", { valueAsNumber: true })}
+            {...register("defaultReps", { setValueAs: (v) => v === "" || v === undefined ? undefined : Number(v) })}
             id="defaultReps"
             type="number"
             min={1}
@@ -213,7 +213,7 @@ export default function ExerciseForm({ defaultValues, exerciseId, mode }: Exerci
             Default Weight (optional)
           </label>
           <input
-            {...register("defaultWeight", { valueAsNumber: true })}
+            {...register("defaultWeight", { setValueAs: (v) => v === "" || v === undefined ? undefined : Number(v) })}
             id="defaultWeight"
             type="number"
             min={0}

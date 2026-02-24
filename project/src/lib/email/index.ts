@@ -1,9 +1,10 @@
 import { Resend } from "resend";
+import { getAppUrl } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendVerificationEmail(email: string, token: string) {
-  const verifyUrl = `${process.env.APP_URL}/verify?token=${token}`;
+  const verifyUrl = `${getAppUrl()}/verify?token=${token}`;
 
   await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "noreply@gymapp.com",
@@ -14,7 +15,7 @@ export async function sendVerificationEmail(email: string, token: string) {
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-  const resetUrl = `${process.env.APP_URL}/reset-password?token=${token}`;
+  const resetUrl = `${getAppUrl()}/reset-password?token=${token}`;
 
   await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "noreply@gymapp.com",
@@ -25,7 +26,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 }
 
 export async function sendMagicLinkEmail(email: string, token: string) {
-  const magicUrl = `${process.env.APP_URL}/api/auth/magic-link/verify/${token}`;
+  const magicUrl = `${getAppUrl()}/api/auth/magic-link/verify/${token}`;
 
   await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "noreply@gymapp.com",
