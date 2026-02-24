@@ -2,8 +2,5 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "env": {
-    "NEXTAUTH_URL": "@nextauth_url"
-  }
+  "outputDirectory": ".next"
 }
