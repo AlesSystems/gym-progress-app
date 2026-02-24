@@ -11,7 +11,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const template = await db.workoutTemplate.findUnique({ where: { id }, select: { name: true } });
-  return { title: `Edit ${template?.name ?? "Template"} – Gym Progress` };
+  return { title: `Edit ${template?.name ?? "Template"} – Ales GYM` };
 }
 
 export default async function EditTemplatePage({ params }: PageProps) {

@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import SessionDetailClient from "./SessionDetailClient";
 
-export const metadata = { title: "Session Detail – Gym Progress" };
+export const metadata = { title: "Session Detail – Ales GYM" };
 
 type Params = { params: Promise<{ id: string }> };
 

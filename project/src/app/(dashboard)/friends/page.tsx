@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { Users } from "lucide-react";
 
-export const metadata = { title: "Friends – Gym Progress" };
+export const metadata = { title: "Friends – Ales GYM" };
 
 export default async function FriendsPage() {
   const session = await getServerSession(authOptions);

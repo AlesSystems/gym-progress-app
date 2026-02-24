@@ -11,7 +11,7 @@ export default function Home() {
       
       <div className="space-y-4 max-w-md">
         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-foreground">
-          Gym Progress
+          Ales GYM
         </h1>
         <p className="text-muted-foreground text-lg">
           Track your workouts, visualize your progress, and crush your goals.
@@ -27,14 +27,6 @@ export default function Home() {
         </Button>
         <Button variant="outline" size="lg" className="w-full text-base h-12 rounded-xl" asChild>
           <Link href="/signup">Sign Up</Link>
-        </Button>
-      </div>
-      
-      <div className="pt-8">
-        <Button variant="link" className="text-muted-foreground hover:text-primary" asChild>
-          <Link href="/dashboard">
-            Go to Dashboard (Dev Shortcut)
-          </Link>
         </Button>
       </div>
     </div>

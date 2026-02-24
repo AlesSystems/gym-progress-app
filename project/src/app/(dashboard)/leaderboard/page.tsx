@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { Trophy, Flame, Dumbbell, Medal, Crown, Users } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = { title: "Leaderboard – Gym Progress" };
+export const metadata = { title: "Leaderboard – Ales GYM" };
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 

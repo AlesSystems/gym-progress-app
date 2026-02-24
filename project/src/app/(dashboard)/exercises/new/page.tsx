@@ -4,7 +4,7 @@ import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import ExerciseForm from "@/components/exercise/ExerciseForm";
 
-export const metadata = { title: "New Exercise – Gym Progress" };
+export const metadata = { title: "New Exercise – Ales GYM" };
 
 export default async function NewExercisePage() {
   const session = await getServerSession(authOptions);

@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import SettingsClient from "@/components/settings/SettingsClient";
 
-export const metadata = { title: "Settings – Gym Progress" };
+export const metadata = { title: "Settings – Ales GYM" };
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);

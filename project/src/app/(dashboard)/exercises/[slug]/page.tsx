@@ -16,7 +16,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const exercise = await db.exercise.findUnique({ where: { slug } });
-  return { title: exercise ? `${exercise.name} – Gym Progress` : "Exercise – Gym Progress" };
+  return { title: exercise ? `${exercise.name} – Ales GYM` : "Exercise – Ales GYM" };
 }
 
 export default async function ExerciseDetailPage({ params }: PageProps) {

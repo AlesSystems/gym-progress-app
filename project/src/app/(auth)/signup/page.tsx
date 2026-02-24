@@ -2,7 +2,7 @@ import Link from "next/link";
 import SignupForm from "@/components/auth/SignupForm";
 import MagicLinkButton from "@/components/auth/MagicLinkButton";
 
-export const metadata = { title: "Sign Up – Gym Progress" };
+export const metadata = { title: "Sign Up – Ales GYM" };
 
 export default function SignupPage() {
   return (

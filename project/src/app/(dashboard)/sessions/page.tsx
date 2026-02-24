@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import SessionHistoryClient from "./SessionHistoryClient";
 
-export const metadata = { title: "Session History – Gym Progress" };
+export const metadata = { title: "Session History – Ales GYM" };
 
 export default async function SessionsPage() {
   const session = await getServerSession(authOptions);

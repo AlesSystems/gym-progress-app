@@ -65,7 +65,7 @@ export default async function JoinPage({ params }: JoinPageProps) {
           {inviterName ? (
             <p className="text-sm text-gray-500 mt-1">
               <span className="font-medium text-gray-700">{inviterName}</span> invited you
-              to join Gym Progress
+              to join Ales GYM
             </p>
           ) : (
             <p className="text-sm text-gray-500 mt-1">

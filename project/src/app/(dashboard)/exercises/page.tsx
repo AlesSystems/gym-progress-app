@@ -9,7 +9,7 @@ import ExerciseCard from "@/components/exercise/ExerciseCard";
 import ExerciseFilters from "@/components/exercise/ExerciseFilters";
 import type { ExerciseType, MovementCategory } from "@/lib/validations/exercise";
 
-export const metadata = { title: "Exercise Library – Gym Progress" };
+export const metadata = { title: "Exercise Library – Ales GYM" };
 
 interface PageProps {
   searchParams: Promise<{

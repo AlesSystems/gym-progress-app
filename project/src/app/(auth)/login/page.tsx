@@ -2,7 +2,7 @@ import Link from "next/link";
 import LoginForm from "@/components/auth/LoginForm";
 import MagicLinkButton from "@/components/auth/MagicLinkButton";
 
-export const metadata = { title: "Sign In – Gym Progress" };
+export const metadata = { title: "Sign In – Ales GYM" };
 
 export default function LoginPage({
   searchParams,

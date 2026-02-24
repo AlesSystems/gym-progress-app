@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import TemplateEditor from "@/components/template/TemplateEditor";
 
-export const metadata = { title: "New Template – Gym Progress" };
+export const metadata = { title: "New Template – Ales GYM" };
 
 export default async function NewTemplatePage() {
   const session = await getServerSession(authOptions);

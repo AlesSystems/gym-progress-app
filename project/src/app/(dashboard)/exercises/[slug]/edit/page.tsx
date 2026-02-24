@@ -10,7 +10,7 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const metadata = { title: "Edit Exercise – Gym Progress" };
+export const metadata = { title: "Edit Exercise – Ales GYM" };
 
 export default async function EditExercisePage({ params }: PageProps) {
   const session = await getServerSession(authOptions);

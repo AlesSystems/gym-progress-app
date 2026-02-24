@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import DataSettingsClient from "./DataSettingsClient";
 
-export const metadata = { title: "Data & Privacy – Gym Progress" };
+export const metadata = { title: "Data & Privacy – Ales GYM" };
 
 export default async function DataSettingsPage() {
   const session = await getServerSession(authOptions);

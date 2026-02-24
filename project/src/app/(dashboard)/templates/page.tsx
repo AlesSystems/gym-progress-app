@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import TemplateListClient from "./TemplateListClient";
 
-export const metadata = { title: "Workout Templates – Gym Progress" };
+export const metadata = { title: "Workout Templates – Ales GYM" };
 
 export default async function TemplatesPage() {
   const session = await getServerSession(authOptions);
