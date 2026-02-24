@@ -21,21 +21,46 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials) return null;
 
-        // Magic token flow
-        if (credentials.magicToken) {
-          const verToken = await db.verificationToken.findUnique({
-            where: { token: credentials.magicToken },
-          });
+        try {
+          // Magic token flow
+          if (credentials.magicToken) {
+            const verToken = await db.verificationToken.findUnique({
+              where: { token: credentials.magicToken },
+            });
 
-          if (!verToken || verToken.expiresAt < new Date()) return null;
+            if (!verToken || verToken.expiresAt < new Date()) return null;
 
-          await db.verificationToken.delete({ where: { id: verToken.id } });
+            await db.verificationToken.delete({ where: { id: verToken.id } });
+
+            const user = await db.user.findUnique({
+              where: { email: verToken.email },
+            });
+
+            if (!user) return null;
+
+            await db.user.update({
+              where: { id: user.id },
+              data: { lastLoginAt: new Date() },
+            });
+
+            return { id: user.id, email: user.email, name: user.name };
+          }
+
+          // Email/password flow
+          if (!credentials.email || !credentials.password) return null;
 
           const user = await db.user.findUnique({
-            where: { email: verToken.email },
+            where: { email: credentials.email },
           });
 
-          if (!user) return null;
+          if (!user || !user.password) return null;
+
+          const isValidPassword = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isValidPassword) return null;
 
           await db.user.update({
             where: { id: user.id },
@@ -43,30 +68,10 @@ export const authOptions: NextAuthOptions = {
           });
 
           return { id: user.id, email: user.email, name: user.name };
+        } catch (error) {
+          console.error("[authorize] error:", error);
+          return null;
         }
-
-        // Email/password flow
-        if (!credentials.email || !credentials.password) return null;
-
-        const user = await db.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (!user || !user.password) return null;
-
-        const isValidPassword = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isValidPassword) return null;
-
-        await db.user.update({
-          where: { id: user.id },
-          data: { lastLoginAt: new Date() },
-        });
-
-        return { id: user.id, email: user.email, name: user.name };
       },
     }),
   ],
