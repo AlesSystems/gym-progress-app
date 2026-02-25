@@ -44,16 +44,18 @@ export default async function JoinPage({ params }: JoinPageProps) {
 
   if (!inviteValid) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-md w-full text-center space-y-4">
+      <div className="min-h-screen flex items-center justify-center bg-background px-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
+        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -z-10" />
+        <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card/40 p-8 max-w-md w-full text-center space-y-4 backdrop-blur-md shadow-2xl">
           <div className="text-3xl">🚫</div>
-          <h1 className="text-xl font-bold text-gray-900">Invalid Invite</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-xl font-bold text-foreground">Invalid Invite</h1>
+          <p className="text-sm text-muted-foreground">
             This invite link is invalid or has expired.
           </p>
           <Link
             href="/signup"
-            className="inline-block text-sm text-indigo-600 hover:underline"
+            className="inline-block text-sm text-primary hover:underline font-medium"
           >
             Sign up without an invite
           </Link>
@@ -63,18 +65,21 @@ export default async function JoinPage({ params }: JoinPageProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-md w-full space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative overflow-hidden">
+      <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -z-10" />
+      <div className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-border bg-card/40 p-8 max-w-md w-full space-y-6 backdrop-blur-md shadow-2xl">
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
         <div className="text-center">
-          <div className="text-3xl mb-3">🏋️</div>
-          <h1 className="text-2xl font-bold text-gray-900">You&apos;re invited!</h1>
+          <div className="text-4xl mb-3">🏋️</div>
+          <h1 className="text-2xl font-black text-foreground tracking-tight">You&apos;re invited!</h1>
           {inviterName ? (
-            <p className="text-sm text-gray-500 mt-1">
-              <span className="font-medium text-gray-700">{inviterName}</span> invited you
+            <p className="text-sm text-muted-foreground mt-1">
+              <span className="font-bold text-foreground">{inviterName}</span> invited you
               to join Ales GYM
             </p>
           ) : (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Create your account to get started
             </p>
           )}
@@ -82,13 +87,13 @@ export default async function JoinPage({ params }: JoinPageProps) {
 
         {isLoggedIn ? (
           <>
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-muted-foreground text-center">
               You&apos;re already signed in. Connect with{" "}
-              <span className="font-medium">{inviterName ?? "this user"}</span> to join their leaderboard.
+              <span className="font-bold text-foreground">{inviterName ?? "this user"}</span> to join their leaderboard.
             </p>
             <ConnectButton code={code} />
-            <p className="text-center text-sm text-gray-500">
-              <Link href="/leaderboard" className="text-indigo-600 font-medium hover:underline">
+            <p className="text-center text-sm text-muted-foreground">
+              <Link href="/leaderboard" className="text-primary font-bold hover:text-primary/80 transition-colors">
                 Go to leaderboard
               </Link>
             </p>
@@ -96,9 +101,9 @@ export default async function JoinPage({ params }: JoinPageProps) {
         ) : (
           <>
             <SignupForm defaultInviteCode={code} />
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href={`/login?callbackUrl=/join/${code}`} className="text-indigo-600 font-medium hover:underline">
+              <Link href={`/login?callbackUrl=/join/${code}`} className="text-primary font-black hover:text-primary/80 transition-colors underline decoration-primary/30 underline-offset-4">
                 Sign in
               </Link>
             </p>

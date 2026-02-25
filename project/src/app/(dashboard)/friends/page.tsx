@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Users } from "lucide-react";
+import RedeemInviteCode from "@/components/social/RedeemInviteCode";
 
 export const metadata = { title: "Friends – Ales GYM" };
 
@@ -61,6 +62,8 @@ export default async function FriendsPage() {
           <p className="text-muted-foreground text-lg font-medium">Your network of training partners</p>
         </div>
       </header>
+
+      <RedeemInviteCode />
 
       {friends.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-border bg-card/20 p-20 gap-8 backdrop-blur-sm text-center">

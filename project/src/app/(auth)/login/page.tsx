@@ -4,11 +4,12 @@ import MagicLinkButton from "@/components/auth/MagicLinkButton";
 
 export const metadata = { title: "Sign In – Ales GYM" };
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ verified?: string; error?: string }>;
+  searchParams: Promise<{ verified?: string; error?: string; callbackUrl?: string }>;
 }) {
+  const { callbackUrl } = await searchParams;
   return (
     <div className="relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] border border-border bg-card/40 p-6 md:p-12 backdrop-blur-md shadow-2xl space-y-8 md:space-y-10">
       {/* Decorative inner element */}
@@ -20,7 +21,7 @@ export default function LoginPage({
       </div>
 
       <div className="relative z-10">
-        <LoginForm />
+        <LoginForm callbackUrl={callbackUrl} />
       </div>
 
       <div className="flex items-center gap-4 px-2">

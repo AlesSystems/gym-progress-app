@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { signInSchema, type SignInInput } from "@/lib/validations/auth";
 
-export default function LoginForm() {
+export default function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -36,7 +36,7 @@ export default function LoginForm() {
       return;
     }
 
-    router.push("/profile");
+    router.push(callbackUrl ?? "/profile");
     router.refresh();
   };
 
