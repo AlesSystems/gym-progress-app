@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import PRBadge from "./PRBadge";
 
@@ -25,41 +25,40 @@ interface SetRowProps {
   onDelete: (setId: string) => void;
 }
 
-export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete }: SetRowProps) {
+function SetRowComponent({ set, sessionId, exerciseId, onUpdate, onDelete }: SetRowProps) {
   const [saving, setSaving] = useState(false);
 
-  const handleBlur = async (field: keyof SetData, value: unknown) => {
+  const handleBlur = (field: keyof SetData, value: unknown) => {
+    // Optimistic update first — no waiting for the API
+    onUpdate(set.id, { [field]: value });
     setSaving(true);
-    try {
-      await fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ [field]: value }),
-      });
-      onUpdate(set.id, { [field]: value });
-    } finally {
-      setSaving(false);
-    }
+    fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [field]: value }),
+    }).finally(() => setSaving(false));
   };
 
-  const handleDelete = async () => {
-    await fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, { method: "DELETE" });
+  const handleDelete = () => {
+    // Optimistic removal — no await
     onDelete(set.id);
+    fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, { method: "DELETE" });
   };
 
-  const toggleWarmup = async () => {
+  const toggleWarmup = () => {
     const newVal = !set.isWarmup;
-    await fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, {
+    // Optimistic toggle — no await
+    onUpdate(set.id, { isWarmup: newVal });
+    fetch(`/api/sessions/${sessionId}/exercises/${exerciseId}/sets/${set.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isWarmup: newVal }),
     });
-    onUpdate(set.id, { isWarmup: newVal });
   };
 
   return (
     <div
-      className={`group flex items-center gap-2 md:gap-3 rounded-2xl px-2 md:px-4 py-3 transition-all duration-300 border ${
+      className={`group flex items-center gap-2 md:gap-3 rounded-2xl px-2 md:px-4 py-3 transition-[background-color,border-color] border ${
         set.isWarmup 
           ? "bg-amber-500/5 border-amber-500/20 shadow-sm shadow-amber-500/5" 
           : "bg-secondary/20 border-border/50 hover:border-primary/30 hover:bg-secondary/30"
@@ -158,7 +157,7 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
       {/* Delete */}
       <button
         onClick={handleDelete}
-        className="shrink-0 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground/30 hover:bg-destructive/10 hover:text-destructive transition-all"
+        className="shrink-0 h-9 w-9 md:h-10 md:w-10 rounded-xl flex items-center justify-center text-muted-foreground/30 hover:bg-destructive/10 hover:text-destructive transition-colors"
         aria-label="Delete set"
       >
         <Trash2 size={16} />
@@ -166,3 +165,6 @@ export default function SetRow({ set, sessionId, exerciseId, onUpdate, onDelete 
     </div>
   );
 }
+
+const SetRow = memo(SetRowComponent);
+export default SetRow;

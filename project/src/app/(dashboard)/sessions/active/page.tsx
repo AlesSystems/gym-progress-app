@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import ActiveSessionHeader from "@/components/session/ActiveSessionHeader";
@@ -38,18 +38,16 @@ export default function ActiveSessionPage() {
       .finally(() => setLoading(false));
   }, [router]);
 
-  const handleExerciseRemove = (exId: string) => {
-    if (!session) return;
-    setSession({ ...session, exercises: session.exercises.filter((e) => e.id !== exId) });
-  };
+  const handleExerciseRemove = useCallback((exId: string) => {
+    setSession((prev) => prev ? { ...prev, exercises: prev.exercises.filter((e) => e.id !== exId) } : prev);
+  }, []);
 
-  const handleExerciseUpdate = (exId: string, sets: SetData[]) => {
-    if (!session) return;
-    setSession({
-      ...session,
-      exercises: session.exercises.map((e) => (e.id === exId ? { ...e, sets } : e)),
-    });
-  };
+  const handleExerciseUpdate = useCallback((exId: string, sets: SetData[]) => {
+    setSession((prev) => prev ? {
+      ...prev,
+      exercises: prev.exercises.map((e) => (e.id === exId ? { ...e, sets } : e)),
+    } : prev);
+  }, []);
 
   const handleAddExercise = async (exercise: { id: string; name: string }) => {
     if (!session) return;
@@ -78,7 +76,7 @@ export default function ActiveSessionPage() {
     }
   };
 
-  const calcStats = () => {
+  const stats = useMemo(() => {
     if (!session) return { totalSets: 0, totalVolume: 0, totalVolumeUnit: "kg" };
     const allSets = session.exercises.flatMap((e) => e.sets).filter((s) => !s.isWarmup);
     const totalSets = allSets.length;
@@ -88,7 +86,7 @@ export default function ActiveSessionPage() {
     }, 0);
     const totalVolumeUnit = allSets.find((s) => s.weightUnit)?.weightUnit ?? "kg";
     return { totalSets, totalVolume: Math.round(totalVolume), totalVolumeUnit };
-  };
+  }, [session]);
 
   const [finishError, setFinishError] = useState<string | null>(null);
 
@@ -117,8 +115,6 @@ export default function ActiveSessionPage() {
   }
 
   if (!session) return null;
-
-  const stats = calcStats();
 
   return (
     <>

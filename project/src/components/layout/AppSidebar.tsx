@@ -35,7 +35,7 @@ export default function AppSidebar() {
     href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   return (
-    <aside className="hidden md:flex flex-col w-20 shrink-0 h-screen sticky top-0 bg-sidebar/50 backdrop-blur-xl border-r border-border z-40">
+    <aside className="hidden md:flex flex-col w-20 shrink-0 h-screen sticky top-0 bg-sidebar border-r border-border z-40">
       {/* Logo */}
       <div className="flex items-center justify-center h-20 border-b border-border/50">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
@@ -53,7 +53,7 @@ export default function AppSidebar() {
               href={href}
               title={label}
               className={cn(
-                "group relative flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300",
+                "group relative flex h-12 w-12 items-center justify-center rounded-xl transition-colors",
                 active
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"

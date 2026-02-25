@@ -39,10 +39,10 @@ export default function RestTimerBar() {
 
   return (
     <div
-      className={`fixed bottom-24 md:bottom-0 left-4 md:left-0 right-4 md:right-0 z-[60] flex items-center justify-between px-4 md:px-6 py-3 md:py-4 rounded-2xl md:rounded-none shadow-2xl backdrop-blur-2xl border md:border-t border-border/50 transition-all duration-500 ${
+      className={`fixed bottom-24 md:bottom-0 left-4 md:left-0 right-4 md:right-0 z-[60] flex items-center justify-between px-4 md:px-6 py-3 md:py-4 rounded-2xl md:rounded-none shadow-2xl border md:border-t border-border/50 transition-colors duration-300 ${
         isAlert 
-          ? "bg-red-500/90 text-white animate-pulse" 
-          : "bg-background/90 text-foreground"
+          ? "bg-red-500 text-white animate-pulse" 
+          : "bg-card text-foreground"
       }`}
     >
       <div className="flex items-center gap-3 md:gap-4">

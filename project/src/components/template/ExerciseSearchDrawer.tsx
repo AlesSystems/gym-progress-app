@@ -49,11 +49,11 @@ export default function ExerciseSearchDrawer({ open, onClose, onAdd }: ExerciseS
 
   return (
     <>
-      {/* Backdrop with enhanced blur */}
-      <div className="fixed inset-0 z-[100] bg-background/40 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose} />
+      {/* Backdrop */}
+      <div className="fixed inset-0 z-[100] bg-background/40 backdrop-blur-sm animate-in fade-in duration-150" onClick={onClose} />
 
-      {/* Drawer with glassmorphism */}
-      <div className="fixed right-0 top-0 z-[110] h-full w-full max-w-md bg-card/80 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.3)] flex flex-col border-l border-border/50 animate-in slide-in-from-right duration-500 ease-out">
+      {/* Drawer */}
+      <div className="fixed right-0 top-0 z-[110] h-full w-full max-w-md bg-card shadow-[0_0_50px_rgba(0,0,0,0.3)] flex flex-col border-l border-border/50 animate-in slide-in-from-right duration-200 ease-out">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border/50 px-8 py-6 bg-secondary/10">
           <div>

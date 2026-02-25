@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2, Plus } from "lucide-react";
 import SetRow, { SetData } from "./SetRow";
 import PreviousBestHint from "./PreviousBestHint";
@@ -23,7 +23,7 @@ interface ExerciseAccordionProps {
   onExerciseUpdate: (exId: string, sets: SetData[]) => void;
 }
 
-export default function ExerciseAccordion({
+function ExerciseAccordion({
   exercise,
   sessionId,
   previousBest,
@@ -35,22 +35,25 @@ export default function ExerciseAccordion({
   const [adding, setAdding] = useState(false);
   const timerStart = useTimerStore((s) => s.start);
 
-  const handleSetUpdate = (setId: string, updates: Partial<SetData>) => {
-    const updated = sets.map((s) => (s.id === setId ? { ...s, ...updates } : s));
-    setSets(updated);
-    onExerciseUpdate(exercise.id, updated);
-  };
+  const handleSetUpdate = useCallback((setId: string, updates: Partial<SetData>) => {
+    setSets((prev) => {
+      const updated = prev.map((s) => (s.id === setId ? { ...s, ...updates } : s));
+      onExerciseUpdate(exercise.id, updated);
+      return updated;
+    });
+  }, [exercise.id, onExerciseUpdate]);
 
-  const handleSetDelete = (setId: string) => {
-    const updated = sets.filter((s) => s.id !== setId);
-    setSets(updated);
-    onExerciseUpdate(exercise.id, updated);
-  };
+  const handleSetDelete = useCallback((setId: string) => {
+    setSets((prev) => {
+      const updated = prev.filter((s) => s.id !== setId);
+      onExerciseUpdate(exercise.id, updated);
+      return updated;
+    });
+  }, [exercise.id, onExerciseUpdate]);
 
-  const handleAddSet = async () => {
+  const handleAddSet = useCallback(async () => {
     setAdding(true);
     try {
-      // Pre-fill from last set
       const last = sets[sets.length - 1];
       const body: Record<string, unknown> = { isWarmup: false };
       if (last) {
@@ -67,25 +70,26 @@ export default function ExerciseAccordion({
       const json = await res.json();
       if (json.success) {
         const newSet: SetData = json.data;
-        const updated = [...sets, newSet];
-        setSets(updated);
-        onExerciseUpdate(exercise.id, updated);
-        // Auto-start rest timer
+        setSets((prev) => {
+          const updated = [...prev, newSet];
+          onExerciseUpdate(exercise.id, updated);
+          return updated;
+        });
         timerStart(exercise.restSeconds ?? 90);
       }
     } finally {
       setAdding(false);
     }
-  };
+  }, [sets, sessionId, exercise.id, exercise.restSeconds, onExerciseUpdate, timerStart]);
 
-  const handleRemoveExercise = async () => {
+  const handleRemoveExercise = useCallback(async () => {
     if (!confirm(`Remove ${exercise.exerciseName} and all its sets?`)) return;
     await fetch(`/api/sessions/${sessionId}/exercises/${exercise.id}`, { method: "DELETE" });
     onExerciseRemove(exercise.id);
-  };
+  }, [exercise.id, exercise.exerciseName, sessionId, onExerciseRemove]);
 
   return (
-    <div className="rounded-3xl border border-border bg-card/30 overflow-hidden backdrop-blur-sm transition-all hover:border-primary/20 hover:bg-card/40 shadow-sm">
+    <div className="rounded-3xl border border-border bg-card/30 overflow-hidden backdrop-blur-sm transition-[border-color,background-color] hover:border-primary/20 hover:bg-card/40 shadow-sm">
       {/* Header with glassmorphism */}
       <div className="flex items-center justify-between px-4 md:px-6 py-4 bg-secondary/20 border-b border-border/50">
         <button
@@ -183,3 +187,5 @@ export default function ExerciseAccordion({
 
 // Helper icons for the header update
 import { Dumbbell, Trophy } from "lucide-react";
+
+export default memo(ExerciseAccordion);

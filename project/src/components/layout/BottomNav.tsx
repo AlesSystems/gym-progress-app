@@ -21,7 +21,7 @@ export default function BottomNav() {
     href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
   return (
-    <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50 rounded-2xl bg-card/80 backdrop-blur-xl border border-border/50 shadow-2xl shadow-black/50">
+    <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50 rounded-2xl bg-card border border-border/50 shadow-2xl shadow-black/50">
       <div className="flex items-center justify-around h-16 px-2">
         {TABS.map(({ href, icon: Icon, label }) => {
           const active = isActive(href);
@@ -30,7 +30,7 @@ export default function BottomNav() {
               key={href}
               href={href}
               className={cn(
-                "group relative flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all duration-300",
+                "group relative flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-colors",
                 active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
