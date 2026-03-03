@@ -23,30 +23,29 @@ export function DashboardCard({
     <Link
       href={href}
       className={cn(
-        "group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-card p-6 transition-all hover:bg-accent/5 hover:ring-1 hover:ring-primary/20",
+        "group relative flex flex-col justify-between overflow-hidden rounded-lg bg-card/40 p-6 border border-border/50 transition-all duration-300 hover:bg-card/60 hover:border-primary/30 backdrop-blur-sm shadow-sm hover:shadow-primary/5",
         className
       )}
     >
       <div className="flex items-start justify-between">
-        <div className={cn("rounded-xl bg-background/50 p-3 ring-1 ring-border/50 transition-colors group-hover:bg-background group-hover:ring-primary/20", accentColor)}>
-          <Icon size={24} strokeWidth={1.5} />
+        <div className={cn("rounded-md bg-secondary/50 p-2.5 border border-border/40 transition-all group-hover:bg-primary/10 group-hover:border-primary/20", accentColor)}>
+          <Icon size={20} strokeWidth={2} />
         </div>
-        {/* Optional: Add a subtle arrow or indicator here */}
       </div>
 
       <div className="mt-4">
-        <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
+        <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors tracking-tight uppercase">
           {title}
         </h3>
         {subtitle && (
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+          <p className="text-xs font-medium text-muted-foreground mt-1 line-clamp-1 uppercase tracking-wider opacity-70">
             {subtitle}
           </p>
         )}
       </div>
 
       {/* Decorative gradient blob */}
-      <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10" />
+      <div className="pointer-events-none absolute -right-4 -top-4 h-20 w-20 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10" />
     </Link>
   );
 }

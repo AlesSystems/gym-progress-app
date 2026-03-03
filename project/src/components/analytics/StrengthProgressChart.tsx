@@ -102,15 +102,15 @@ export default function StrengthProgressChart({ data, exercises, unit }: Props) 
               </linearGradient>
             ))}
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="color-mix(in oklab, var(--foreground) 0.08, transparent)" vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
             unit={` ${unit}`}

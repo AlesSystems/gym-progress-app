@@ -65,21 +65,22 @@ export default function TemplateQuickStart() {
             key={t.id}
             onClick={() => startFromTemplate(t.id)}
             disabled={startingId !== null}
-            className="group flex items-center gap-3 rounded-xl border border-border bg-card/50 p-3 text-left hover:border-primary/30 hover:bg-card/80 transition-all disabled:opacity-50"
+            className="group flex items-center gap-3 rounded-lg border border-border/50 bg-card/40 p-3 text-left hover:border-primary/40 hover:bg-card/60 transition-all duration-300 disabled:opacity-50 active:scale-[0.98] backdrop-blur-sm shadow-sm"
           >
-            <div className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+            <div className="h-9 w-9 rounded-md bg-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors border border-border/40">
               {startingId === t.id ? (
                 <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               ) : (
                 <Play
-                  size={16}
-                  className="text-muted-foreground group-hover:text-primary transition-colors ml-0.5"
+                  size={14}
+                  className="text-muted-foreground/80 group-hover:text-primary transition-colors ml-0.5"
+                  strokeWidth={2.5}
                 />
               )}
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium truncate">{t.name}</p>
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-sm font-bold truncate tracking-tight text-foreground/90 group-hover:text-primary transition-colors">{t.name}</p>
+              <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                 {t.exerciseCount} exercises
               </p>
             </div>

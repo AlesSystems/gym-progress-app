@@ -55,20 +55,20 @@ export default function FrequencyChart({ data }: Props) {
     <div className="flex flex-col gap-3">
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} margin={{ top: 4, right: 4, left: -28, bottom: 0 }} barCategoryGap="35%">
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="color-mix(in oklab, var(--foreground) 0.08, transparent)" vertical={false} />
           <XAxis
             dataKey="label"
-            tick={{ fontSize: 9, fill: "#fff" }}
+            tick={{ fontSize: 9, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
             allowDecimals={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "color-mix(in oklab, var(--foreground) 0.05, transparent)" }} />
           <defs>
             <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#34d399" stopOpacity={0.9} />

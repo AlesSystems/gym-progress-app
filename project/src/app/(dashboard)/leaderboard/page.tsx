@@ -154,15 +154,32 @@ async function fetchFriendsLeaderboard(currentUserId: string): Promise<UserStats
 }
 
 async function fetchGlobalLeaderboard(currentUserId: string): Promise<UserStats[]> {
-  // Only include users who have at least one completed session
-  const activeRows = await db.workoutSession.findMany({
-    where: { status: "completed" },
-    select: { userId: true },
-    distinct: ["userId"],
-  });
-  const userIds = activeRows.map((r) => r.userId);
-  if (userIds.length === 0) return [];
-  return buildStats(userIds, currentUserId);
+  // To avoid performance issues and timeouts, we only process a subset of candidate top users.
+  // We'll pick the top 20 by session count and top 20 by best lift.
+  const [topBySessions, topByLifts] = await Promise.all([
+    db.workoutSession.groupBy({
+      by: ["userId"],
+      _count: { _all: true },
+      where: { status: "completed" },
+      orderBy: { _count: { userId: "desc" } },
+      take: 20,
+    }),
+    db.maxLift.findMany({
+      orderBy: { weight: "desc" },
+      take: 20,
+      select: { userId: true },
+    }),
+  ]);
+
+  const candidateIds = new Set<string>();
+  topBySessions.forEach((r) => candidateIds.add(r.userId));
+  topByLifts.forEach((r) => candidateIds.add(r.userId));
+  
+  // Always include current user so they can see their own rank
+  candidateIds.add(currentUserId);
+
+  if (candidateIds.size === 0) return [];
+  return buildStats(Array.from(candidateIds), currentUserId);
 }
 
 // ─── rank helpers ─────────────────────────────────────────────────────────────
@@ -211,17 +228,17 @@ export default async function LeaderboardPage() {
   const globalBoards = toBoards(globalStats, 10);
 
   return (
-    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-4xl w-full mx-auto">
+    <div className="flex flex-col gap-10 p-6 md:p-12 max-w-5xl w-full mx-auto">
       {/* Header */}
-      <header className="px-2 space-y-2">
+      <header className="px-1 space-y-3">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-yellow-400/10 flex items-center justify-center text-yellow-400 shadow-xl shadow-yellow-400/5">
-            <Trophy size={28} />
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-sm">
+            <Trophy size={20} strokeWidth={2.5} />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Leaderboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Leaderboard</h1>
         </div>
-        <p className="text-muted-foreground text-lg font-medium">
-          Compete with your training circle — or the whole app
+        <p className="text-muted-foreground text-base max-w-lg">
+          Compete with your circle or see where you stand globally.
         </p>
       </header>
 

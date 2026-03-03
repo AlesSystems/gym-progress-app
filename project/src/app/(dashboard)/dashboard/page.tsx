@@ -85,7 +85,7 @@ export default async function DashboardPage() {
     db.workoutSession.findMany({
       where: { userId, status: "completed" },
       orderBy: { completedAt: "desc" },
-      take: 3,
+      take: 4,
       select: {
         id: true,
         name: true,
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
 
   const userName = user?.displayName || user?.name || "there";
 
-  // Recent activity — last 3 sessions
+  // Recent activity — last 4 sessions
   const recentActivity = recentSessions.map((s) => {
     const durationMinutes =
       s.completedAt
@@ -128,28 +128,31 @@ export default async function DashboardPage() {
   const streak = calcStreak(completedDates);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-5 p-4 md:space-y-6 md:p-8">
+    <div className="mx-auto max-w-4xl space-y-8 p-6 md:space-y-10 md:p-12">
       {/* Header */}
       <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-medium tracking-tight text-foreground md:text-2xl">
-            {getGreeting()}, {userName}
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            {getGreeting()}, <span className="text-primary">{userName}</span>
           </h1>
-          <div className="flex items-center gap-2 mt-1">
-            <Zap
-              className={`h-3.5 w-3.5 ${streak > 0 ? "text-orange-500 fill-orange-500" : "text-muted-foreground"}`}
-            />
-            <span className="text-xs text-muted-foreground">
-              {streak > 0 ? `${streak} day streak` : "No streak yet"}
-            </span>
+          <div className="flex items-center gap-2 mt-2">
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${streak > 0 ? "bg-orange-500/10 border-orange-500/20 text-orange-600 dark:text-orange-400" : "bg-muted/50 border-border/50 text-muted-foreground"}`}>
+              <Zap
+                className={`h-3.5 w-3.5 ${streak > 0 ? "fill-orange-500/20" : ""}`}
+                strokeWidth={streak > 0 ? 2.5 : 2}
+              />
+              <span className="text-[11px] font-bold uppercase tracking-wider">
+                {streak > 0 ? `${streak} day streak` : "No streak yet"}
+              </span>
+            </div>
           </div>
         </div>
         <Link href="/settings">
-          <div className="h-9 w-9 rounded-full bg-secondary ring-1 ring-border flex items-center justify-center hover:ring-primary/50 transition-all overflow-hidden">
+          <div className="h-11 w-11 rounded-lg bg-card/40 border border-border/60 shadow-sm backdrop-blur-sm flex items-center justify-center hover:border-primary/40 transition-all overflow-hidden group">
             {user?.image ? (
-              <Image src={user.image} alt="Profile" width={36} height={36} className="object-cover w-full h-full" />
+              <Image src={user.image} alt="Profile" width={44} height={44} className="object-cover w-full h-full group-hover:scale-105 transition-transform" />
             ) : (
-              <User className="h-4 w-4 text-muted-foreground" />
+              <User className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" strokeWidth={2} />
             )}
           </div>
         </Link>
@@ -158,62 +161,72 @@ export default async function DashboardPage() {
       {/* Active session resume banner */}
       <ActiveSessionBanner />
 
-      {/* Start empty workout */}
-      <StartWorkoutButton />
-
-      {/* Quick start from template */}
-      <TemplateQuickStart />
-
-      {/* Recent sessions */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
-            Recent Sessions
-          </h3>
-          <Link href="/sessions" className="text-xs text-primary hover:underline">
-            View All
-          </Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Left Column: Actions */}
+        <div className="space-y-8">
+          <section className="space-y-4">
+             <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-1">
+              Actions
+            </h3>
+            <StartWorkoutButton />
+            <TemplateQuickStart />
+          </section>
         </div>
 
-        {recentActivity.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border p-6 text-center">
-            <p className="text-sm text-muted-foreground">No sessions yet.</p>
-            <p className="text-xs text-muted-foreground/70 mt-1">
-              Complete your first workout to see it here.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {recentActivity.map((s) => (
-              <Link
-                key={s.id}
-                href={`/sessions/${s.id}`}
-                className="flex items-center justify-between rounded-xl border border-border bg-card/50 px-4 py-3 group hover:border-primary/20 transition-colors"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-8 w-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors shrink-0">
-                    <Calendar className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium group-hover:text-primary transition-colors truncate">
-                      {s.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {s.completedAt ? relativeTime(s.completedAt) : "—"}
-                      {s.exerciseCount > 0 && ` · ${s.exerciseCount} exercises`}
-                    </p>
-                  </div>
-                </div>
-                {s.durationMinutes != null && (
-                  <span className="text-[10px] font-medium text-muted-foreground bg-secondary/50 px-2 py-1 rounded shrink-0 ml-2">
-                    {s.durationMinutes} min
-                  </span>
-                )}
+        {/* Right Column: History */}
+        <div className="space-y-8">
+          <section className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                Recent Sessions
+              </h3>
+              <Link href="/sessions" className="text-[11px] font-bold text-primary uppercase tracking-wider hover:underline">
+                View All
               </Link>
-            ))}
-          </div>
-        )}
-      </section>
+            </div>
+
+            {recentActivity.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-border/60 p-8 text-center bg-card/20">
+                <p className="text-sm font-medium text-muted-foreground">No sessions recorded yet</p>
+                <p className="text-[11px] text-muted-foreground/60 mt-1 uppercase tracking-wide">
+                  Your journey starts with the first rep
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {recentActivity.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/sessions/${s.id}`}
+                    className="flex items-center justify-between rounded-lg border border-border/50 bg-card/40 px-5 py-4 group hover:border-primary/30 hover:bg-card/60 transition-all duration-300 backdrop-blur-sm shadow-sm"
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="h-9 w-9 rounded-md bg-secondary/60 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors shrink-0 border border-border/40">
+                        <Calendar className="h-4 w-4" strokeWidth={2} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold group-hover:text-primary transition-colors truncate tracking-tight">
+                          {s.name}
+                        </p>
+                        <p className="text-[11px] font-medium text-muted-foreground/80">
+                          {s.completedAt ? relativeTime(s.completedAt) : "—"}
+                          {s.exerciseCount > 0 && <span className="opacity-40 mx-1.5">·</span>}
+                          {s.exerciseCount > 0 && `${s.exerciseCount} exercises`}
+                        </p>
+                      </div>
+                    </div>
+                    {s.durationMinutes != null && (
+                      <span className="text-[10px] font-black text-muted-foreground/60 bg-secondary/80 px-2 py-1 rounded border border-border/30 shrink-0 ml-2 uppercase tracking-tighter">
+                        {s.durationMinutes}m
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+      </div>
     </div>
   );
 }

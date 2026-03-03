@@ -29,14 +29,14 @@ export default function AppSidebar() {
     <>
       <aside className="hidden md:flex flex-col w-20 shrink-0 h-screen sticky top-0 bg-sidebar border-r border-border z-40">
         {/* Logo */}
-        <div className="flex items-center justify-center h-20 border-b border-border/50">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-            <Dumbbell size={20} strokeWidth={2} />
+        <div className="flex items-center justify-center h-20 border-b border-border/40">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20 shadow-sm">
+            <Dumbbell size={22} strokeWidth={2} />
           </div>
         </div>
 
         {/* Primary nav */}
-        <nav className="flex-1 flex flex-col items-center gap-4 py-6 overflow-y-auto">
+        <nav className="flex-1 flex flex-col items-center gap-5 py-8 overflow-y-auto">
           {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
             const active = isActive(href);
             return (
@@ -45,49 +45,49 @@ export default function AppSidebar() {
                 href={href}
                 title={label}
                 className={cn(
-                  "group relative flex h-12 w-12 items-center justify-center rounded-xl transition-colors",
+                  "group relative flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-300",
                   active
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}
               >
                 <Icon
-                  size={22}
-                  strokeWidth={1.5}
-                  className="transition-transform duration-300 group-hover:scale-110"
+                  size={20}
+                  strokeWidth={2}
+                  className="transition-transform duration-300 group-hover:scale-105"
                 />
               </Link>
             );
           })}
 
-          <div className="w-8 border-t border-border/50" />
+          <div className="w-8 border-t border-border/30 my-2" />
 
           <button
             onClick={() => setMoreOpen(true)}
             title="More"
-            className="group flex h-12 w-12 items-center justify-center rounded-xl transition-colors text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="group flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-300 text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             <Menu
-              size={22}
-              strokeWidth={1.5}
-              className="transition-transform duration-300 group-hover:scale-110"
+              size={20}
+              strokeWidth={2}
+              className="transition-transform duration-300 group-hover:scale-105"
             />
           </button>
         </nav>
 
         {/* Settings */}
-        <div className="flex flex-col items-center gap-4 py-6 border-t border-border/50">
+        <div className="flex flex-col items-center gap-4 py-8 border-t border-border/40">
           <Link
             href="/settings"
             title="Settings"
             className={cn(
-              "group flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300",
+              "group flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-300",
               isActive("/settings")
                 ? "bg-secondary text-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground"
             )}
           >
-            <Settings size={22} strokeWidth={1.5} />
+            <Settings size={20} strokeWidth={2} />
           </Link>
         </div>
       </aside>

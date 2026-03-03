@@ -29,14 +29,16 @@ export default function StartWorkoutButton() {
     <button
       onClick={handleStart}
       disabled={starting}
-      className="w-full flex items-center justify-center gap-3 rounded-2xl bg-primary/10 hover:bg-primary/20 text-primary h-24 transition-all disabled:opacity-50 ring-1 ring-primary/20"
+      className="w-full flex items-center justify-center gap-4 rounded-lg bg-primary/10 hover:bg-primary/15 text-primary h-20 transition-all duration-300 disabled:opacity-50 border border-primary/20 backdrop-blur-sm shadow-sm hover:shadow-primary/5 active:scale-[0.98]"
     >
       {starting ? (
-        <div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       ) : (
         <>
-          <Dumbbell size={32} strokeWidth={1.5} />
-          <span className="text-lg font-semibold">Start Empty Workout</span>
+          <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center border border-primary/10">
+            <Dumbbell size={24} strokeWidth={2} />
+          </div>
+          <span className="text-base font-bold tracking-tight uppercase">Start Empty Workout</span>
         </>
       )}
     </button>

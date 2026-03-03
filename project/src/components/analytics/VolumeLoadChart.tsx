@@ -66,20 +66,20 @@ export default function VolumeLoadChart({ data, unit }: Props) {
     <div className="flex flex-col gap-3">
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barCategoryGap="28%">
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="color-mix(in oklab, var(--foreground) 0.08, transparent)" vertical={false} />
           <XAxis
             dataKey="week"
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v: number) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v))}
           />
-          <Tooltip content={<CustomTooltip unit={unit} />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+          <Tooltip content={<CustomTooltip unit={unit} />} cursor={{ fill: "color-mix(in oklab, var(--foreground) 0.05, transparent)" }} />
           <ReferenceLine
             y={avg}
             stroke="rgba(99,102,241,0.4)"

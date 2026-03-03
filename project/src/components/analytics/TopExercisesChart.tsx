@@ -73,10 +73,10 @@ export default function TopExercisesChart({ data, unit }: Props) {
               </linearGradient>
             ))}
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="color-mix(in oklab, var(--foreground) 0.08, transparent)" horizontal={false} />
           <XAxis
             type="number"
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(v: number) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v))}
@@ -85,12 +85,12 @@ export default function TopExercisesChart({ data, unit }: Props) {
             type="category"
             dataKey="name"
             width={110}
-            tick={{ fontSize: 10, fill: "#fff" }}
+            tick={{ fontSize: 10, fill: "var(--foreground)" }}
             axisLine={false}
             tickLine={false}
             tickFormatter={(val: string) => (val.length > 16 ? val.slice(0, 14) + "…" : val)}
           />
-          <Tooltip content={<CustomTooltip unit={unit} />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+          <Tooltip content={<CustomTooltip unit={unit} />} cursor={{ fill: "color-mix(in oklab, var(--foreground) 0.05, transparent)" }} />
           <Bar dataKey="volume" radius={[0, 6, 6, 0]} maxBarSize={28}>
             {data.map((_, index) => (
               <Cell key={`cell-${index}`} fill={`url(#hbar-${index % GRADIENT_COLORS.length})`} />

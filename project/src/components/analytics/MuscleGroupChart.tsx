@@ -63,10 +63,10 @@ export default function MuscleGroupChart({ data, unit }: Props) {
               <stop offset="100%" stopColor="#fb923c" stopOpacity={0.1} />
             </linearGradient>
           </defs>
-          <PolarGrid stroke="rgba(255,255,255,0.08)" />
+          <PolarGrid stroke="color-mix(in oklab, var(--foreground) 0.12, transparent)" />
           <PolarAngleAxis
             dataKey="muscle"
-            tick={{ fontSize: 10, fill: "#fff", fontWeight: 600 }}
+            tick={{ fontSize: 10, fill: "var(--foreground)", fontWeight: 600 }}
             tickFormatter={(val: string) =>
               val.length > 10 ? val.slice(0, 9) + "…" : val
             }
@@ -74,7 +74,7 @@ export default function MuscleGroupChart({ data, unit }: Props) {
           <PolarRadiusAxis
             angle={30}
             domain={[0, 100]}
-            tick={{ fontSize: 9, fill: "#fff" }}
+            tick={{ fontSize: 9, fill: "var(--foreground)" }}
             axisLine={false}
             tickCount={4}
           />

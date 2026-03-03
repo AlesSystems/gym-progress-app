@@ -33,27 +33,29 @@ export default function RecentSessionRow({
   return (
     <Link
       href={`/sessions/${id}`}
-      className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-secondary transition-colors"
+      className="flex items-center gap-4 rounded-lg px-4 py-3 bg-card/40 border border-border/50 hover:bg-card/60 hover:border-primary/20 transition-all duration-300 backdrop-blur-sm group shadow-sm"
     >
-      <div className="h-8 w-8 shrink-0 rounded-lg bg-secondary flex items-center justify-center">
-        <Dumbbell size={14} className="text-muted-foreground" />
+      <div className="h-9 w-9 shrink-0 rounded-md bg-secondary/60 flex items-center justify-center border border-border/40 group-hover:text-primary transition-colors">
+        <Dumbbell size={16} strokeWidth={2} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-foreground truncate">{name ?? "Workout"}</p>
-        <div className="flex items-center gap-3 mt-0.5">
+        <p className="text-sm font-bold text-foreground truncate tracking-tight group-hover:text-primary transition-colors">{name ?? "Workout"}</p>
+        <div className="flex items-center gap-3 mt-1">
           {durationMinutes && (
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock size={10} />
+            <span className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground uppercase tracking-wider">
+              <Clock size={10} strokeWidth={3} />
               {durationMinutes}m
             </span>
           )}
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Flame size={10} />
+          <span className="flex items-center gap-1.5 text-[10px] font-black text-muted-foreground uppercase tracking-wider">
+            <Flame size={10} strokeWidth={3} />
             {totalVolume > 0 ? `${totalVolume.toLocaleString()} ${totalVolumeUnit ?? ""}`.trim() : `${exerciseCount} ex`}
           </span>
         </div>
       </div>
-      <span className="text-xs text-muted-foreground shrink-0">{formatDate(startedAt)}</span>
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{formatDate(startedAt)}</span>
+      </div>
     </Link>
   );
 }
