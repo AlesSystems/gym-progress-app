@@ -75,45 +75,14 @@ export async function POST(req: NextRequest, { params }: Params) {
       weight: result.data.weight !== undefined ? result.data.weight : null,
       weightUnit: result.data.weightUnit ?? null,
       reps: result.data.reps !== undefined ? result.data.reps : null,
-      rpe: result.data.rpe !== undefined ? result.data.rpe : null,
       notes: result.data.notes ?? null,
       isWarmup: result.data.isWarmup,
       completedAt,
     },
   });
 
-  // PR detection for non-warmup sets with weight + reps
-  let isNewPR = false;
-  if (!result.data.isWarmup && result.data.weight !== undefined && result.data.reps !== undefined) {
-    const existing = await db.maxLift.findUnique({
-      where: { userId_exerciseId: { userId, exerciseId: sessionExercise.exerciseId } },
-    });
-    if (!existing || result.data.weight > existing.weight) {
-      await db.maxLift.upsert({
-        where: { userId_exerciseId: { userId, exerciseId: sessionExercise.exerciseId } },
-        update: {
-          weight: result.data.weight,
-          unit: result.data.weightUnit ?? "kg",
-          reps: result.data.reps,
-          achievedAt: completedAt ?? new Date(),
-          workoutId: id,
-        },
-        create: {
-          userId,
-          exerciseId: sessionExercise.exerciseId,
-          weight: result.data.weight,
-          unit: result.data.weightUnit ?? "kg",
-          reps: result.data.reps,
-          achievedAt: completedAt ?? new Date(),
-          workoutId: id,
-        },
-      });
-      isNewPR = true;
-    }
-  }
-
   return NextResponse.json(
-    generateApiResponse(true, { ...serializeSet(newSet), isNewPR }, "Set logged."),
+    generateApiResponse(true, serializeSet(newSet), "Set logged."),
     { status: 201 }
   );
 }

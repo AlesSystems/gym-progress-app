@@ -89,6 +89,7 @@ export default function ActiveSessionPage() {
   }, [session]);
 
   const [finishError, setFinishError] = useState<string | null>(null);
+  const [cancelling, setCancelling] = useState(false);
 
   const handleFinishWorkout = () => {
     if (!session) return;
@@ -100,6 +101,22 @@ export default function ActiveSessionPage() {
     }
     setFinishError(null);
     setShowSummary(true);
+  };
+
+  const handleCancelWorkout = async () => {
+    if (!session) return;
+    if (!confirm("Are you sure you want to cancel this workout? This session will not be saved as completed.")) return;
+    setCancelling(true);
+    try {
+      await fetch(`/api/sessions/${session.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "abandoned" }),
+      });
+      router.push("/sessions");
+    } finally {
+      setCancelling(false);
+    }
   };
 
   const elapsedMinutes = session
@@ -164,6 +181,13 @@ export default function ActiveSessionPage() {
                 >
                   FINISH WORKOUT 
                   <span className="text-xl md:text-2xl">✓</span>
+                </button>
+                <button
+                  onClick={handleCancelWorkout}
+                  disabled={cancelling}
+                  className="w-full h-12 rounded-2xl border border-destructive/30 bg-destructive/5 px-6 py-3 text-sm font-bold text-destructive hover:bg-destructive/10 hover:border-destructive/50 active:scale-[0.98] transition-all disabled:opacity-50"
+                >
+                  {cancelling ? "Cancelling…" : "Cancel Workout"}
                 </button>
               </div>
             </>

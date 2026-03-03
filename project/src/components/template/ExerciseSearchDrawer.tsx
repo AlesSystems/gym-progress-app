@@ -23,6 +23,10 @@ export default function ExerciseSearchDrawer({ open, onClose, onAdd }: ExerciseS
   const [category, setCategory] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -151,6 +155,80 @@ export default function ExerciseSearchDrawer({ open, onClose, onAdd }: ExerciseS
                   </button>
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* Create New Exercise Section */}
+        <div className="border-t border-border/50 px-8 py-5 bg-secondary/10">
+          {!showCreate ? (
+            <button
+              onClick={() => { setShowCreate(true); setNewName(search); setCreateError(null); }}
+              className="w-full flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border/50 bg-secondary/5 px-4 py-4 text-sm font-bold text-muted-foreground hover:border-primary/40 hover:bg-primary/5 hover:text-primary transition-all"
+            >
+              <Plus size={18} />
+              Create New Exercise
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Quick Create</p>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Exercise name..."
+                maxLength={100}
+                className="w-full h-12 rounded-xl border border-border bg-background/50 px-4 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
+                autoFocus
+              />
+              {createError && (
+                <p className="text-xs font-bold text-destructive">{createError}</p>
+              )}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowCreate(false); setCreateError(null); }}
+                  className="flex-1 h-10 rounded-xl border border-border bg-background text-sm font-bold text-muted-foreground hover:bg-secondary transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    if (newName.trim().length < 2) {
+                      setCreateError("Name must be at least 2 characters.");
+                      return;
+                    }
+                    setCreating(true);
+                    setCreateError(null);
+                    try {
+                      const res = await fetch("/api/exercises", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          name: newName.trim(),
+                          type: "compound",
+                          movementCategory: "other",
+                          primaryMuscle: "other",
+                          secondaryMuscles: [],
+                        }),
+                      });
+                      const json = await res.json();
+                      if (json.success) {
+                        onAdd(json.data);
+                        setShowCreate(false);
+                        setNewName("");
+                      } else {
+                        setCreateError(json.error?.message ?? "Failed to create exercise.");
+                      }
+                    } finally {
+                      setCreating(false);
+                    }
+                  }}
+                  disabled={creating || newName.trim().length < 2}
+                  className="flex-1 h-10 rounded-xl bg-primary text-sm font-black text-primary-foreground hover:bg-primary/90 active:scale-95 transition-all disabled:opacity-50"
+                >
+                  {creating ? "Creating…" : "Create & Add"}
+                </button>
+              </div>
             </div>
           )}
         </div>

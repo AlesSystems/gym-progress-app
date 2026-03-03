@@ -72,7 +72,6 @@ export async function PUT(req: NextRequest, { params }: Params) {
       ...(result.data.weight !== undefined && { weight: result.data.weight }),
       ...(result.data.weightUnit !== undefined && { weightUnit: result.data.weightUnit }),
       ...(result.data.reps !== undefined && { reps: result.data.reps }),
-      ...(result.data.rpe !== undefined && { rpe: result.data.rpe }),
       ...(result.data.notes !== undefined && { notes: result.data.notes }),
       ...(result.data.isWarmup !== undefined && { isWarmup: result.data.isWarmup }),
       ...(result.data.completedAt !== undefined && {

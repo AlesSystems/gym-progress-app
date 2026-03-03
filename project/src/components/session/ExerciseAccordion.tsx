@@ -3,7 +3,6 @@
 import { memo, useCallback, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2, Plus } from "lucide-react";
 import SetRow, { SetData } from "./SetRow";
-import PreviousBestHint from "./PreviousBestHint";
 import { useTimerStore } from "@/store/timer";
 
 export interface SessionExercise {
@@ -18,7 +17,6 @@ export interface SessionExercise {
 interface ExerciseAccordionProps {
   exercise: SessionExercise;
   sessionId: string;
-  previousBest?: { weight?: number | null; weightUnit?: string | null; reps?: number | null; rpe?: number | null } | null;
   onExerciseRemove: (exId: string) => void;
   onExerciseUpdate: (exId: string, sets: SetData[]) => void;
 }
@@ -26,7 +24,6 @@ interface ExerciseAccordionProps {
 function ExerciseAccordion({
   exercise,
   sessionId,
-  previousBest,
   onExerciseRemove,
   onExerciseUpdate,
 }: ExerciseAccordionProps) {
@@ -60,7 +57,7 @@ function ExerciseAccordion({
         if (last.weight !== null && last.weight !== undefined) body.weight = last.weight;
         if (last.weightUnit) body.weightUnit = last.weightUnit;
         if (last.reps !== null && last.reps !== undefined) body.reps = last.reps;
-        if (last.rpe !== null && last.rpe !== undefined) body.rpe = last.rpe;
+
       }
       const res = await fetch(`/api/sessions/${sessionId}/exercises/${exercise.id}/sets`, {
         method: "POST",
@@ -118,20 +115,6 @@ function ExerciseAccordion({
 
       {open && (
         <div className="px-3 md:px-6 py-4 md:py-6 space-y-4">
-          {previousBest && (
-            <div className="rounded-2xl bg-primary/5 border border-primary/10 p-2 md:p-3 flex items-center gap-2 md:gap-3">
-              <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <Trophy className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
-              </div>
-              <PreviousBestHint
-                weight={previousBest.weight}
-                weightUnit={previousBest.weightUnit}
-                reps={previousBest.reps}
-                rpe={previousBest.rpe}
-              />
-            </div>
-          )}
-
           {/* Column headers with better typography */}
           <div className="flex items-center gap-2 md:gap-4 px-2 md:px-4 text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-[0.1em] md:tracking-[0.15em] opacity-60">
             <span className="w-6 md:w-8 shrink-0 text-center">#</span>
@@ -139,7 +122,6 @@ function ExerciseAccordion({
             <span className="w-16 md:w-20 text-center">Weight</span>
             <span className="w-1 md:w-2 shrink-0" />
             <span className="w-12 md:w-16 text-center">Reps</span>
-            <span className="w-12 md:w-16 text-center">RPE</span>
             <span className="flex-1 shrink-0" />
           </div>
 
@@ -186,6 +168,6 @@ function ExerciseAccordion({
 }
 
 // Helper icons for the header update
-import { Dumbbell, Trophy } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 
 export default memo(ExerciseAccordion);

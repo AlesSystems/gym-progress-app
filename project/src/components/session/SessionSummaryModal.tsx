@@ -4,20 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 
-interface PR {
-  exerciseName: string;
-  weight: number;
-  weightUnit: string;
-  reps: number;
-}
-
 interface SessionSummaryModalProps {
   sessionId: string;
   durationMinutes: number;
   totalSets: number;
   totalVolume: number;
   totalVolumeUnit?: string | null;
-  newPRs?: PR[];
   onKeepTraining: () => void;
 }
 
@@ -27,7 +19,6 @@ export default function SessionSummaryModal({
   totalSets,
   totalVolume,
   totalVolumeUnit,
-  newPRs = [],
   onKeepTraining,
 }: SessionSummaryModalProps) {
   const router = useRouter();
@@ -85,28 +76,6 @@ export default function SessionSummaryModal({
           </div>
         </div>
 
-        {/* New PRs Section */}
-        {newPRs.length > 0 && (
-          <div className="mb-8 rounded-3xl bg-amber-500/10 border border-amber-500/20 p-6 backdrop-blur-sm">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <Trophy size={20} className="text-amber-500" />
-              </div>
-              <p className="text-sm font-black text-amber-500 uppercase tracking-widest">New Personal Records!</p>
-            </div>
-            <div className="space-y-2">
-              {newPRs.map((pr, i) => (
-                <div key={i} className="flex items-center justify-between bg-amber-500/5 rounded-xl px-4 py-2 border border-amber-500/10">
-                  <span className="text-sm font-bold text-foreground">{pr.exerciseName}</span>
-                  <span className="text-sm font-black text-amber-500">
-                    {pr.weight} {pr.weightUnit} × {pr.reps}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Session notes */}
         <div className="space-y-2 mb-8">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-2">Session Notes</label>
@@ -145,6 +114,3 @@ export default function SessionSummaryModal({
     </div>
   );
 }
-
-// Helper icons
-import { Trophy } from "lucide-react";

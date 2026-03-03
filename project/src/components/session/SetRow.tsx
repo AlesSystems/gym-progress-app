@@ -2,7 +2,6 @@
 
 import { memo, useState } from "react";
 import { Trash2 } from "lucide-react";
-import PRBadge from "./PRBadge";
 
 export interface SetData {
   id: string;
@@ -10,11 +9,9 @@ export interface SetData {
   weight?: number | null;
   weightUnit?: string | null;
   reps?: number | null;
-  rpe?: number | null;
   notes?: string | null;
   isWarmup: boolean;
   completedAt?: string | null;
-  isNewPR?: boolean;
 }
 
 interface SetRowProps {
@@ -128,31 +125,8 @@ function SetRowComponent({ set, sessionId, exerciseId, onUpdate, onDelete }: Set
         </span>
       </div>
 
-      {/* RPE Input */}
-      <div className="relative">
-        <input
-          type="number"
-          defaultValue={set.rpe ?? ""}
-          placeholder="-"
-          min={1}
-          max={10}
-          step={0.5}
-          onBlur={(e) => {
-            const v = e.target.value === "" ? null : parseFloat(e.target.value);
-            handleBlur("rpe", v);
-          }}
-          className="w-12 md:w-16 h-10 rounded-xl border border-border bg-background/50 px-1 md:px-2 text-center text-sm font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-muted-foreground/30"
-          aria-label="RPE"
-        />
-        <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-widest absolute -bottom-4 left-1/2 -translate-x-1/2">
-          RPE
-        </span>
-      </div>
-
-      {/* PR badge */}
-      <div className="flex-1 flex justify-center scale-90 md:scale-100">
-        {set.isNewPR && <PRBadge />}
-      </div>
+      {/* Spacer */}
+      <div className="flex-1" />
 
       {/* Delete */}
       <button

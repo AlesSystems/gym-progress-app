@@ -123,3 +123,38 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
   return NextResponse.json(generateApiResponse(true, updated, `Session ${result.data.status}.`));
 }
+
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user) {
+    return NextResponse.json(
+      generateApiResponse(false, undefined, undefined, { code: "UNAUTHORIZED", message: "Not authenticated." }),
+      { status: 401 }
+    );
+  }
+
+  const userId = (session.user as { id: string }).id;
+  const { id } = await params;
+
+  const workoutSession = await getOwnedSession(id, userId);
+  if (!workoutSession) {
+    return NextResponse.json(
+      generateApiResponse(false, undefined, undefined, { code: "NOT_FOUND", message: "Session not found." }),
+      { status: 404 }
+    );
+  }
+
+  if (workoutSession.status === "in_progress") {
+    return NextResponse.json(
+      generateApiResponse(false, undefined, undefined, {
+        code: "FORBIDDEN",
+        message: "Cannot delete an in-progress session. Cancel it first.",
+      }),
+      { status: 403 }
+    );
+  }
+
+  await db.workoutSession.delete({ where: { id } });
+
+  return NextResponse.json(generateApiResponse(true, undefined, "Session deleted."));
+}

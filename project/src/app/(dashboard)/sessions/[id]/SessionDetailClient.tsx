@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Clock, Dumbbell, ArrowLeft, RotateCcw } from "lucide-react";
+import { Clock, Dumbbell, ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface SetDetail {
@@ -44,6 +45,7 @@ interface SessionDetailClientProps {
 
 export default function SessionDetailClient({ session }: SessionDetailClientProps) {
   const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
 
   const allSets = session.exercises.flatMap((e) => e.sets).filter((s) => !s.isWarmup);
   const totalVolume = allSets.reduce((sum, s) => {
@@ -66,6 +68,22 @@ export default function SessionDetailClient({ session }: SessionDetailClientProp
       router.push("/sessions/active");
     } else {
       alert(json.error?.message ?? "Failed to start session.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this session? This action cannot be undone.")) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/sessions/${session.id}`, { method: "DELETE" });
+      if (res.ok) {
+        router.push("/sessions");
+      } else {
+        const json = await res.json();
+        alert(json.error?.message ?? "Failed to delete session.");
+      }
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -92,15 +110,25 @@ export default function SessionDetailClient({ session }: SessionDetailClientProp
             </p>
           </div>
           
-          {session.templateId && (
+          <div className="flex items-center gap-3">
+            {session.templateId && (
+              <button
+                onClick={handleRepeat}
+                className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+              >
+                <RotateCcw size={18} />
+                Repeat Workout
+              </button>
+            )}
             <button
-              onClick={handleRepeat}
-              className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+              onClick={handleDelete}
+              disabled={deleting}
+              className="flex items-center gap-2 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-2.5 text-sm font-bold text-destructive hover:bg-destructive/10 hover:border-destructive/50 active:scale-[0.98] transition-all disabled:opacity-50"
             >
-              <RotateCcw size={18} />
-              Repeat Workout
+              <Trash2 size={18} />
+              {deleting ? "Deleting…" : "Delete"}
             </button>
-          )}
+          </div>
         </header>
 
         {/* Stats Grid with Glassmorphism */}
@@ -154,7 +182,6 @@ export default function SessionDetailClient({ session }: SessionDetailClientProp
                           <th className="text-left pb-3 px-1">Set</th>
                           <th className="text-center pb-3">Weight</th>
                           <th className="text-center pb-3">Reps</th>
-                          <th className="text-center pb-3">RPE</th>
                           <th className="text-right pb-3 px-1">Status</th>
                         </tr>
                       </thead>
@@ -172,9 +199,6 @@ export default function SessionDetailClient({ session }: SessionDetailClientProp
                               ) : "—"}
                             </td>
                             <td className="py-3 text-center font-semibold text-lg">{s.reps ?? "—"}</td>
-                            <td className="py-3 text-center font-medium">
-                              {s.rpe ? <span className="text-primary">{s.rpe}</span> : "—"}
-                            </td>
                             <td className="py-3 px-1 text-right text-[10px] font-bold uppercase tracking-tighter opacity-50">
                               {s.isWarmup ? "Warm-up" : "Working"}
                             </td>
