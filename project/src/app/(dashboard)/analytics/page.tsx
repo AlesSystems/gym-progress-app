@@ -12,13 +12,31 @@ import {
   Zap,
   Target,
 } from "lucide-react";
-import VolumeLoadChart from "@/components/analytics/VolumeLoadChart";
-import StrengthProgressChart from "@/components/analytics/StrengthProgressChart";
-import FrequencyChart from "@/components/analytics/FrequencyChart";
-import MuscleGroupChart from "@/components/analytics/MuscleGroupChart";
-import TopExercisesChart from "@/components/analytics/TopExercisesChart";
-import DurationTrendChart from "@/components/analytics/DurationTrendChart";
-import PersonalRecords from "@/components/analytics/PersonalRecords";
+import dynamic from "next/dynamic";
+
+const ChartPlaceholder = () => <div className="h-[200px] rounded-xl bg-secondary/50 animate-pulse" />;
+
+const VolumeLoadChart = dynamic(() => import("@/components/analytics/VolumeLoadChart"), {
+  loading: ChartPlaceholder,
+});
+const StrengthProgressChart = dynamic(() => import("@/components/analytics/StrengthProgressChart"), {
+  loading: ChartPlaceholder,
+});
+const FrequencyChart = dynamic(() => import("@/components/analytics/FrequencyChart"), {
+  loading: ChartPlaceholder,
+});
+const MuscleGroupChart = dynamic(() => import("@/components/analytics/MuscleGroupChart"), {
+  loading: ChartPlaceholder,
+});
+const TopExercisesChart = dynamic(() => import("@/components/analytics/TopExercisesChart"), {
+  loading: ChartPlaceholder,
+});
+const DurationTrendChart = dynamic(() => import("@/components/analytics/DurationTrendChart"), {
+  loading: ChartPlaceholder,
+});
+const PersonalRecords = dynamic(() => import("@/components/analytics/PersonalRecords"), {
+  loading: ChartPlaceholder,
+});
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -61,11 +79,18 @@ export default async function AnalyticsPage() {
   const sessions = await db.workoutSession.findMany({
     where: { userId, status: "completed", completedAt: { gte: sixMonthsAgo } },
     orderBy: { completedAt: "asc" },
-    include: {
+    select: {
+      name: true,
+      startedAt: true,
+      completedAt: true,
       exercises: {
-        include: {
+        select: {
+          exerciseName: true,
           exercise: { select: { name: true, primaryMuscle: true } },
-          sets: { where: { isWarmup: false } },
+          sets: {
+            where: { isWarmup: false },
+            select: { weight: true, reps: true, weightUnit: true },
+          },
         },
       },
     },

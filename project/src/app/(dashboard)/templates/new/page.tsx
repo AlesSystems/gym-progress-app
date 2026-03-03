@@ -1,7 +1,11 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
-import TemplateEditor from "@/components/template/TemplateEditor";
+import dynamic from "next/dynamic";
+
+const TemplateEditor = dynamic(() => import("@/components/template/TemplateEditor"), {
+  loading: () => <div className="h-96 animate-pulse rounded-xl bg-secondary/50" />,
+});
 
 export const metadata = { title: "New Template – Ales GYM" };
 

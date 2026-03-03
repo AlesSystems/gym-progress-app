@@ -27,10 +27,20 @@ export async function GET(req: NextRequest) {
       orderBy: { startedAt: "desc" },
       skip,
       take: limit,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        templateId: true,
+        startedAt: true,
+        completedAt: true,
         exercises: {
-          include: {
-            sets: { where: { isWarmup: false } },
+          select: {
+            id: true,
+            sets: {
+              where: { isWarmup: false },
+              select: { weight: true, reps: true, weightUnit: true },
+            },
           },
         },
       },
@@ -63,7 +73,8 @@ export async function GET(req: NextRequest) {
   });
 
   return NextResponse.json(
-    generateApiResponse(true, { sessions: data, total, page, limit, pages: Math.ceil(total / limit) })
+    generateApiResponse(true, { sessions: data, total, page, limit, pages: Math.ceil(total / limit) }),
+    { headers: { "Cache-Control": "private, max-age=0, stale-while-revalidate=30" } }
   );
 }
 

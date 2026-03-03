@@ -2,7 +2,11 @@ import { getServerSession } from "next-auth/next";
 import { redirect, notFound } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import TemplateEditor from "@/components/template/TemplateEditor";
+import dynamic from "next/dynamic";
+
+const TemplateEditor = dynamic(() => import("@/components/template/TemplateEditor"), {
+  loading: () => <div className="h-96 animate-pulse rounded-xl bg-secondary/50" />,
+});
 
 interface PageProps {
   params: Promise<{ id: string }>;

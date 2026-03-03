@@ -76,29 +76,38 @@ export default async function DashboardPage() {
 
   const userId = (session.user as { id: string }).id;
 
-  // Fetch user display name
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: { displayName: true, name: true, image: true },
-  });
-  const userName = user?.displayName || user?.name || "there";
-
-  // Fetch recent completed sessions (for recent activity + streak)
-  const recentSessions = await db.workoutSession.findMany({
-    where: { userId, status: "completed" },
-    orderBy: { completedAt: "desc" },
-    take: 30,
-    include: {
-      exercises: {
-        include: {
-          sets: { where: { isWarmup: false } },
+  // Parallel fetch: user info, recent 3 sessions (for display), streak dates
+  const [user, recentSessions, streakDates] = await Promise.all([
+    db.user.findUnique({
+      where: { id: userId },
+      select: { displayName: true, name: true, image: true },
+    }),
+    db.workoutSession.findMany({
+      where: { userId, status: "completed" },
+      orderBy: { completedAt: "desc" },
+      take: 3,
+      select: {
+        id: true,
+        name: true,
+        startedAt: true,
+        completedAt: true,
+        exercises: {
+          select: { id: true },
         },
       },
-    },
-  });
+    }),
+    db.workoutSession.findMany({
+      where: { userId, status: "completed", completedAt: { not: null } },
+      orderBy: { completedAt: "desc" },
+      take: 30,
+      select: { completedAt: true },
+    }),
+  ]);
+
+  const userName = user?.displayName || user?.name || "there";
 
   // Recent activity — last 3 sessions
-  const recentActivity = recentSessions.slice(0, 3).map((s) => {
+  const recentActivity = recentSessions.map((s) => {
     const durationMinutes =
       s.completedAt
         ? Math.round((s.completedAt.getTime() - s.startedAt.getTime()) / 60000)
@@ -113,7 +122,7 @@ export default async function DashboardPage() {
   });
 
   // Streak
-  const completedDates = recentSessions
+  const completedDates = streakDates
     .map((s) => s.completedAt)
     .filter((d): d is Date => d !== null);
   const streak = calcStreak(completedDates);

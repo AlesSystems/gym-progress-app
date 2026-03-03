@@ -45,40 +45,55 @@ type UserStats = {
 };
 
 async function buildStats(userIds: string[], currentUserId: string): Promise<UserStats[]> {
-  const users = await db.user.findMany({
-    where: { id: { in: userIds } },
-    select: { id: true, displayName: true, name: true, image: true },
-  });
-
-  const sessions = await db.workoutSession.findMany({
-    where: { userId: { in: userIds }, status: "completed" },
-    select: {
-      userId: true,
-      completedAt: true,
-      exercises: {
-        select: {
-          sets: {
-            where: { isWarmup: false },
-            select: { weight: true, reps: true },
+  // Run all three queries in parallel
+  const [users, sessions, maxLifts] = await Promise.all([
+    db.user.findMany({
+      where: { id: { in: userIds } },
+      select: { id: true, displayName: true, name: true, image: true },
+    }),
+    db.workoutSession.findMany({
+      where: { userId: { in: userIds }, status: "completed" },
+      select: {
+        userId: true,
+        completedAt: true,
+        exercises: {
+          select: {
+            sets: {
+              where: { isWarmup: false },
+              select: { weight: true, reps: true },
+            },
           },
         },
       },
-    },
-  });
+    }),
+    db.maxLift.findMany({
+      where: { userId: { in: userIds } },
+      orderBy: { weight: "desc" },
+      select: {
+        userId: true,
+        weight: true,
+        unit: true,
+        exercise: { select: { name: true } },
+      },
+    }),
+  ]);
 
-  const maxLifts = await db.maxLift.findMany({
-    where: { userId: { in: userIds } },
-    orderBy: { weight: "desc" },
-    select: {
-      userId: true,
-      weight: true,
-      unit: true,
-      exercise: { select: { name: true } },
-    },
-  });
+  // Pre-group sessions by userId for O(n) lookup instead of O(n*m) filter
+  const sessionsByUser = new Map<string, typeof sessions>();
+  for (const s of sessions) {
+    const arr = sessionsByUser.get(s.userId);
+    if (arr) arr.push(s);
+    else sessionsByUser.set(s.userId, [s]);
+  }
+
+  // Pre-group maxLifts by userId
+  const maxLiftByUser = new Map<string, (typeof maxLifts)[0]>();
+  for (const l of maxLifts) {
+    if (!maxLiftByUser.has(l.userId)) maxLiftByUser.set(l.userId, l);
+  }
 
   return users.map((u) => {
-    const userSessions = sessions.filter((s) => s.userId === u.id);
+    const userSessions = sessionsByUser.get(u.id) ?? [];
     const totalSessions = userSessions.length;
     const completedDates = userSessions
       .map((s) => s.completedAt)
@@ -90,7 +105,7 @@ async function buildStats(userIds: string[], currentUserId: string): Promise<Use
         return v;
       }, 0);
     }, 0);
-    const topLift = maxLifts.find((l) => l.userId === u.id);
+    const topLift = maxLiftByUser.get(u.id);
     return {
       userId: u.id,
       displayName: u.displayName ?? u.name ?? "Unknown",
@@ -107,21 +122,26 @@ async function buildStats(userIds: string[], currentUserId: string): Promise<Use
 }
 
 async function fetchFriendsLeaderboard(currentUserId: string): Promise<UserStats[]> {
-  const currentUser = await db.user.findUnique({
-    where: { id: currentUserId },
-    select: { invitedBy: true },
-  });
+  // Fetch user info and invitees in parallel
+  const [currentUser, invitees, teamMemberships] = await Promise.all([
+    db.user.findUnique({
+      where: { id: currentUserId },
+      select: { invitedBy: true },
+    }),
+    db.user.findMany({
+      where: { invitedBy: currentUserId },
+      select: { id: true },
+    }),
+    db.teamMember.findMany({
+      where: { userId: currentUserId },
+      select: { teamId: true },
+    }),
+  ]);
+
   const peerIds = new Set<string>([currentUserId]);
   if (currentUser?.invitedBy) peerIds.add(currentUser.invitedBy);
-  const invitees = await db.user.findMany({
-    where: { invitedBy: currentUserId },
-    select: { id: true },
-  });
   invitees.forEach((u) => peerIds.add(u.id));
-  const teamMemberships = await db.teamMember.findMany({
-    where: { userId: currentUserId },
-    select: { teamId: true },
-  });
+
   if (teamMemberships.length > 0) {
     const teamIds = teamMemberships.map((t) => t.teamId);
     const teammates = await db.teamMember.findMany({

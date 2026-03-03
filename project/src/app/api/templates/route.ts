@@ -35,7 +35,9 @@ export async function GET(req: NextRequest) {
     updatedAt: t.updatedAt,
   }));
 
-  return NextResponse.json(generateApiResponse(true, { templates: data }));
+  return NextResponse.json(generateApiResponse(true, { templates: data }), {
+    headers: { "Cache-Control": "private, max-age=0, stale-while-revalidate=30" },
+  });
 }
 
 export async function POST(req: NextRequest) {

@@ -38,9 +38,18 @@ export async function GET(req: NextRequest) {
         status: "completed",
         completedAt: { gte: fromDate, lte: toDate },
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        startedAt: true,
+        completedAt: true,
         exercises: {
-          include: { sets: { where: { isWarmup: false } } },
+          select: {
+            sets: {
+              where: { isWarmup: false },
+              select: { weight: true, reps: true, weightUnit: true },
+            },
+          },
         },
       },
       orderBy: { completedAt: "asc" },
@@ -50,7 +59,15 @@ export async function GET(req: NextRequest) {
         userId,
         scheduledDate: { gte: fromDate, lte: toDate },
       },
-      include: { template: { select: { name: true } } },
+      select: {
+        id: true,
+        title: true,
+        templateId: true,
+        scheduledDate: true,
+        notes: true,
+        completedSessionId: true,
+        template: { select: { name: true } },
+      },
       orderBy: { scheduledDate: "asc" },
     }),
   ]);
@@ -129,5 +146,7 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  return NextResponse.json(generateApiResponse(true, { from, to, days }));
+  return NextResponse.json(generateApiResponse(true, { from, to, days }), {
+    headers: { "Cache-Control": "private, max-age=0, stale-while-revalidate=30" },
+  });
 }

@@ -112,7 +112,8 @@ export async function GET(req: NextRequest) {
     generateApiResponse(true, {
       exercises,
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
-    })
+    }),
+    { headers: { "Cache-Control": "private, max-age=0, stale-while-revalidate=60" } }
   );
 }
 

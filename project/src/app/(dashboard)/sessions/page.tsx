@@ -16,10 +16,20 @@ export default async function SessionsPage() {
     where: { userId, status: "completed" },
     orderBy: { startedAt: "desc" },
     take: 20,
-    include: {
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      templateId: true,
+      startedAt: true,
+      completedAt: true,
       exercises: {
-        include: {
-          sets: { where: { isWarmup: false } },
+        select: {
+          id: true,
+          sets: {
+            where: { isWarmup: false },
+            select: { weight: true, reps: true, weightUnit: true },
+          },
         },
       },
     },
